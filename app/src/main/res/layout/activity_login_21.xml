@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.login.LoginActivity"
+    android:background="@drawable/reg_ip_server"
+    android:animateLayoutChanges="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        app:elevation="10dp"
+        android:translationZ="5dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/TooBarDP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Đăng ký sử dụng thiết bị"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/boxRegis"
+        android:layout_marginTop="50dp"
+        android:layout_centerInParent="false">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/borderYellow"/>
+        <com.mimi.mimigroup.ui.custom.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên đầy đủ của bạn"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="30dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorHint"/>
+        <com.mimi.mimigroup.ui.custom.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:padding="10dp"
+            android:id="@+id/edtName"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorEdit"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"/>
+        <com.mimi.mimigroup.ui.custom.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bộ phận/Nơi làm việc"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorHint"/>
+        <com.mimi.mimigroup.ui.custom.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:textColor="@color/colorEdit"
+            android:id="@+id/edtDvi"
+            android:background="@drawable/edittext"
+            android:padding="10dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/borderYellow"
+            android:layout_marginTop="50dp"/>
+    </LinearLayout>
+
+    <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="Tiếp tục"
+        android:id="@+id/tvContinue"
+        android:padding="10dp"
+        android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:background="@color/ColorButtonGreen"
+        android:gravity="center"
+        android:layout_below="@+id/boxRegis"
+        android:textColor="#ffffff"/>
+
+</RelativeLayout>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.visitcard.VisitCardActivity">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/layout_app_bar"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/llTop"
+            android:weightSum="3">
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="10dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Ngày thăm"
+                android:gravity="center"/>
+
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Loại"
+                android:gravity="center"/>
+
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Khách hàng"
+                android:gravity="center"/>
+
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Thời gian"
+                android:gravity="center"/>
+
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="550dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Địa chỉ"
+                android:gravity="center"/>
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="350dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Ghi chú"
+                android:gravity="center"/>
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Đã gửi"
+                android:gravity="center"/>
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Thời điểm gửi"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvVisitCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/llBottom"
+            android:layout_below="@+id/llTop">
+        </android.support.v7.widget.RecyclerView>
+
+       </RelativeLayout>
+
+
+    </HorizontalScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnVisitIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:src="@drawable/tiva_check_in"
+        app:backgroundTint="@color/ColorButtonGreen"
+        app:layout_anchorGravity="center|left|end"
+        app:rippleColor="#FFF" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnVisitOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:src="@drawable/tiva_check_out"
+        app:backgroundTint="@color/ColorButtonGreen"
+        app:layout_anchorGravity="center|left|end"
+        app:rippleColor="#FFF" />
+
+
+    <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/btnVisitMenuList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="90dp"
+        android:clickable="true"
+        android:visibility="invisible"
+        android:src="@drawable/ic_menu_list"
+        app:backgroundTint="@color/ColorButtonYellow"
+        app:layout_anchorGravity="bottom|right|end"
+        app:rippleColor="#FFF" />
+
+</RelativeLayout>
+
+
+
+
+

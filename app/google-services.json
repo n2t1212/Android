@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "234325600083",
+    "firebase_url": "https://mtgrcscanner.firebaseio.com",
+    "project_id": "mtgrcscanner",
+    "storage_bucket": "mtgrcscanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234325600083:android:3db00d80159f5202",
+        "android_client_info": {
+          "package_name": "com.npc.grc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234325600083-kjadehgaph4iafujbf0kj69eo9e3u1q9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFKcNpyD31fGNzv6ScOIg7FsbopoTFtI0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

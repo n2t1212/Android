@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.history.HistoryServerActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        app:elevation="10dp"
+        android:translationZ="5dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/TooBarDP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Chi tiết lịch sử quét"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/layout_app_bar"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/llTop"
+                android:weightSum="3">
+
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Mã SP"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Tên Sản Phẩm"
+                    android:gravity="center"/>
+
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Ngày quét"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Người quét"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Khách hàng"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Lần quét"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="450dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Vị trí quét"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvHistoryServer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/llBottom"
+                android:layout_below="@+id/llTop">
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+    </HorizontalScrollView>
+</RelativeLayout>
+
+

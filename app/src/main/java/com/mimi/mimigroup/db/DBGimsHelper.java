@@ -1,0 +1,3005 @@
+package com.mimi.mimigroup.db;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
+import android.util.Log;
+
+import com.mimi.mimigroup.model.DM_Customer;
+import com.mimi.mimigroup.model.DM_Customer_Distance;
+import com.mimi.mimigroup.model.DM_Customer_Search;
+import com.mimi.mimigroup.model.DM_Employee;
+import com.mimi.mimigroup.model.DM_Product;
+import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_Tree_Disease;
+import com.mimi.mimigroup.model.HT_PARA;
+import com.mimi.mimigroup.model.DM_Province;
+import com.mimi.mimigroup.model.DM_District;
+import com.mimi.mimigroup.model.DM_Ward;
+import com.mimi.mimigroup.model.QR_QRSCAN;
+import com.mimi.mimigroup.model.SM_CustomerPay;
+import com.mimi.mimigroup.model.SM_Order;
+import com.mimi.mimigroup.model.SM_OrderDelivery;
+import com.mimi.mimigroup.model.SM_OrderDeliveryDetail;
+import com.mimi.mimigroup.model.SM_OrderDetail;
+import com.mimi.mimigroup.model.SM_OrderStatus;
+import com.mimi.mimigroup.model.SM_VisitCard;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class DBGimsHelper extends SQLiteOpenHelper{
+    private Context mCxt;
+    private static DBGimsHelper mInstance = null;
+
+    private static final int DATABASE_VERSION=12;
+    private static final String DATABASE_NAME="mimigroup_sm";
+
+    private DBGimsHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DBGimsHelper getInstance(Context ctx) {
+        /**
+         * use the application context as suggested by CommonsWare.
+         * this will ensure that you dont accidentally leak an Activitys
+         * context (see this article for more information:
+         * http://android-developers.blogspot.nl/2009/01/avoiding-memory-leaks.html)
+         */
+        if (mInstance == null) {
+            mInstance = new DBGimsHelper(ctx.getApplicationContext());
+        }
+        return mInstance;
+    }
+
+    //UPDATE DB INFOR
+
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        /*<<THONG TIN TABLE>>
+         * 1-tblTHIETBI,2-tblDMTINH,3-tblDMHUYEN,4-tblDMXA,
+         5-tblDMCAYTRONG,6-tblDMGIAIDOAN,7-tblDMDICHHAI,8-tblDMNHOMSP,9-tblDMSANPHAM,
+         10-tblDMTANSUAT,11-tblDMMUCDO,12-tblDMDPDOITHU,13-tblDMNVKH
+         14-tblKHBH,15-tblCTKHBH,16-tblKHACHHANG,17-tblNHACC,18-tblLICHTHAM,
+         19-tblTHETHAM,20-tblTHITRUONG,21- tblDOITHU,22-tblTTSANPHAM,23-tblDUBAO
+         <<END>>
+         */
+
+        //<<THAM SỐ HỆ THỐNG>>// INTEGER PRIMARY KEY
+        String sqlCMM="CREATE TABLE HT_PARA(" +
+                "PARA_NAME VARCHAR(50),"+
+                "PARA_VAL VARCHAR(50))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_PROVINCE(Provinceid INTEGER PRIMARY KEY,"+
+                "ProvinceCode VARCHAR(10),"+
+                "Province VARCHAR(50),"+
+                "ZoneCode VARCHAR(10))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_DISTRICT(Districtid INTEGER PRIMARY KEY,"+
+                "Provinceid INTEGER,"+
+                "District VARCHAR(50),"+
+                "DistrictCode VARCHAR(10))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_WARD(Wardid INTEGER PRIMARY KEY,"+
+                "Districtid INTEGER,"+
+                "Ward VARCHAR(50),"+
+                "WardCode VARCHAR(10))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_PRODUCT_GROUP(ProductGroupid VARCHAR(15) PRIMARY KEY,"+
+                "ProductGroup VARCHAR(50),"+
+                "ProductGroupCode VARCHAR(10))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_PRODUCT(ProductCode VARCHAR(15) PRIMARY KEY,"+
+                "ProductGroupID VARCHAR(15),"+
+                "ProductName VARCHAR(50),"+
+                "Unit VARCHAR(30),"+
+                "Spec VARCHAR(30),"+
+                "ConvertKgl FLOAT,"+
+                "ConvertBox FLOAT,"+
+                "isMain BIT)";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_CUSTOMER(Customerid VARCHAR(50)PRIMARY KEY,"+
+                "Employeeid VARCHAR(50),"+
+                "CustomerCode VARCHAR(15),"+
+                "CustomerName VARCHAR(150),"+
+                "ShortName VARCHAR(50),"+
+                "Represent VARCHAR(70),"+
+                "Provinceid INTEGER,"+
+                "Districtid INTEGER,"+
+                "Wardid INTEGER,"+
+                "Street VARCHAR(250),"+
+                "Address VARCHAR(250),"+
+                "Tax VARCHAR(15),"+
+                "Tel VARCHAR(15),"+
+                "Fax VARCHAR(15),"+
+                "Email VARCHAR(50),"+
+                "IsLevel INTEGER,"+
+                "VisitSchedule VARCHAR(10),"+
+                "Ranked VARCHAR(10),"+
+                "ExtCustomer BIT,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LongitudeTemp FLOAT,"+
+                "LatitudeTemp FLOAT,"+
+                "Scope FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
+                "LocationAddressTemp VARCHAR(255),"+
+                "Notes VARCHAR(200),"+
+                "IsSupport BIT,"+
+                "EditStatus INTEGER)";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_CUSTOMER_SUPPLIER(Supplierid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
+                "Notes VARCHAR(50))";
+        db.execSQL(sqlCMM);
+
+
+        sqlCMM="CREATE TABLE QR_QRSCAN(Qrscanid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
+                "CommandNo VARCHAR(15),"+
+                "Qrid VARCHAR(50),"+
+                "ProductCode VARCHAR(15),"+
+                "ProductName VARCHAR(70),"+
+                "Unit VARCHAR(30),"+
+                "Specification VARCHAR(50),"+
+                "ScanNo INTEGER,"+
+                "ScanDay DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
+                "ScanSupportID VARCHAR(50),"+
+                "Imei VARCHAR(50),"+
+                "ImeiSim VARCHAR(50),"+
+                "ScanType VARCHAR(5),"+
+                "SyncDay DATETIME,"+
+                "IsSync BIT)";
+        db.execSQL(sqlCMM);
+
+
+        sqlCMM="CREATE TABLE QR_QRSCAN_HIS(Scanhisid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
+                "CommandNo VARCHAR(15),"+
+                "Qrid VARCHAR(50),"+
+                "ProductCode VARCHAR(15),"+
+                "ProductName VARCHAR(70),"+
+                "Unit VARCHAR(30),"+
+                "Specification VARCHAR(50),"+
+                "ScanNo INTEGER,"+
+                "ScanDay DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
+                "Employee VARCHAR(100))";
+
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_CUSTOMER_LOCATION("+
+                "Customerid VARCHAR(50),"+
+                "CustomerCode VARCHAR(15),"+
+                "CustomerName VARCHAR(150),"+
+                "LongitudeScan FLOAT,"+
+                "LatitudeScan FLOAT,"+
+                "LocationAddressScan VARCHAR(255)," +
+                "Distince FLOAT)";
+        db.execSQL(sqlCMM);
+
+
+        sqlCMM="CREATE TABLE SM_VISITCARD("+
+                "VisitCardID VARCHAR(50),"+
+                "VisitDay DATETIME,"+
+                "CustomerID VARCHAR(50),"+
+                "VisitType VARCHAR(5),"+
+                "VisitTime DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LocationAddress VARCHAR(255)," +
+                "VisitNotes VARCHAR(255),"+
+                "IsSync BIT,"+
+                "SyncDay DATETIME)";
+
+        db.execSQL(sqlCMM);
+        // addTrace(db);
+
+        sqlCMM="CREATE TABLE DM_EMPLOYEE("+
+                "Employeeid VARCHAR(50),"+
+                "EmployeeCode VARCHAR(15),"+
+                "EmployeeName VARCHAR(120),"+
+                "Notes VARCHAR(255))";
+        db.execSQL(sqlCMM);
+
+
+        /////////////////////////////////////// TIVA ///////////////////////////////////
+        // DM_ProductPrice
+        sqlCMM = "CREATE TABLE DM_PRODUCT_PRICE(" +
+                "PriceID nvarchar(50)," +
+                "CustomerID nvarchar(50)," +
+                "ProvinceCode nvarchar(50)," +
+                "ProductID nvarchar(50)," +
+                "OriginPrice numeric(18, 3)," +
+                "SalePrices numeric(18, 3)," +
+                "SalePrice numeric(18, 3)," +
+                "IsActive int ," +
+                "IsActiveDate datetime," +
+                "Sync varchar(500))";
+        db.execSQL(sqlCMM);
+
+        //DM_SaleOrder
+        sqlCMM = "CREATE TABLE SM_ORDER(" +
+                "OrderID VARCHAR(50) PRIMARY KEY," +
+                "OrderCode VARCHAR(50)," +
+                "CustomerID VARCHAR(50), " +
+                "OrderDate DATETIME,"+
+                "RequestDate DATETIME," +
+                "MaxDebt INTEGER," +
+                "OriginMoney FLOAT," +
+                "VAT FLOAT," +
+                "VATMoney FLOAT," +
+                "TotalMoney FLOAT," +
+                "OrderStatus INTEGER," +
+                "OrderNotes VARCHAR(255), " +
+                "ApproveDate DATETIME," +
+                "HandleStaff VARCHAR(100)," +
+                "DeliveryDesc VARCHAR(500)," +
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "SeqnoCode INTEGER," +
+                "IsPost BIT,"+
+                "PostDay DATETIME)";
+        db.execSQL(sqlCMM);
+
+        // SALE ORDER DETAIL,Notes2: TreeList
+        sqlCMM = "CREATE TABLE SM_ORDER_DETAIL(" +
+                "OrderDetailID VARCHAR(50) PRIMARY KEY," +
+                "OrderID VARCHAR(50)," +
+                "ProductID VARCHAR(50)," +
+                "ProductCode VARCHAR(50)," +
+                "ProductName VARCHAR(100)," +
+                "Unit VARCHAR(30)," +
+                "Spec VARCHAR(50),"+
+                "ConvertBox FLOAT,"+
+                "Amount INTEGER," +
+                "AmountBox FLOAT,"+
+                "Price FLOAT," +
+                "OriginMoney FLOAT,"+
+                "Notes VARCHAR(255)," +
+                "Notes2 VARCHAR(255))";
+        db.execSQL(sqlCMM);
+
+        // DELIVERY ORDER
+        sqlCMM = "CREATE TABLE SM_DELIVERY_ORDER(" +
+                "DeliveryOrderID VARCHAR(50) PRIMARY KEY," +
+                "OrderID VARCHAR(50)," +
+                "TransportCode VARCHAR(50)," +
+                "NumberPlate VARCHAR(50)," +
+                "CarType VARCHAR(100)," +
+                "DeliveryStaff VARCHAR(100)," +
+                "DeliveryNum INTEGER," +
+                "DeliveryDate DATETIME," +
+                "HandlingStaff VARCHAR(100)," +
+                "HandlingDate DATETIME," +
+                "TotalMoney FLOAT,"+
+                "DeliveryDesc VARCHAR(1500))";
+        db.execSQL(sqlCMM);
+        //DELIVERYDETAIL
+        sqlCMM = "CREATE TABLE SM_DELIVERY_ORDER_DETAIL(" +
+                "DeliveryOrderDetailID VARCHAR(50) PRIMARY KEY," +
+                "DeliveryOrderID VARCHAR(50)," +
+                "ProductCode VARCHAR(50)," +
+                "ProductName VARCHAR(100)," +
+                "Unit VARCHAR(30)," +
+                "Spec VARCHAR(50),"+
+                "Amount INTEGER," +
+                "AmountBox FLOAT,"+
+                "Price FLOAT," +
+                "OriginMoney FLOAT,"+
+                "Notes VARCHAR(255))";
+        db.execSQL(sqlCMM);
+        /////////////////////////////////////////END TIVA ///////////////////////////////////
+        ////////////GIAI DOAN 2//////////
+        sqlCMM="CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY,"+
+                "PayCode VARCHAR(20),"+
+                "PayDate DATETIME,"+
+                "PayName VARCHAR(100),"+
+                "CustomerID VARCHAR(50),"+
+                "PayMoney FLOAT,"+
+                "PayPic VARCHAR(255),"+
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "PayStatus INTEGER," +
+                "PayNotes VARCHAR(255)," +
+                "IsPost BIT,"+
+                "PostDay DATETIME)";
+        db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY,"+
+                "TreeCode VARCHAR(15),"+
+                "TreeGroupCode VARCHAR(15),"+
+                "TreeName VARCHAR(50))";
+        db.execSQL(sqlCMM);
+        sqlCMM="CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY,"+
+                "TreeID INTEGER,"+
+                "DiseaseCode VARCHAR(15),"+
+                "DiseaseName VARCHAR(50))";
+        db.execSQL(sqlCMM);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            String sqlCMM="";
+            if (oldVersion <12) {
+                sqlCMM="CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY,"+
+                        "PayCode VARCHAR(20),"+
+                        "PayDate DATETIME,"+
+                        "PayName VARCHAR(100),"+
+                        "CustomerID VARCHAR(50),"+
+                        "PayMoney FLOAT,"+
+                        "PayPic VARCHAR(255),"+
+                        "Longitude FLOAT," +
+                        "Latitude FLOAT," +
+                        "LocationAddress VARCHAR(255)," +
+                        "PayStatus INTEGER," +
+                        "PayNotes VARCHAR(255)," +
+                        "IsPost BIT,"+
+                        "PostDay DATETIME)";
+                db.execSQL(sqlCMM);
+
+                db.execSQL("DROP TABLE IF EXISTS DM_TREE");
+                sqlCMM="CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY,"+
+                        "TreeCode VARCHAR(15),"+
+                        "TreeGroupCode VARCHAR(15),"+
+                        "TreeName VARCHAR(50))";
+                db.execSQL(sqlCMM);
+
+                sqlCMM="CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY,"+
+                        "TreeID INTEGER,"+
+                        "DiseaseCode VARCHAR(15),"+
+                        "DiseaseName VARCHAR(50))";
+                db.execSQL(sqlCMM);
+
+                //db.execSQL("ALTER TABLE QR_QRSCAN ADD COLUMN ScanSupportID VARCHAR(50) DEFAULT ''");
+                //onCreate(db);
+
+                db.execSQL("ALTER TABLE SM_ORDER_DETAIL ADD COLUMN Notes2 VARCHAR(255) DEFAULT ''");
+            }
+        }catch (Exception ex){
+            //Toast.makeText(mCxt, "Không thể nâng cấp DB lên V12."+ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public boolean onClearHIS() {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL("DELETE FROM DM_CUSTOMER");
+            db.execSQL("DELETE FROM DM_PROVINCE");
+            db.execSQL("DELETE FROM DM_DISTRICT");
+            db.execSQL("DELETE FROM DM_WARD");
+            db.execSQL("DELETE FROM DM_PRODUCT");
+            db.execSQL("DELETE FROM DM_EMPLOYEE");
+            db.execSQL("DELETE FROM QR_QRSCAN");
+            db.execSQL("DELETE FROM SM_VISITCARD");
+            //Toast.makeText(mCxt, "Đã xóa dữ liệu thành công..", Toast.LENGTH_SHORT).show();
+            return true;
+        }catch (Exception ex){return false;}
+    }
+
+    public void addTrace(SQLiteDatabase db){
+        // SQLiteDatabase db=getWritableDatabase();
+        ContentValues value=new ContentValues();
+        value.put("id", 1);
+        value.put("trace", 0);
+        db.insert("TRACE", null, value);
+    }
+
+    //HT_DUNGCHUNG
+    public int getRowCount(String mSql){
+        try{
+            SQLiteDatabase db=getReadableDatabase();
+            Cursor oCurs=db.rawQuery(mSql, null);
+            //Log.d("Cursor_row",oCurs.getString(0));
+            int iSq= oCurs.getCount();
+            oCurs.close();
+            return  iSq;
+        }catch (Exception ex){Log.d("RawQuery:",ex.getMessage());}
+        return  0;
+    }
+
+    //[HT_PARA]
+    public void addHTPara(HT_PARA oHTPara){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("PARA_NAME", oHTPara.getParaCode());
+            values.put("PARA_VAL", oHTPara.getParaValue());
+            if (getSizePara(oHTPara.getParaCode())>0){
+                values.put("PARA_VAL",oHTPara.getParaValue());
+                db.update("HT_PARA",values,"PARA_NAME" +"=?",new String[] { String.valueOf(oHTPara.getParaCode())});
+            }else{
+                db.insert("HT_PARA", null, values);
+            }
+            Log.d("PARA_ADD", oHTPara.getParaValue());
+            db.close();
+        }catch (Exception ex){
+            Log.d("INS_HT_PARA",ex.getMessage().toString());}
+    }
+    public void editHTParam(String ParamName, String ParaVal){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql = String.format("update HT_PARA set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+            db.execSQL(mSql);
+        }catch (Exception ex){}
+    }
+
+    public int getSizePara(String ParaName){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM HT_PARA WHERE PARA_NAME=?", new String[]{ParaName});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+    public String getParam(String ParamName){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            String mSql = String.format("select * from HT_PARA where PARA_NAME='%s'", ParamName);
+            Cursor cursor = db.rawQuery(mSql, null);
+            String value="";
+            if(cursor.moveToFirst()){
+                value=cursor.getString(cursor.getColumnIndex("PARA_VAL"));
+            }
+            return value;
+        }catch (Exception ex){return "";}
+    }
+
+    public List<HT_PARA> getAllPara() {
+        List<HT_PARA> lstPara = new ArrayList<HT_PARA>();
+
+        String selectQuery = "SELECT  * FROM HT_PARA ORDER BY PARA_NAME ASC";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                HT_PARA oPara = new HT_PARA();
+                oPara.setParaCode(cursor.getString(0));
+                oPara.setParaValue(cursor.getString(1));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+
+    //QR-SCAN
+    public int getSizeQRScan(String QRID,String Customerid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM QR_QRSCAN WHERE Qrid=? AND Customerid=?", new String[]{QRID,Customerid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public int getQrScanNo(String QRID,String Customerid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT COALESCE(max(ScanNo) ,0) FROM QR_QRSCAN WHERE Qrid=? AND Customerid=?", new String[]{QRID,Customerid});
+            if (cursor.moveToFirst()) {
+                do {
+                    return cursor.getInt(0);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+        }catch(Exception ex){return 0;}
+        return 0;
+    }
+
+    public boolean addQRScan(QR_QRSCAN oQR){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            //iSq=getSizeQRScan(oQR.getQrid(),oQR.getCustomerid());
+            iSq=getQrScanNo(oQR.getQrid(),oQR.getCustomerid());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("Qrscanid", oQR.getQrscanid());
+                values.put("Customerid", oQR.getCustomerid());
+                values.put("CommandNo", oQR.getCommandNo());
+                values.put("Qrid", oQR.getQrid());
+                values.put("ProductCode", oQR.getProductCode());
+                values.put("ProductName", oQR.getProductName());
+                values.put("Unit", oQR.getUnit());
+                values.put("Specification", oQR.getSpecification());
+                values.put("ScanNo", oQR.getScanNo());
+                values.put("ScanDay", oQR.getScanDay());
+                values.put("Longitude", oQR.getLongitude());
+                values.put("Latitude", oQR.getLatitude());
+                values.put("LocationAddress", oQR.getLocationAddress());
+                values.put("ScanSupportID",oQR.getScanSupportID());
+                values.put("Imei", oQR.getImei());
+                values.put("ImeiSim", oQR.getImeiSim());
+                values.put("SyncDay", oQR.getScanDay());
+                values.put("IsSync", oQR.getSync());
+                values.put("ScanType",oQR.getScanType());
+                db.insert("QR_QRSCAN", null, values);
+            }else{
+                //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+                //db.execSQL(mSql);
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("CommandNo", oQR.getCommandNo());
+                values.put("ProductCode", oQR.getProductCode());
+                values.put("ProductName", oQR.getProductName());
+                values.put("Unit", oQR.getUnit());
+                values.put("Specification", oQR.getSpecification());
+                values.put("ScanNo", iSq);
+                values.put("ScanDay", oQR.getScanDay());
+                values.put("Longitude", oQR.getLongitude());
+                values.put("Latitude", oQR.getLatitude());
+                values.put("LocationAddress", oQR.getLocationAddress());
+                values.put("ScanSupportID",oQR.getScanSupportID());
+                values.put("Imei", oQR.getImei());
+                values.put("ImeiSim", oQR.getImeiSim());
+                values.put("SyncDay", oQR.getScanDay());
+                values.put("IsSync", oQR.getSync());
+                values.put("ScanType",oQR.getScanType());
+                db.update("QR_QRSCAN",values,"Qrid=? AND Customerid=?" ,new String[] { String.valueOf(oQR.getQrid()),String.valueOf(oQR.getCustomerid())});
+            }
+
+            Log.d("INS_QRSCAN_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_QRSCAN_ERR",e.getMessage()); return  false;}
+    }
+
+
+
+    public boolean editQRScanStatus(QR_QRSCAN oQR){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("SyncDay", oQR.getScanDay());
+            values.put("IsSync", oQR.getSync());
+            db.update("QR_QRSCAN",values,"Qrid=? AND Customerid=?" ,new String[] { String.valueOf(oQR.getQrid()),String.valueOf(oQR.getCustomerid())});
+
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("INS_QRSCAN_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean delQRScan(QR_QRSCAN oQr){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from QR_QRSCAN where Qrscanid ='%s'",oQr.getQrscanid());
+            try {
+                db.execSQL(mSql);
+                //Log.d("DEL_QRSCAN",oQr.getQrscanid());
+            }catch (Exception ex){
+                Log.d("DEL_QRSCAN",ex.getMessage());
+                return  false;
+            }
+            return  true;
+            //db.delete("QR_QRSCAN", "malt = ?", new String[]{malt});
+        }catch (Exception ex){return false;}
+    }
+
+
+    public List<QR_QRSCAN> getAllQRScan(String fDay,String tDay) {
+        List<QR_QRSCAN> lstPara = new ArrayList<QR_QRSCAN>();
+        String selectQuery =String.format("SELECT  A.*,B.CustomerName,C.EmployeeName FROM QR_QRSCAN A LEFT JOIN DM_CUSTOMER B ON A.Customerid=B.Customerid LEFT JOIN DM_EMPLOYEE C ON A.ScanSupportID=C.Employeeid where (julianday(A.ScanDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.ScanDay)) >=0 ORDER BY ScanDay desc,ProductCode asc",fDay,tDay);
+        //String selectQuery =String.format("SELECT  A.*,B.CustomerName FROM QR_QRSCAN A LEFT JOIN DM_CUSTOMER B ON A.Customerid=B.Customerid  ORDER BY ScanDay desc,ProductCode asc");
+        //Log.d("SQL",selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                QR_QRSCAN oPara = new QR_QRSCAN();
+                oPara.setQrscanid(cursor.getString(cursor.getColumnIndex("Qrscanid")));
+                oPara.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                oPara.setCommandNo(cursor.getString(cursor.getColumnIndex("CommandNo")));
+                oPara.setQrid(cursor.getString(cursor.getColumnIndex("Qrid")));
+                oPara.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                oPara.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                oPara.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                oPara.setSpecification(cursor.getString(cursor.getColumnIndex("Specification")));
+                oPara.setScanNo(Integer.valueOf(cursor.getString(cursor.getColumnIndex("ScanNo"))));
+                oPara.setScanDay(cursor.getString(cursor.getColumnIndex("ScanDay")));
+                oPara.setLongitude(Double.valueOf(cursor.getString(cursor.getColumnIndex("Longitude"))));
+                oPara.setLatitude(Double.valueOf(cursor.getString(cursor.getColumnIndex("Latitude"))));
+                oPara.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                oPara.setScanSupportID(cursor.getString(cursor.getColumnIndex("ScanSupportID")));
+                oPara.setScanSupportDesc(cursor.getString(cursor.getColumnIndex("EmployeeName")));
+                oPara.setImei(cursor.getString(cursor.getColumnIndex("Imei")));
+                oPara.setImeiSim(cursor.getString(cursor.getColumnIndex("ImeiSim")));
+                oPara.setSyncDay(cursor.getString(cursor.getColumnIndex("SyncDay")));
+                if(cursor.getString(cursor.getColumnIndex("IsSync")).contains("1")){
+                    oPara.setSync(true);
+                }else{
+                    oPara.setSync(false);
+                }
+                oPara.setScanType(cursor.getString(cursor.getColumnIndex("ScanType")));
+
+                oPara.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+
+    public List<QR_QRSCAN> getQRScan(String QrID,String CustomerID) {
+        List<QR_QRSCAN> lstPara = new ArrayList<QR_QRSCAN>();
+        String selectQuery = "SELECT  * FROM QR_QRSCAN where Qrid=? and Customerid=? ORDER BY ScanDay desc,ProductCode asc";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{QrID,CustomerID});
+
+        if (cursor.moveToFirst()) {
+            do {
+                QR_QRSCAN oPara = new QR_QRSCAN();
+                oPara.setQrscanid(cursor.getString(cursor.getColumnIndex("Qrscanid")));
+                oPara.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                oPara.setCommandNo(cursor.getString(cursor.getColumnIndex("CommandNo")));
+                oPara.setQrid(cursor.getString(cursor.getColumnIndex("Qrid")));
+                oPara.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                oPara.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                oPara.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                oPara.setSpecification(cursor.getString(cursor.getColumnIndex("Specification")));
+                oPara.setScanNo(Integer.valueOf(cursor.getString(cursor.getColumnIndex("ScanNo"))));
+                oPara.setScanDay(cursor.getString(cursor.getColumnIndex("ScanDay")));
+                oPara.setLongitude(Double.valueOf(cursor.getString(cursor.getColumnIndex("Longitude"))));
+                oPara.setLatitude(Double.valueOf(cursor.getString(cursor.getColumnIndex("Latitude"))));
+                oPara.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                oPara.setScanSupportID(cursor.getString(cursor.getColumnIndex("ScanSupportID")));
+                oPara.setScanSupportDesc(cursor.getString(cursor.getColumnIndex("EmployeeName")));
+                oPara.setImei(cursor.getString(cursor.getColumnIndex("Imei")));
+                oPara.setImeiSim(cursor.getString(cursor.getColumnIndex("ImeiSim")));
+                oPara.setSyncDay(cursor.getString(cursor.getColumnIndex("SyncDay")));
+                if(cursor.getString(cursor.getColumnIndex("IsSync")).contains("1")){
+                    oPara.setSync(true);
+                }else{
+                    oPara.setSync(false);
+                }
+                oPara.setScanType(cursor.getString(cursor.getColumnIndex("ScanType")));
+                //oPara.setSync(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex("IsSync"))));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+
+    //DM_PRODUCT
+    public int getSizeProduct(String ProductCode){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_PRODUCT WHERE ProductCode=?",new String[]{ProductCode});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addProduct(DM_Product oPro){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeProduct(oPro.getProductCode().toString());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("ProductCode",oPro.getProductCode());
+                values.put("ProductName", oPro.getProductName());
+                values.put("Unit",oPro.getUnit());
+                values.put("Spec", oPro.getSpecification());
+                values.put("ConvertKgl", oPro.getConvertKgl());
+                values.put("ConvertBox", oPro.getConvertBox());
+                values.put("isMain", oPro.getMain());
+                db.insert("DM_PRODUCT", null, values);
+            }else{
+                //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+                //db.execSQL(mSql);
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("ProductName", oPro.getProductName());
+                values.put("Unit",oPro.getUnit());
+                values.put("Spec", oPro.getSpecification());
+                values.put("ConvertKgl", oPro.getConvertKgl());
+                values.put("ConvertBox", oPro.getConvertBox());
+                values.put("isMain", oPro.getMain());
+                db.update("DM_PRODUCT",values,"ProductCode=?" ,new String[] { String.valueOf(oPro.getProductCode())});
+            }
+
+            //Log.d("INS_PRODUCT_DB","OK");
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("INS_PRODUCT_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Product> getAllProduct() {
+        List<DM_Product> lstPara = new ArrayList<DM_Product>();
+        String selectQuery = "SELECT ProductCode,ProductGroupID,ProductName,Unit," +
+                "Spec,ConvertKgl,ConvertBox,isMain FROM DM_PRODUCT ORDER BY ProductCode ASC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Product oPara = new DM_Product();
+                oPara.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                oPara.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                oPara.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                oPara.setSpecification(cursor.getString(cursor.getColumnIndex("Spec")));
+                oPara.setConvertKgl(cursor.getFloat(cursor.getColumnIndex("ConvertKgl")));
+                oPara.setConvertBox(cursor.getFloat(cursor.getColumnIndex("ConvertBox")));
+                oPara.setMain(Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("isMain"))));
+                lstPara.add(oPara);
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+
+    public DM_Product getProduct(String mProductCode) {
+        List<DM_Product> lstPara = new ArrayList<DM_Product>();
+        String selectQuery = "SELECT  ProductCode,ProductGroupID,ProductName,Unit," +
+                "Spec,ConvertKgl,ConvertBox,isMain FROM DM_PRODUCT WHERE ProductCode=? ORDER BY ProductCode ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{mProductCode});
+        DM_Product oPara = new DM_Product();
+
+        if (cursor.moveToFirst()) {
+            do {
+                oPara.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                oPara.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                oPara.setSpecification(cursor.getString(cursor.getColumnIndex("Spec")));
+                oPara.setConvertKgl(cursor.getFloat(cursor.getColumnIndex("ConvertKgl")));
+                oPara.setConvertBox(cursor.getFloat(cursor.getColumnIndex("ConvertBox")));
+                oPara.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                oPara.setMain(Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("isMain"))));
+
+                cursor.close();
+                db.close();
+                return oPara;
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return null ;
+    }
+
+    public boolean delProduct(String ProductCode,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_PRODUCT");
+            }else{
+                mSql = String.format("delete from DM_PRODUCT where ProductCode='%s'", ProductCode);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    //DM_PROVINCE
+    public int getSizeProvince(String Provinceid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_PROVINCE WHERE Provinceid=?",new String[]{Provinceid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addProvince(DM_Province oPro){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeProvince(oPro.getProvinceid().toString());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("Provinceid",oPro.getProvinceid());
+                values.put("ProvinceCode", oPro.getProvinceCode());
+                values.put("Province",oPro.getProvince());
+                values.put("ZoneCode", oPro.getZoneCode());
+                db.insert("DM_PROVINCE", null, values);
+            }else{
+                //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+                //db.execSQL(mSql);
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("ProvinceCode", oPro.getProvinceCode());
+                values.put("Province",oPro.getProvince());
+                values.put("ZoneCode", oPro.getZoneCode());
+                db.update("DM_PROVINCE",values,"Provinceid=?" ,new String[] { String.valueOf(oPro.getProvinceid().toString())});
+            }
+
+            //Log.d("INS_PROVINCE_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Province> getAllProvince() {
+        List<DM_Province> lstPara = new ArrayList<DM_Province>();
+        String selectQuery = "SELECT  * FROM DM_PROVINCE ORDER BY Province ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Province oPara = new DM_Province();
+                oPara.setProvinceid(cursor.getInt(0));
+                oPara.setProvinceCode(cursor.getString(1));
+                oPara.setProvince(cursor.getString(2));
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+    public boolean delProvince(String Provinceid,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_PROVINCE");
+            }else{
+                mSql = String.format("delete from DM_PROVINCE where Provinceid='%s'", Provinceid);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    //DM_DISTRICT
+    public int getSizeDistrict(String Districtid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_DISTRICT WHERE Districtid=?",new String[]{Districtid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addDistrict(DM_District oPro){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeDistrict(Integer.toString(oPro.getDistrictid()));
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("Districtid",oPro.getDistrictid());
+                values.put("Provinceid",oPro.getProvinceid());
+                values.put("District", oPro.getDistrict());
+                db.insert("DM_DISTRICT", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("District", oPro.getDistrict());
+                values.put("Provinceid",oPro.getProvinceid());
+                db.update("DM_DISTRICT",values,"Districtid=?" ,new String[] { String.valueOf(oPro.getDistrictid())});
+            }
+
+            //Log.d("INS_DISTRICT_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_District> getAllDistrict() {
+        List<DM_District> lstPara = new ArrayList<DM_District>();
+
+        String selectQuery = "SELECT  A.Districtid,A.Provinceid,A.District,B.Province FROM DM_DISTRICT A LEFT JOIN DM_PROVINCE B ON A.Provinceid=b.Provinceid ORDER BY District ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                DM_District oPara = new DM_District();
+                oPara.setDistrictid(cursor.getInt(cursor.getColumnIndex("Districtid")));
+                oPara.setProvinceid(cursor.getInt(cursor.getColumnIndex("Provinceid")));
+                oPara.setDistrict(cursor.getString(cursor.getColumnIndex("District")));
+                oPara.setProvince(cursor.getString(cursor.getColumnIndex("Province")));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+
+        return lstPara;
+    }
+    public List<DM_District> getDistrict(Integer Provinceid) {
+        List<DM_District> lstPara = new ArrayList<DM_District>();
+
+        String selectQuery = String.format("SELECT  A.Districtid,A.Provinceid,A.District,B.Province FROM DM_DISTRICT A LEFT JOIN DM_PROVINCE B ON A.Provinceid=b.Provinceid where A.Provinceid='%d' ORDER BY District ASC",Provinceid);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        //Log.d("SQL_SEL_DISTRICT",selectQuery);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_District oPara = new DM_District();
+                oPara.setDistrictid(cursor.getInt(cursor.getColumnIndex("Districtid")));
+                oPara.setProvinceid(cursor.getInt(cursor.getColumnIndex("Provinceid")));
+                oPara.setDistrict(cursor.getString(cursor.getColumnIndex("District")));
+                oPara.setProvince(cursor.getString(cursor.getColumnIndex("Province")));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+
+        return lstPara;
+    }
+
+    public boolean delDistrict(String Districtid,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_DISTRICT");
+            }else{
+                mSql = String.format("delete from DM_DISTRICT where Districtid='%s'", Districtid);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+    //DM_WARD
+    public int getSizeWard(String Wardid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_WARD WHERE Wardid=?",new String[]{Wardid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addWard(DM_Ward oPro){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeWard(Integer.toString(oPro.getWardid()));
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("Wardid",oPro.getWardid());
+                values.put("Districtid",oPro.getDistrictid());
+                values.put("Ward", oPro.getWard());
+                db.insert("DM_WARD", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("Ward", oPro.getWard());
+                values.put("Wardid",oPro.getWardid());
+                db.update("DM_WARD",values,"Wardid=?" ,new String[] { String.valueOf(oPro.getWardid())});
+            }
+
+            //Log.d("INS_WARD_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_WARD_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Ward> getAllWard() {
+        List<DM_Ward> lstPara = new ArrayList<DM_Ward>();
+
+        String selectQuery = "SELECT  A.*,B.District FROM DM_WARD A LEFT JOIN DM_DISTRICT B ON A.Districtid=b.Districtid ORDER BY Ward ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Ward oPara = new DM_Ward();
+                oPara.setWardid(cursor.getInt(0));
+                oPara.setDistrictid(cursor.getInt(1));
+                oPara.setWard(cursor.getString(2));
+                oPara.setDistrict(cursor.getString(4));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+
+    public List<DM_Ward> getWard(Integer Districtid) {
+        List<DM_Ward> lstPara = new ArrayList<DM_Ward>();
+
+        String selectQuery =String.format("SELECT  A.*,B.District FROM DM_WARD A LEFT JOIN DM_DISTRICT B ON A.Districtid=b.Districtid where A.Districtid='%d' ORDER BY Ward ASC",Districtid);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Ward oPara = new DM_Ward();
+                oPara.setWardid(cursor.getInt(0));
+                oPara.setDistrictid(cursor.getInt(1));
+                oPara.setWard(cursor.getString(2));
+                oPara.setDistrict(cursor.getString(4));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+    public boolean delWard(String Wardid,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_WARD");
+            }else{
+                mSql = String.format("delete from DM_WARD where Wardid='%s'", Wardid);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    //CUSTOMER
+    public int getSizeCustomerPenddingAprrove(){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT Customerid FROM DM_CUSTOMER WHERE EditStatus =? OR EditStatus=?",new String[]{"4","6"});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public int getSizeCustomer(String CustomerID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_CUSTOMER WHERE Customerid=?", new String[]{CustomerID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public DM_Customer getCustomer(String CustomerID) {
+        try {
+            DM_Customer oCus = new DM_Customer();
+
+            String selectQuery = "SELECT  A.Customerid,A.Employeeid,A.CustomerCode,A.CustomerName," +
+                    " A.ShortName,A.Represent,A.Provinceid,A.Districtid,A.Wardid,A.Street,A.Tel,A.Tax,A.Fax,A.Email," +
+                    " A.Longitude,A.Latitude,A.LongitudeTemp,A.LatitudeTemp,A.LocationAddressTemp,A.EditStatus,A.Notes,A.Ranked, " +
+                    " B.Province,C.District,D.Ward " +
+                    " FROM DM_CUSTOMER A LEFT JOIN DM_PROVINCE B ON A.Provinceid=b.Provinceid " +
+                    " LEFT JOIN DM_DISTRICT C ON A.Districtid=C.Districtid "+
+                    " LEFT JOIN DM_WARD D ON A.Wardid=D.Wardid "+
+                    " WHERE A.Customerid=? ORDER BY Customerid ASC";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, new String[]{CustomerID});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    oCus.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                    oCus.setEmployeeid(cursor.getString(cursor.getColumnIndex("Employeeid")));
+                    oCus.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+
+                    oCus.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oCus.setShortName(cursor.getString(cursor.getColumnIndex("ShortName")));
+                    oCus.setRepresent(cursor.getString(cursor.getColumnIndex("Represent")));
+                    oCus.setProvinceid(cursor.getInt(cursor.getColumnIndex("Provinceid")));
+                    oCus.setDistrictid(cursor.getInt(cursor.getColumnIndex("Districtid")));
+                    oCus.setWardid(cursor.getInt(cursor.getColumnIndex("Wardid")));
+                    oCus.setStreet(cursor.getString(cursor.getColumnIndex("Street")));
+                    oCus.setTel(cursor.getString(cursor.getColumnIndex("Tel")));
+                    oCus.setTax(cursor.getString(cursor.getColumnIndex("Tax")));
+                    oCus.setFax(cursor.getString(cursor.getColumnIndex("Fax")));
+                    oCus.setEmail(cursor.getString(cursor.getColumnIndex("Email")));
+                    oCus.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oCus.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oCus.setLongitudeTemp(cursor.getDouble(cursor.getColumnIndex("LongitudeTemp")));
+                    oCus.setLatitudeTemp(cursor.getDouble(cursor.getColumnIndex("LatitudeTemp")));
+                    oCus.setLocationAddressTemp(cursor.getString(cursor.getColumnIndex("LocationAddressTemp")));
+                    oCus.setEdit(cursor.getInt(cursor.getColumnIndex("EditStatus")));
+                    if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==1){
+                        oCus.setStatusDesc("Mới");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==2){
+                        oCus.setStatusDesc("Sửa");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==3){
+                        oCus.setStatusDesc("Xóa");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==4){
+                        oCus.setStatusDesc("Chờ duyệt");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==5){
+                        oCus.setStatusDesc("Từ chối");
+                    }else{
+                        oCus.setStatusDesc("");
+                    }
+                    oCus.setProvinceName(cursor.getString(cursor.getColumnIndex("Province")));
+                    oCus.setDistrictName(cursor.getString(cursor.getColumnIndex("District")));
+                    oCus.setWardName(cursor.getString(cursor.getColumnIndex("Ward")));
+                    oCus.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oCus.setRanked(cursor.getString(cursor.getColumnIndex("Ranked")));
+
+                    return  oCus;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oCus;
+        }catch (Exception ex){Log.d("ERR_LOAD_CUS",ex.getMessage().toString());}
+        return null;
+    }
+
+    public List<DM_Customer> getAllCustomer() {
+        try {
+            List<DM_Customer> lstPara = new ArrayList<DM_Customer>();
+
+            String selectQuery = "SELECT  A.Customerid,A.Employeeid,A.CustomerCode,A.CustomerName," +
+                    " A.ShortName,A.Represent,A.Provinceid,A.Districtid,A.Wardid,A.Street,A.Tel,A.Tax,A.Fax,A.Email," +
+                    " A.Longitude,A.Latitude,A.LongitudeTemp,A.LatitudeTemp,A.LocationAddress,A.LocationAddressTemp,A.EditStatus,A.Notes,A.Ranked, " +
+                    " B.Province,C.District,D.Ward " +
+                    " FROM DM_CUSTOMER A LEFT JOIN DM_PROVINCE B ON A.Provinceid=b.Provinceid " +
+                    " LEFT JOIN DM_DISTRICT C ON A.Districtid=C.Districtid "+
+                    " LEFT JOIN DM_WARD D ON A.Wardid=D.Wardid "+
+                    " ORDER BY A.EditStatus desc, Customerid ASC";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Customer oCus = new DM_Customer();
+                    oCus.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                    oCus.setEmployeeid(cursor.getString(cursor.getColumnIndex("Employeeid")));
+                    oCus.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+
+                    oCus.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oCus.setShortName(cursor.getString(cursor.getColumnIndex("ShortName")));
+                    oCus.setRepresent(cursor.getString(cursor.getColumnIndex("Represent")));
+                    oCus.setProvinceid(cursor.getInt(cursor.getColumnIndex("Provinceid")));
+                    oCus.setDistrictid(cursor.getInt(cursor.getColumnIndex("Districtid")));
+                    oCus.setWardid(cursor.getInt(cursor.getColumnIndex("Wardid")));
+                    oCus.setStreet(cursor.getString(cursor.getColumnIndex("Street")));
+                    oCus.setTax(cursor.getString(cursor.getColumnIndex("Tax")));
+                    oCus.setTel(cursor.getString(cursor.getColumnIndex("Tel")));
+                    oCus.setFax(cursor.getString(cursor.getColumnIndex("Fax")));
+                    oCus.setEmail(cursor.getString(cursor.getColumnIndex("Email")));
+                    oCus.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oCus.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oCus.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+
+                    if(cursor.getDouble(cursor.getColumnIndex("LongitudeTemp"))<=0){
+                        oCus.setLongitudeTemp(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    }else{
+                        oCus.setLongitudeTemp(cursor.getDouble(cursor.getColumnIndex("LongitudeTemp")));
+                    }
+
+                    if(cursor.getDouble(cursor.getColumnIndex("LatitudeTemp"))<=0) {
+                        oCus.setLatitudeTemp(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    }else{
+                        oCus.setLatitudeTemp(cursor.getDouble(cursor.getColumnIndex("LatitudeTemp")));
+                    }
+
+                    oCus.setLocationAddressTemp(cursor.getString(cursor.getColumnIndex("LocationAddressTemp")));
+                    oCus.setEdit(cursor.getInt(cursor.getColumnIndex("EditStatus")));
+                    if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==1){
+                        oCus.setStatusDesc("Mới");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==2){
+                        oCus.setStatusDesc("Sửa");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==3){
+                        oCus.setStatusDesc("Xóa");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==4){
+                        oCus.setStatusDesc("Chờ duyệt");
+                    }else if(cursor.getInt(cursor.getColumnIndex("EditStatus"))==5){
+                        oCus.setStatusDesc("Từ chối");
+                    }else{
+                        oCus.setStatusDesc("");
+                    }
+
+                    oCus.setProvinceName(cursor.getString(cursor.getColumnIndex("Province")));
+                    oCus.setDistrictName(cursor.getString(cursor.getColumnIndex("District")));
+                    oCus.setWardName(cursor.getString(cursor.getColumnIndex("Ward")));
+                    oCus.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oCus.setRanked(cursor.getString(cursor.getColumnIndex("Ranked")));
+
+                    lstPara.add(oCus);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstPara;
+        }catch (Exception ex){Log.d("ERR_LOAD_CUS",ex.getMessage().toString());}
+        return null;
+    }
+
+
+    public List<DM_Customer_Search> getAllCustomerSearch() {
+        try {
+            List<DM_Customer_Search> lstPara = new ArrayList<DM_Customer_Search>();
+
+            String selectQuery = "SELECT  A.Customerid,A.CustomerCode,A.CustomerName," +
+                    " A.ShortName,A.Represent,B.Province,A.Longitude,A.Latitude" +
+                    " FROM DM_CUSTOMER A LEFT JOIN DM_PROVINCE B ON A.Provinceid=b.Provinceid " +
+                    " ORDER BY A.EditStatus desc, Customerid ASC";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Customer_Search oCus = new DM_Customer_Search();
+                    oCus.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                    oCus.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+                    oCus.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oCus.setShortName(cursor.getString(cursor.getColumnIndex("ShortName")));
+                    oCus.setLongititude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oCus.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oCus.setProvinceName(cursor.getString(cursor.getColumnIndex("Province")));
+                    lstPara.add(oCus);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstPara;
+        }catch (Exception ex){Log.d("ERR_LOAD_CUS",ex.getMessage().toString());}
+        return null;
+    }
+
+
+    public boolean addCustomer(DM_Customer oCus){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeCustomer(oCus.getCustomerid());
+            if (iSq<0) {
+                //Log.d("INS_CUSTOMER_DB","ERROR :-1");
+                db.close();
+                //return false;
+            }
+
+            if (iSq<=0 && iSq!=-1) {
+                ContentValues values = new ContentValues();
+                values.put("Customerid", oCus.getCustomerid());
+                values.put("Employeeid", oCus.getEmployeeid());
+                values.put("CustomerCode", oCus.getCustomerCode());
+                values.put("CustomerName",oCus.getCustomerName());
+                values.put("ShortName", oCus.getShortName());
+                values.put("Represent", oCus.getRepresent());
+                values.put("Provinceid", oCus.getProvinceid());
+                values.put("Districtid", oCus.getDistrictid());
+                values.put("Wardid",oCus.getWardid());
+                values.put("Street", oCus.getStreet());
+                values.put("Address", oCus.getAddress());
+                values.put("Tax", oCus.getTax());
+                values.put("Tel", oCus.getTel());
+                values.put("Fax", oCus.getFax());
+                values.put("Email",oCus.getEmail());
+                values.put("Longitude", oCus.getLongitude());
+                values.put("Latitude", oCus.getLatitude());
+                values.put("LocationAddress",oCus.getLocationAddress());
+                values.put("Notes", oCus.getNotes());
+                values.put("EditStatus", oCus.getEdit());
+                values.put("Ranked",oCus.getRanked());
+
+                db.insert("DM_CUSTOMER", null, values);
+            }else{
+                //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+                //db.execSQL(mSql);
+                ContentValues values = new ContentValues();
+                values.put("Employeeid", oCus.getEmployeeid());
+                values.put("CustomerCode", oCus.getCustomerCode());
+                values.put("CustomerName",oCus.getCustomerName());
+                values.put("ShortName", oCus.getShortName());
+                values.put("Represent", oCus.getRepresent());
+                values.put("Provinceid", oCus.getProvinceid());
+                values.put("Districtid", oCus.getDistrictid());
+                values.put("Wardid",oCus.getWardid());
+                values.put("Street", oCus.getStreet());
+                values.put("Address", oCus.getAddress());
+                values.put("Tel", oCus.getTel());
+                values.put("Tax", oCus.getTax());
+                values.put("Fax", oCus.getFax());
+                values.put("Email",oCus.getEmail());
+                values.put("Longitude", oCus.getLongitude());
+                values.put("Latitude", oCus.getLatitude());
+                values.put("LocationAddress",oCus.getLocationAddress());
+                values.put("Notes", oCus.getNotes());
+                values.put("EditStatus", oCus.getEdit());
+                values.put("Ranked",oCus.getRanked());
+
+                db.update("DM_CUSTOMER",values,"Customerid=?" ,new String[] {String.valueOf(oCus.getCustomerid())});
+            }
+
+            //Log.d("INS_CUSTOMER_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_CUSTOMER_ERR",e.getMessage()); return  false;}
+    }
+
+
+    public String addCustomer2(DM_Customer oCus) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+            iSq = getSizeCustomer(oCus.getCustomerid());
+            if (iSq < 0) {
+                db.close();
+                //return false;
+            }
+
+            if (iSq <= 0 && iSq != -1) {
+                ContentValues values = new ContentValues();
+                values.put("Customerid", oCus.getCustomerid());
+                values.put("Employeeid", oCus.getEmployeeid());
+                values.put("CustomerCode", oCus.getCustomerCode());
+                values.put("CustomerName", oCus.getCustomerName());
+                values.put("ShortName", oCus.getShortName());
+                values.put("Represent", oCus.getRepresent());
+                values.put("Provinceid", oCus.getProvinceid());
+                values.put("Districtid", oCus.getDistrictid());
+                values.put("Wardid", oCus.getWardid());
+                values.put("Street", oCus.getStreet());
+                values.put("Address", oCus.getAddress());
+                values.put("Tel", oCus.getTel());
+                values.put("Tax", oCus.getTax());
+                values.put("Fax", oCus.getFax());
+                values.put("Email", oCus.getEmail());
+                values.put("Longitude", 0);
+                values.put("Latitude", 0);
+                values.put("LocationAddress", "");
+                values.put("LongitudeTemp", oCus.getLongitudeTemp());
+                values.put("LatitudeTemp", oCus.getLatitudeTemp());
+                values.put("LocationAddressTemp",oCus.getLocationAddressTemp());
+                values.put("Notes", oCus.getNotes());
+                values.put("EditStatus", oCus.getEdit());
+
+                db.insert("DM_CUSTOMER", null, values);
+            }
+            return "OK";
+        }catch (Exception ex){ return ex.getMessage(); }
+    }
+    public boolean editCustomer(DM_Customer oCus){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+            //db.execSQL(mSql);
+            ContentValues values = new ContentValues();
+            values.put("Employeeid", oCus.getEmployeeid());
+            values.put("CustomerCode", oCus.getCustomerCode());
+            values.put("CustomerName",oCus.getCustomerName());
+            values.put("ShortName", oCus.getShortName());
+            values.put("Represent", oCus.getRepresent());
+            values.put("Provinceid", oCus.getProvinceid());
+            values.put("Districtid", oCus.getDistrictid());
+            values.put("Wardid",oCus.getWardid());
+            values.put("Street", oCus.getStreet());
+            values.put("Address", oCus.getAddress());
+            values.put("Tel", oCus.getTel());
+            values.put("Tax", oCus.getTax());
+            values.put("Fax", oCus.getFax());
+            values.put("Email",oCus.getEmail());
+            values.put("LongitudeTemp", oCus.getLongitudeTemp());
+            values.put("LatitudeTemp", oCus.getLatitudeTemp());
+            values.put("LocationAddressTemp",oCus.getLocationAddressTemp());
+            values.put("Notes", oCus.getNotes());
+            values.put("EditStatus", oCus.getEdit());
+
+            db.update("DM_CUSTOMER",values,"Customerid=?" ,new String[] {String.valueOf(oCus.getCustomerid())});
+
+            //Log.d("UDP_CUSTOMER_DB","OK");
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_CUSTOMER_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean delCustomer(String CustomerID,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_CUSTOMER");
+            }else{
+                mSql = String.format("delete from DM_CUSTOMER where Customerid='%s'", CustomerID);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    //CUSTOMER_DISTANCE
+    public List<DM_Customer_Distance> getAllCustomerDistance() {
+        try {
+            List<DM_Customer_Distance> lstPara = new ArrayList<DM_Customer_Distance>();
+            String selectQuery = "SELECT  distinct Customerid,CustomerName,Longitude,Latitude from DM_CUSTOMER WHERE Longitude>0 AND Latitude>0 ";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Customer_Distance oCus = new DM_Customer_Distance();
+                    oCus.setCustomerid(cursor.getString(cursor.getColumnIndex("Customerid")));
+                    oCus.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oCus.setLongititude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oCus.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oCus.setDistance(Float.valueOf(0));
+                    lstPara.add(oCus);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstPara;
+        }catch (Exception ex){Log.d("ERR_LOAD_CUS",ex.getMessage().toString());}
+        return null;
+    }
+
+
+
+    //DM_EMPLOYEE
+    public int getSizeEmployee(String Employeeid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_EMPLOYEE WHERE Employeeid=?",new String[]{Employeeid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addEmployee(DM_Employee oEmp){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeEmployee(oEmp.getEmployeeid().toString());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("Employeeid",oEmp.getEmployeeid());
+                values.put("EmployeeCode",oEmp.getEmployeeCode());
+                values.put("EmployeeName",oEmp.getEmployeeName());
+                values.put("Notes", oEmp.getNotes());
+                db.insert("DM_EMPLOYEE", null, values);
+            }else{
+                //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+                //db.execSQL(mSql);
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("EmployeeCode",oEmp.getEmployeeCode());
+                values.put("EmployeeName",oEmp.getEmployeeName());
+                values.put("Notes", oEmp.getNotes());
+                db.update("DM_EMPLOYEE",values,"Employeeid=?" ,new String[] { String.valueOf(oEmp.getEmployeeid().toString())});
+            }
+            //Log.d("INS_PROVINCE_DB","OK");
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_DM_EMPLOYEE_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Employee> getAllEmployee() {
+        List<DM_Employee> lstPara = new ArrayList<DM_Employee>();
+        String selectQuery = "SELECT  * FROM DM_EMPLOYEE ORDER BY EmployeeName ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Employee oPara = new DM_Employee();
+                oPara.setEmployeeid(cursor.getString(cursor.getColumnIndex("Employeeid")));
+                oPara.setEmployeeCode(cursor.getString(cursor.getColumnIndex("EmployeeCode")));
+                oPara.setEmployeeName(cursor.getString(cursor.getColumnIndex("EmployeeName")));
+                oPara.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+    public boolean delEmployee(String Employeeid,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_EMPLOYEE");
+            }else{
+                mSql = String.format("delete from DM_EMPLOYEE where Employeeid='%s'", Employeeid);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+
+
+    //SMVISIT-CARD
+    private String getVisitCardid(String VisitDay,String mCustomerID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_VISITCARD WHERE (julianday(VisitDay)-julianday('%s')=0) and CustomerID='%s' ", new String[]{VisitDay,mCustomerID});
+
+            String VisitCardID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    VisitCardID=cursor.getString(cursor.getColumnIndex("VisitCardID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return VisitCardID;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizeVisitCard(String VisitCardID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_VISITCARD WHERE VisitCardID=?", new String[]{VisitCardID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanVisitCard(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql = String.format("delete from SM_VISITCARD where julianday('now')-julianday(VisitDay)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+    //Fortmat yy
+    public List<SM_VisitCard> getAllVisitCard(String fday,String tDay) {
+        try {
+            List<SM_VisitCard> lstVisit = new ArrayList<SM_VisitCard>();
+            String mSql=String.format("Select A.*,B.CustomerName from SM_VISITCARD A LEFT JOIN DM_CUSTOMER B on ifnull(a.CustomerID,'')=b.Customerid "+
+                    " where (julianday(A.VisitDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.VisitDay)) >=0 order by VisitDay desc,VisitTime desc",fday,tDay);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_VisitCard oVisitCard = new SM_VisitCard();
+                    oVisitCard.setVisitCardID(cursor.getString(cursor.getColumnIndex("VisitCardID")));
+                    oVisitCard.setVisitDay(cursor.getString(cursor.getColumnIndex("VisitDay")));
+                    oVisitCard.setVisitType(cursor.getString(cursor.getColumnIndex("VisitType")));
+
+                    oVisitCard.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oVisitCard.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oVisitCard.setVisitTime(cursor.getString(cursor.getColumnIndex("VisitTime")));
+                    oVisitCard.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oVisitCard.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oVisitCard.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oVisitCard.setVisitNotes(cursor.getString(cursor.getColumnIndex("VisitNotes")));
+
+                    oVisitCard.setSyncDay(cursor.getString(cursor.getColumnIndex("SyncDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsSync")).contains("1")){
+                        oVisitCard.setSync(true);
+                    }else{
+                        oVisitCard.setSync(false);
+                    }
+                    lstVisit.add(oVisitCard);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstVisit;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_VISIT",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_VisitCard getVisitCard(String VisitCardID) {
+        try {
+            String mSql=String.format("Select A.*,B.CustomerName from SM_VISITCARD A LEFT JOIN DM_CUSTOMER B on a.CustomerID=b.Customerid "+
+                    " where A.VisitCardID='%s' order by VisitDay desc",VisitCardID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+
+            SM_VisitCard oVisitCard = new SM_VisitCard();
+            if (cursor.moveToFirst()) {
+                do {
+                    oVisitCard.setVisitCardID(cursor.getString(cursor.getColumnIndex("VisitCardID")));
+                    oVisitCard.setVisitDay(cursor.getString(cursor.getColumnIndex("VisitDay")));
+                    oVisitCard.setVisitType(cursor.getString(cursor.getColumnIndex("VisitType")));
+
+                    oVisitCard.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oVisitCard.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oVisitCard.setVisitTime(cursor.getString(cursor.getColumnIndex("VisitTime")));
+                    oVisitCard.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oVisitCard.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oVisitCard.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oVisitCard.setVisitNotes(cursor.getString(cursor.getColumnIndex("VisitNotes")));
+                    oVisitCard.setSyncDay(cursor.getString(cursor.getColumnIndex("SyncDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsSync")).contains("1")){
+                        oVisitCard.setSync(true);
+                    }else{
+                        oVisitCard.setSync(false);
+                    }
+
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return  oVisitCard;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_VISIT",ex.getMessage().toString());}
+        return null;
+    }
+
+    public String addVisitCard(SM_VisitCard oVisit){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String VisitCardID=getVisitCardid(oVisit.getVisitDay(),oVisit.getCustomerID());
+            if(VisitCardID!=""){
+                if(oVisit.getVisitCardID().isEmpty()|| oVisit.getVisitCardID()==null){
+                    oVisit.setVisitCardID(VisitCardID);
+                }
+            }
+            iSq=getSizeVisitCard(oVisit.getVisitCardID());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("VisitCardID", oVisit.getVisitCardID());
+                values.put("VisitDay", oVisit.getVisitDay());
+                values.put("VisitType", oVisit.getVisitType());
+                values.put("CustomerID", oVisit.getCustomerID());
+                values.put("VisitTime", oVisit.getVisitTime());
+                values.put("Longitude",oVisit.getLongitude());
+                values.put("Latitude", oVisit.getLatitude());
+                values.put("LocationAddress", oVisit.getLocationAddress());
+                values.put("VisitNotes", oVisit.getVisitNotes());
+                values.put("IsSync", oVisit.getSync());
+
+                db.insert("SM_VISITCARD", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("VisitDay", oVisit.getVisitDay());
+                values.put("CustomerID", oVisit.getCustomerID());
+                values.put("VisitTime", oVisit.getVisitTime());
+                values.put("Longitude",oVisit.getLongitude());
+                values.put("Latitude", oVisit.getLatitude());
+                values.put("LocationAddress", oVisit.getLocationAddress());
+                values.put("VisitNotes", oVisit.getVisitNotes());
+                values.put("IsSync", oVisit.getSync());
+
+                db.update("SM_VISITCARD",values,"VisitCardID=?" ,new String[] {String.valueOf(oVisit.getVisitCardID())});
+            }
+            //Log.d("INS_VISITCARD_DB","OK");
+            db.close();
+
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+
+    public boolean editVisitCard(SM_VisitCard oVisit){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            //String mSql = String.format("update QR_QRSCAN set PARA_VAL='%s' where PARA_NAME='%s'", ParamName, ParaVal);
+            //db.execSQL(mSql);
+            ContentValues values = new ContentValues();
+            values.put("IsSync", oVisit.getSync());
+            values.put("SyncDay",oVisit.getSyncDay());
+            db.update("SM_VISITCARD",values,"VisitCardID=?" ,new String[] {String.valueOf(oVisit.getVisitCardID())});
+            //Log.d("UDP_SM_VISITCARD_DB","OK");
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_VISITCARD_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean delVisitCard(SM_VisitCard oVisit){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_VISITCARD where VisitCardID='%s'",oVisit.getVisitCardID());
+            try {
+                db.execSQL(mSql);
+                //Log.d("DEL_VISIT_CARD",oVisit.getVisitCardID());
+            }catch (Exception ex){
+                //Log.d("DEL_VISIT_CARD",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    /********************/
+    /*<<SM-ORDER>>*/
+    /********************/
+    public boolean getCheckOrderStatus(String mToday){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            //Cursor cursor = db.rawQuery("SELECT * FROM SM_ORDER WHERE OrderStatus<=3 and (julianday('%s')-julianday(OrderDate)>=7)", new String[]{mToday});
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_ORDER WHERE OrderStatus<=3",null);
+            int iSq= cursor.getCount();
+            cursor.close();
+
+            if (iSq>0){return  true;}else{return  false;}
+        }catch(Exception ex){return false;}
+    }
+
+    private String getSMOrderID(String OrderDay,String mCustomerID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_ORDER WHERE (julianday(OrderDate)-julianday('%s')=0) and CustomerID='%s' ", new String[]{OrderDay,mCustomerID});
+            String OrderID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    OrderID=cursor.getString(cursor.getColumnIndex("OrderID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return OrderID;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizeSMOrder(String OrderID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_ORDER WHERE OrderID=?", new String[]{OrderID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanSMOrder(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_ORDER_DETAIL where OrderID in(select OrderID from SM_ORDER where julianday('now')-julianday(OrderDate)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+            mSql = String.format("delete from SM_ORDER where julianday('now')-julianday(OrderDate)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+    //Fortmat yy
+    public List<SM_Order> getAllSMOrder(String fday,String tDay) {
+        try {
+            List<SM_Order> lstOrder = new ArrayList<SM_Order>();
+            String mSql=String.format("Select A.*,B.CustomerName,B.CustomerCode,B.LocationAddress as CustomerAddress from SM_ORDER A LEFT JOIN DM_CUSTOMER B on ifnull(a.CustomerID,'')=b.Customerid "+
+                    " where (julianday(A.OrderDate)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.OrderDate)) >=0 order by OrderDate desc,RequestDate desc",fday,tDay);
+
+            //Log.d("SQL_ORDER",mSql);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_Order oOrder = new SM_Order();
+                    oOrder.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+                    oOrder.setOrderCode(cursor.getString(cursor.getColumnIndex("OrderCode")));
+                    oOrder.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+
+                    oOrder.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oOrder.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+                    oOrder.setCustomerAddress(cursor.getString(cursor.getColumnIndex("CustomerAddress")));
+
+                    oOrder.setOrderDate(cursor.getString(cursor.getColumnIndex("OrderDate")));
+                    oOrder.setRequestDate(cursor.getString(cursor.getColumnIndex("RequestDate")));
+                    oOrder.setMaxDebt(cursor.getInt(cursor.getColumnIndex("MaxDebt")));
+                    oOrder.setOriginMoney(cursor.getDouble(cursor.getColumnIndex("OriginMoney")));
+                    oOrder.setVAT(cursor.getDouble(cursor.getColumnIndex("VAT")));
+                    oOrder.setVATMoney(cursor.getDouble(cursor.getColumnIndex("VATMoney")));
+                    oOrder.setTotalMoney(cursor.getDouble(cursor.getColumnIndex("TotalMoney")));
+                    oOrder.setOrderStatus(cursor.getInt(cursor.getColumnIndex("OrderStatus")));
+                    if(cursor.getString(cursor.getColumnIndex("OrderStatus"))!=null){
+                        if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("0")){
+                            oOrder.setOrderStatusDesc("Đơn hàng mới");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("1")){
+                            oOrder.setOrderStatusDesc("Đã điều chỉnh");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("2")){
+                            oOrder.setOrderStatusDesc("Đang chờ xử lý");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("3")){
+                            oOrder.setOrderStatusDesc("Đang vận chuyển");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("4")){
+                            oOrder.setOrderStatusDesc("Đã hoàn tất");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("5")){
+                            oOrder.setOrderStatusDesc("Đã hủy");
+                        }else{
+                            oOrder.setOrderStatusDesc("");
+                        }
+                    }
+                    oOrder.setApproveDate(cursor.getString(cursor.getColumnIndex("ApproveDate")));
+                    oOrder.setHandleStaff(cursor.getString(cursor.getColumnIndex("HandleStaff")));
+                    oOrder.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
+
+                    oOrder.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oOrder.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oOrder.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oOrder.setOrderNotes(cursor.getString(cursor.getColumnIndex("OrderNotes")));
+                    oOrder.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsPost"))!=null && cursor.getString(cursor.getColumnIndex("IsPost")).contains("1")){
+                        oOrder.setPost(true);
+                    }else{
+                        oOrder.setPost(false);
+                    }
+                    lstOrder.add(oOrder);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstOrder;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_ORDER",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_Order getSMOrder(String OrderID) {
+        try {
+            String mSql=String.format("Select A.*,B.CustomerName,B.CustomerCode,B.LocationAddress as CustomerAddress from SM_ORDER A LEFT JOIN DM_CUSTOMER B on a.CustomerID=b.Customerid "+
+                    " where A.OrderID='%s' order by OrderDate desc",OrderID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_Order oOrder = new SM_Order();
+            if (cursor.moveToFirst()) {
+                do {
+                    oOrder.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+                    oOrder.setOrderCode(cursor.getString(cursor.getColumnIndex("OrderCode")));
+                    oOrder.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+
+                    oOrder.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oOrder.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+                    oOrder.setCustomerAddress(cursor.getString(cursor.getColumnIndex("CustomerAddress")));
+
+                    oOrder.setOrderDate(cursor.getString(cursor.getColumnIndex("OrderDate")));
+                    oOrder.setRequestDate(cursor.getString(cursor.getColumnIndex("RequestDate")));
+                    oOrder.setMaxDebt(cursor.getInt(cursor.getColumnIndex("MaxDebt")));
+                    oOrder.setOriginMoney(cursor.getDouble(cursor.getColumnIndex("OriginMoney")));
+                    oOrder.setVAT(cursor.getDouble(cursor.getColumnIndex("VAT")));
+                    oOrder.setVATMoney(cursor.getDouble(cursor.getColumnIndex("VATMoney")));
+                    oOrder.setTotalMoney(cursor.getDouble(cursor.getColumnIndex("TotalMoney")));
+                    oOrder.setOrderStatus(cursor.getInt(cursor.getColumnIndex("OrderStatus")));
+                    if(cursor.getString(cursor.getColumnIndex("OrderStatus"))!=null){
+                        if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("0")){
+                            oOrder.setOrderStatusDesc("Đơn hàng mới");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("1")){
+                            oOrder.setOrderStatusDesc("Đã điều chỉnh");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("2")){
+                            oOrder.setOrderStatusDesc("Đang chờ xử lý");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("3")){
+                            oOrder.setOrderStatusDesc("Đang vận chuyển");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("4")){
+                            oOrder.setOrderStatusDesc("Đã hoàn tất");
+                        }else if(cursor.getString(cursor.getColumnIndex("OrderStatus")).equalsIgnoreCase("5")){
+                            oOrder.setOrderStatusDesc("Đã hủy");
+                        }else{
+                            oOrder.setOrderStatusDesc("");
+                        }
+                    }
+                    oOrder.setApproveDate(cursor.getString(cursor.getColumnIndex("ApproveDate")));
+                    oOrder.setHandleStaff(cursor.getString(cursor.getColumnIndex("HandleStaff")));
+                    oOrder.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
+
+                    oOrder.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oOrder.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oOrder.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oOrder.setOrderNotes(cursor.getString(cursor.getColumnIndex("OrderNotes")));
+
+                    oOrder.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsPost")).contains("1")){
+                        oOrder.setPost(true);
+                    }else{
+                        oOrder.setPost(false);
+                    }
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return  oOrder;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_ORDER",ex.getMessage().toString());}
+        return null;
+    }
+
+    public String addSMOrder(SM_Order oOrder){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String OrderID=getSMOrderID(oOrder.getOrderDate(),oOrder.getCustomerID());
+            if(OrderID!=""){
+                if(oOrder.getOrderID().isEmpty()|| oOrder.getOrderID()==null){
+                    oOrder.setOrderID(OrderID);
+                }
+            }
+            iSq=getSizeSMOrder(oOrder.getOrderID());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("OrderID", oOrder.getOrderID());
+                values.put("OrderCode", oOrder.getOrderCode());
+                values.put("OrderDate", oOrder.getOrderDate());
+                values.put("RequestDate", oOrder.getRequestDate());
+                values.put("MaxDebt", oOrder.getMaxDebt());
+                values.put("OriginMoney",oOrder.getOriginMoney());
+                values.put("VAT", oOrder.getVAT());
+                values.put("VATMoney", oOrder.getVATMoney());
+                values.put("TotalMoney", oOrder.getTotalMoney());
+                values.put("OrderStatus", oOrder.getOrderStatus());
+                values.put("OrderNotes", oOrder.getOrderNotes());
+                values.put("CustomerID", oOrder.getCustomerID());
+
+                values.put("Longitude",oOrder.getLongitude());
+                values.put("Latitude", oOrder.getLatitude());
+                values.put("LocationAddress", oOrder.getLocationAddress());
+                values.put("SeqnoCode", oOrder.getSeqnoCode());
+                values.put("IsPost", oOrder.getPost());
+                values.put("PostDay", oOrder.getPostDay());
+
+                db.insert("SM_ORDER", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("OrderCode", oOrder.getOrderCode());
+                values.put("OrderDate", oOrder.getOrderDate());
+                values.put("RequestDate", oOrder.getRequestDate());
+                values.put("MaxDebt", oOrder.getMaxDebt());
+                values.put("OriginMoney",oOrder.getOriginMoney());
+                values.put("VAT", oOrder.getVAT());
+                values.put("VATMoney", oOrder.getVATMoney());
+                values.put("TotalMoney", oOrder.getTotalMoney());
+                values.put("OrderStatus", oOrder.getOrderStatus());
+                values.put("OrderNotes", oOrder.getOrderNotes());
+                values.put("CustomerID", oOrder.getCustomerID());
+
+                values.put("Longitude",oOrder.getLongitude());
+                values.put("Latitude", oOrder.getLatitude());
+                values.put("LocationAddress", oOrder.getLocationAddress());
+                values.put("IsPost", oOrder.getPost());
+                values.put("PostDay", oOrder.getPostDay());
+                db.update("SM_ORDER",values,"OrderID=?" ,new String[] {String.valueOf(oOrder.getOrderID())});
+            }
+            //Log.d("INS_SM_ORDER_DB","OK");
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    public boolean editSMOrder(SM_Order oOrder){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("OrderCode", oOrder.getOrderCode());
+            values.put("OrderDate", oOrder.getOrderDate());
+            values.put("RequestDate", oOrder.getRequestDate());
+            values.put("MaxDebt", oOrder.getMaxDebt());
+            values.put("OriginMoney",oOrder.getOriginMoney());
+            values.put("VAT", oOrder.getVAT());
+            values.put("VATMoney", oOrder.getVATMoney());
+            values.put("TotalMoney", oOrder.getTotalMoney());
+            values.put("OrderStatus", oOrder.getOrderStatus());
+            values.put("CustomerID", oOrder.getCustomerID());
+            values.put("Longitude",oOrder.getLongitude());
+            values.put("Latitude", oOrder.getLatitude());
+            values.put("LocationAddress", oOrder.getLocationAddress());
+            values.put("SeqnoCode", oOrder.getSeqnoCode());
+            values.put("IsPost", oOrder.getPost());
+            values.put("PostDay", oOrder.getPostDay());
+            db.update("SM_ORDER",values,"OrderID=?" ,new String[] {String.valueOf(oOrder.getOrderID())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_ORDER_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean editSMOrderStatus(SM_Order oOrder){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("OrderStatus", oOrder.getOrderStatus());
+            values.put("IsPost", oOrder.getPost());
+            values.put("PostDay", oOrder.getPostDay());
+            db.update("SM_ORDER",values,"OrderID=?" ,new String[] {String.valueOf(oOrder.getOrderID())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_ORDER_ERR",e.getMessage()); return  false;}
+    }
+
+
+    public boolean editSMOrderStatus2(SM_OrderStatus oOST){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("OrderStatus",oOST.getOrderStatus());
+            values.put("TotalMoney", oOST.getTotalMoney());
+
+            db.update("SM_ORDER",values,"OrderCode=?" ,new String[] {String.valueOf(oOST.getOrderCode())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_ORDER_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean delSMOrder(SM_Order oOrder){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_ORDER_DETAIL where OrderID IN(select OrderID from SM_ORDER where OrderID='%s')",oOrder.getOrderID());
+            try {
+                db.execSQL(mSql);
+                mSql=String.format("delete from SM_ORDER where OrderID='%s'",oOrder.getOrderID());
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+
+    /*******************/
+    /*SM_ORDER_DETAIL*/
+    /*******************/
+    private String getSMOrderDetailID(String mOrderID,String mProductID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            String mSql=String.format("SELECT * FROM SM_ORDER_DETAIL WHERE OrderID='%s' AND ProductID='%s'",mOrderID,mProductID);
+            Cursor cursor = db.rawQuery(mSql,null);
+            String OrderDetailID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    OrderDetailID=cursor.getString(cursor.getColumnIndex("OrderDetailID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return OrderDetailID;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizeSMOrderDetail(String OrderDetailID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_ORDER_DETAIL WHERE OrderDetailID=?", new String[]{OrderDetailID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+
+    public List<SM_OrderDetail> getAllSMOrderDetail(String mOrderID) {
+        try {
+            List<SM_OrderDetail> lstOrderDetail = new ArrayList<SM_OrderDetail>();
+            String mSql=String.format("Select * from SM_ORDER_DETAIL where OrderID='%s' order by OrderDetailID desc", mOrderID);
+
+            //Log.d("SQL_ORDER_DETAIL",mSql);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_OrderDetail oOrderDetail = new SM_OrderDetail();
+                    oOrderDetail.setOrderDetailID(cursor.getString(cursor.getColumnIndex("OrderDetailID")));
+                    oOrderDetail.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+
+                    oOrderDetail.setProductID(cursor.getString(cursor.getColumnIndex("ProductID")));
+                    oOrderDetail.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    oOrderDetail.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                    oOrderDetail.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                    oOrderDetail.setSpec(cursor.getString(cursor.getColumnIndex("Spec")));
+                    oOrderDetail.setConvertBox(cursor.getFloat(cursor.getColumnIndex("ConvertBox")));
+                    oOrderDetail.setAmount(cursor.getInt(cursor.getColumnIndex("Amount")));
+                    oOrderDetail.setAmountBox(cursor.getFloat(cursor.getColumnIndex("AmountBox")));
+                    oOrderDetail.setPrice(cursor.getDouble(cursor.getColumnIndex("Price")));
+                    oOrderDetail.setOriginMoney(cursor.getDouble(cursor.getColumnIndex("OriginMoney")));
+                    oOrderDetail.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oOrderDetail.setNotes2(cursor.getString(cursor.getColumnIndex("Notes2")));
+
+                    lstOrderDetail.add(oOrderDetail);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstOrderDetail;
+        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_OrderDetail getSMOrderDetail(String mOrderDetailID) {
+        try {
+            String mSql=String.format("Select * from SM_ORDER_DETAIL where OrderDetailID='%$' order by OrderDetailID desc",mOrderDetailID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+
+            SM_OrderDetail oOrderDetail = new SM_OrderDetail();
+            if (cursor.moveToFirst()) {
+                do {
+                    oOrderDetail.setOrderDetailID(cursor.getString(cursor.getColumnIndex("OrderDetailID")));
+                    oOrderDetail.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+
+                    oOrderDetail.setProductID(cursor.getString(cursor.getColumnIndex("ProductID")));
+                    oOrderDetail.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    oOrderDetail.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                    oOrderDetail.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                    oOrderDetail.setSpec(cursor.getString(cursor.getColumnIndex("Spec")));
+                    oOrderDetail.setConvertBox(cursor.getFloat(cursor.getColumnIndex("ConvertBox")));
+                    oOrderDetail.setAmount(cursor.getInt(cursor.getColumnIndex("Amount")));
+                    oOrderDetail.setAmountBox(cursor.getFloat(cursor.getColumnIndex("AmountBox")));
+                    oOrderDetail.setPrice(cursor.getDouble(cursor.getColumnIndex("Price")));
+                    oOrderDetail.setOriginMoney(cursor.getDouble(cursor.getColumnIndex("OriginMoney")));
+                    oOrderDetail.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oOrderDetail.setNotes2(cursor.getString(cursor.getColumnIndex("Notes2")));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oOrderDetail;
+        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+        return null;
+    }
+
+
+    public String addSMOrderDetail(SM_OrderDetail oOrderDetail){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String mOrderDetailID=getSMOrderDetailID(oOrderDetail.getOrderID(),oOrderDetail.getProductID());
+           if(mOrderDetailID.isEmpty()|| mOrderDetailID=="" ){
+                ContentValues values = new ContentValues();
+                values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
+                values.put("OrderID", oOrderDetail.getOrderID());
+                values.put("ProductID", oOrderDetail.getProductID());
+                values.put("ProductCode", oOrderDetail.getProductCode());
+                values.put("ProductName", oOrderDetail.getProductName());
+                values.put("Unit", oOrderDetail.getUnit());
+                values.put("Spec",oOrderDetail.getSpec());
+                values.put("ConvertBox",oOrderDetail.getConvertBox());
+                values.put("Amount", oOrderDetail.getAmount());
+                values.put("AmountBox", oOrderDetail.getAmountBox());
+                values.put("Price",oOrderDetail.getPrice());
+                values.put("OriginMoney", oOrderDetail.getOriginMoney());
+                values.put("Notes", oOrderDetail.getNotes());
+               values.put("Notes2", oOrderDetail.getNotes2());
+
+                db.insert("SM_ORDER_DETAIL", null, values);
+            }else{
+               ContentValues values = new ContentValues();
+               values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
+               values.put("OrderID", oOrderDetail.getOrderID());
+               values.put("ProductID", oOrderDetail.getProductID());
+               values.put("ProductCode", oOrderDetail.getProductCode());
+               values.put("ProductName", oOrderDetail.getProductName());
+               values.put("Unit", oOrderDetail.getUnit());
+               values.put("Spec",oOrderDetail.getSpec());
+               values.put("ConvertBox",oOrderDetail.getConvertBox());
+               values.put("Amount", oOrderDetail.getAmount());
+               values.put("AmountBox", oOrderDetail.getAmountBox());
+               values.put("Price",oOrderDetail.getPrice());
+               values.put("OriginMoney", oOrderDetail.getOriginMoney());
+               values.put("Notes", oOrderDetail.getNotes());
+               values.put("Notes2", oOrderDetail.getNotes2());
+
+                db.update("SM_ORDER_DETAIL",values,"OrderDetailID=?" ,new String[] {String.valueOf(oOrderDetail.getOrderDetailID())});
+            }
+
+            //Log.d("INS_ORDERDETAIL_DB","OK");
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    public boolean delSMOrderDetail(SM_OrderDetail oOrderDetail){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_ORDER_DETAIL where OrderDetailID ='%s'",oOrderDetail.getOrderDetailID());
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                //Log.d("DEL_SM_ORDER",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+    public boolean delAllSMOrderDetail(String mOrderID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_ORDER_DETAIL where OrderID ='%s'",mOrderID);
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                Log.d("DEL_SM_ODT",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+   /****SM_DELIVERY_ORDER****/
+   private String getDeliveryID(String mOrderID,String mTransportCode){
+       try {
+           SQLiteDatabase db = getReadableDatabase();
+           Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER WHERE (OrderID='%s' AND TransportCode='%s')", new String[]{mOrderID,mTransportCode});
+           String mDeliveryOrderID="";
+           if (cursor.moveToFirst()) {
+               do {
+                   mDeliveryOrderID=cursor.getString(cursor.getColumnIndex("DeliveryOrderID"));
+                   break;
+               } while (cursor.moveToNext());
+           }
+           cursor.close();
+           return mDeliveryOrderID;
+       }catch(Exception ex){return  "";}
+   }
+
+   public List<SM_OrderDelivery> getAllDelivery(String mOrderID) {
+       try {
+           List<SM_OrderDelivery> lstOrderDetail = new ArrayList<SM_OrderDelivery>();
+           String mSql=String.format("Select A.* from SM_DELIVERY_ORDER A  where A.OrderID='%s' order by DeliveryNum asc",mOrderID);
+
+           SQLiteDatabase db = this.getReadableDatabase();
+           Cursor cursor = db.rawQuery(mSql, null);
+           if (cursor.moveToFirst()) {
+               do {
+                   SM_OrderDelivery oOrderDelivery = new SM_OrderDelivery();
+                   oOrderDelivery.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+                   oOrderDelivery.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+                   oOrderDelivery.setTransportCode(cursor.getString(cursor.getColumnIndex("TransportCode")));
+                   oOrderDelivery.setNumberPlate(cursor.getString(cursor.getColumnIndex("NumberPlate")));
+                   oOrderDelivery.setCarType(cursor.getString(cursor.getColumnIndex("CarType")));
+                   oOrderDelivery.setDeliveryStaff(cursor.getString(cursor.getColumnIndex("DeliveryStaff")));
+                   oOrderDelivery.setDeliveryNum(cursor.getInt(cursor.getColumnIndex("DeliveryNum")));
+                   oOrderDelivery.setDeliveryDate(cursor.getString(cursor.getColumnIndex("DeliveryDate")));
+                   oOrderDelivery.setHandlingStaff(cursor.getString(cursor.getColumnIndex("HandlingStaff")));
+                   oOrderDelivery.setHandlingDate(cursor.getString(cursor.getColumnIndex("HandlingDate")));
+                   oOrderDelivery.setTotalMoney(cursor.getFloat(cursor.getColumnIndex("TotalMoney")));
+                   oOrderDelivery.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
+                   lstOrderDetail.add(oOrderDelivery);
+               } while (cursor.moveToNext());
+           }
+           cursor.close();
+           db.close();
+           return lstOrderDetail;
+       }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+       return null;
+   }
+
+    public String addDelivery(SM_OrderDelivery oOrderDelivery){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+            String mOrderDeliveryID=getDeliveryID(oOrderDelivery.getOrderID(),oOrderDelivery.getTransportCode());
+            if(mOrderDeliveryID==null || mOrderDeliveryID.isEmpty()|| mOrderDeliveryID=="" ){
+                ContentValues values = new ContentValues();
+                values.put("DeliveryOrderID", oOrderDelivery.getDeliveryOrderID());
+                values.put("OrderID", oOrderDelivery.getOrderID());
+                values.put("TransportCode",oOrderDelivery.getTransportCode());
+                values.put("NumberPlate", oOrderDelivery.getNumberPlate());
+                values.put("CarType", oOrderDelivery.getCarType());
+                values.put("DeliveryStaff", oOrderDelivery.getDeliveryStaff());
+                values.put("DeliveryNum",oOrderDelivery.getDeliveryNum());
+                values.put("DeliveryDate",oOrderDelivery.getDeliveryDate());
+                values.put("HandlingStaff", oOrderDelivery.getHandlingStaff());
+                values.put("HandlingDate",oOrderDelivery.getHandlingDate());
+                values.put("TotalMoney",oOrderDelivery.getTotalMoney());
+                values.put("DeliveryDesc",oOrderDelivery.getDeliveryDesc());
+
+                db.insert("SM_DELIVERY_ORDER", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("DeliveryOrderID", oOrderDelivery.getDeliveryOrderID());
+                values.put("OrderID", oOrderDelivery.getOrderID());
+                values.put("TransportCode",oOrderDelivery.getTransportCode());
+                values.put("NumberPlate", oOrderDelivery.getNumberPlate());
+                values.put("CarType", oOrderDelivery.getCarType());
+                values.put("DeliveryStaff", oOrderDelivery.getDeliveryStaff());
+                values.put("DeliveryNum",oOrderDelivery.getDeliveryNum());
+                values.put("DeliveryDate",oOrderDelivery.getDeliveryDate());
+                values.put("HandlingStaff", oOrderDelivery.getHandlingStaff());
+                values.put("HandlingDate",oOrderDelivery.getHandlingDate());
+                values.put("TotalMoney",oOrderDelivery.getTotalMoney());
+                values.put("DeliveryDesc",oOrderDelivery.getDeliveryDesc());
+                db.update("SM_DELIVERY_ORDER",values,"DeliveryOrderID=?" ,new String[] {String.valueOf(mOrderDeliveryID)});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+
+    public boolean delDelivery(String mDeliveryID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_DELIVERY_ORDER_DETAIL where DeliveryOrderID ='%s'",mDeliveryID);
+            try {
+                db.execSQL(mSql);
+
+                mSql=String.format("delete from SM_DELIVERY_ORDER where DeliveryOrderID ='%s'",mDeliveryID);
+                db.execSQL(mSql);
+                return  true;
+            }catch (Exception ex){
+                return  false;
+            }
+        }catch (Exception ex){return false;}
+    }
+
+     //DELIVERY DETAIL
+     public List<SM_OrderDeliveryDetail> getAllDeliveryDetail(String mDeliveryOrderID) {
+         try {
+             List<SM_OrderDeliveryDetail> lstOrderDetail = new ArrayList<SM_OrderDeliveryDetail>();
+             String mSql=String.format("Select A.* from SM_DELIVERY_ORDER_DETAIL A  where A.DeliveryOrderID='%s' order by ProductCode asc",mDeliveryOrderID);
+
+             SQLiteDatabase db = this.getReadableDatabase();
+             Cursor cursor = db.rawQuery(mSql, null);
+             if (cursor.moveToFirst()) {
+                 do {
+                     SM_OrderDeliveryDetail oDLT = new SM_OrderDeliveryDetail();
+                     oDLT.setDeliveryOrderDetailID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderDetailID")));
+                     oDLT.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+
+                     oDLT.setProductCode(cursor.getString(cursor.getColumnIndex(    "ProductCode")));
+                     oDLT.setProductName(cursor.getString(cursor.getColumnIndex(    "ProductName")));
+                     oDLT.setUnit(cursor.getString(cursor.getColumnIndex(    "Unit")));
+                     oDLT.setSpec(cursor.getString(cursor.getColumnIndex(    "Spec")));
+                     oDLT.setAmount(cursor.getInt(cursor.getColumnIndex(    "Amount")));
+                     oDLT.setAmountBox(cursor.getFloat(cursor.getColumnIndex(    "AmountBox")));
+                     oDLT.setPrice(cursor.getFloat(cursor.getColumnIndex(    "Price")));
+                     oDLT.setOriginMoney(cursor.getFloat(cursor.getColumnIndex(    "OriginMoney")));
+                     oDLT.setNotes(cursor.getString(cursor.getColumnIndex(    "Notes")));
+                     lstOrderDetail.add(oDLT);
+                 } while (cursor.moveToNext());
+             }
+             cursor.close();
+             db.close();
+             return lstOrderDetail;
+         }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+         return null;
+     }
+
+    private String getDeliveryDetailID(String mDeliveryOrderID,String mProductCode){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER_DETAIL WHERE (DeliveryOrderID='%s' AND ProductCode='%s')", new String[]{mDeliveryOrderID,mProductCode});
+            String mDeliveryOrderDetailID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    mDeliveryOrderDetailID=cursor.getString(cursor.getColumnIndex("DeliveryOrderDetailID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return  mDeliveryOrderDetailID;
+        }catch(Exception ex){return  "";}
+    }
+
+
+    public String addDeliveryDetail(SM_OrderDeliveryDetail oDLT){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+            String mDeliveryDetailID=getDeliveryDetailID(oDLT.getDeliveryOrderID(),oDLT.getProductCode());
+            if(mDeliveryDetailID==null || mDeliveryDetailID.isEmpty()|| mDeliveryDetailID=="" ){
+                ContentValues values = new ContentValues();
+                values.put("DeliveryOrderDetailID",oDLT.getDeliveryOrderDetailID());
+                values.put("DeliveryOrderID", oDLT.getDeliveryOrderID());
+                values.put("ProductCode",oDLT.getProductCode());
+                values.put("ProductName", oDLT.getProductName());
+                values.put("Unit", oDLT.getUnit());
+                values.put("Spec", oDLT.getSpec());
+                values.put("Amount",oDLT.getAmount());
+                values.put("AmountBox",oDLT.getAmountBox());
+                values.put("Price",oDLT.getPrice());
+                values.put("OriginMoney", oDLT.getOriginMoney());
+                values.put("Notes",oDLT.getNotes());
+
+                db.insert("SM_DELIVERY_ORDER_DETAIL", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("DeliveryOrderID", oDLT.getDeliveryOrderID());
+                values.put("ProductCode",oDLT.getProductCode());
+                values.put("ProductName", oDLT.getProductName());
+                values.put("Unit", oDLT.getUnit());
+                values.put("Spec", oDLT.getSpec());
+                values.put("Amount",oDLT.getAmount());
+                values.put("AmountBox",oDLT.getAmountBox());
+                values.put("Price",oDLT.getPrice());
+                values.put("OriginMoney", oDLT.getOriginMoney());
+                values.put("Notes",oDLT.getNotes());
+                db.update("SM_DELIVERY_ORDER_DETAIL",values,"DeliveryOrderDetailID=?" ,new String[] {String.valueOf(mDeliveryDetailID)});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    public boolean delAllDeliveryDetail(String mDeliveryID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSql=String.format("delete from SM_DELIVERY_ORDER_DETAIL where DeliveryOrderID ='%s'",mDeliveryID);
+            try {
+                db.execSQL(mSql);
+                return  true;
+            }catch (Exception ex){
+                return  false;
+            }
+        }catch (Exception ex){return false;}
+    }
+
+
+
+
+
+    /*******GĐ-2*************/
+    /****DM_TREE*****/
+    public int getSizeTree(String Treeid){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_TREE WHERE TreeID=?",new String[]{Treeid});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addTree(DM_Tree oDM){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeTree(Integer.toString(oDM.getTreeID()));
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("TreeID",oDM.getTreeID());
+                values.put("TreeCode",oDM.getTreeCode());
+                values.put("TreeGroupCode", oDM.getTreeGroupCode());
+                values.put("TreeName", oDM.getTreeName());
+                db.insert("DM_TREE", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("TreeCode",oDM.getTreeCode());
+                values.put("TreeGroupCode", oDM.getTreeGroupCode());
+                values.put("TreeName", oDM.getTreeName());
+                db.update("DM_TREE",values,"TreeID=?" ,new String[] { String.valueOf(oDM.getTreeID())});
+            }
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Tree> getAllTree() {
+        List<DM_Tree> lstPara = new ArrayList<DM_Tree>();
+
+        String selectQuery = "SELECT  TreeID,TreeCode,TreeGroupCode,TreeName FROM DM_TREE ORDER BY TreeName ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Tree oPara = new DM_Tree();
+                oPara.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oPara.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                oPara.setTreeGroupCode(cursor.getString(cursor.getColumnIndex("TreeGroupCode")));
+                oPara.setTreeName(cursor.getString(cursor.getColumnIndex("TreeName")));
+
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+
+        return lstPara;
+    }
+    public List<DM_Tree> getTree(Integer TreeID) {
+        List<DM_Tree> lstPara = new ArrayList<DM_Tree>();
+        String selectQuery = String.format("SELECT  TreeID,TreeCode,TreeGroupCode,TreeName FROM DM_TREE where TreeID='%d' ORDER BY TreeName ASC",TreeID);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Tree oPara = new DM_Tree();
+                oPara.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oPara.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                oPara.setTreeGroupCode(cursor.getString(cursor.getColumnIndex("TreeGroupCode")));
+                oPara.setTreeName(cursor.getString(cursor.getColumnIndex("TreeName")));
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+    public boolean delTree(String TreeID,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_TREE");
+            }else{
+                mSql = String.format("delete from DM_TREE where TreeID='%s'",TreeID);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+
+    /****DM_TREE_DISEASE [DỊCH HẠI]*****/
+    public int getSizeTreeDisease(String DiseaseID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_TREE_DISEASE WHERE DiseaseID=?",new String[]{DiseaseID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return 0;}
+    }
+
+    public boolean addTreeDisease(DM_Tree_Disease oDM){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeTreeDisease(Integer.toString(oDM.getDiseaseID()));
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("DiseaseID",oDM.getDiseaseID());
+                values.put("TreeID",oDM.getTreeID());
+                values.put("DiseaseCode",oDM.getDiseaseCode());
+                values.put("DiseaseName",oDM.getDiseaseName());
+                db.insert("DM_TREE_DISEASE", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("TreeID",oDM.getTreeID());
+                values.put("DiseaseCode",oDM.getDiseaseCode());
+                values.put("DiseaseName", oDM.getDiseaseName());
+                db.update("DM_TREE_DISEASE",values,"DiseaseID=?" ,new String[] { String.valueOf(oDM.getDiseaseID())});
+            }
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("INS_DISEASE_ERR",e.getMessage()); return  false;}
+    }
+
+    public List<DM_Tree_Disease> getAllTreeDisease() {
+        List<DM_Tree_Disease> lstPara = new ArrayList<DM_Tree_Disease>();
+
+        String selectQuery = "SELECT  A.DiseaseID,A.TreeID,A.DiseaseCode,A.DiseaseName,B.TreeName FROM DM_TREE_DISEASE A LEFT JOIN DM_TREE B ON A.TreeID=B.TreeID ORDER BY A.TreeID, DiseaseName ASC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Tree_Disease oPara = new DM_Tree_Disease();
+                oPara.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
+                oPara.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oPara.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
+                oPara.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+                oPara.setTreeName(cursor.getString(cursor.getColumnIndex("TreeName")));
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+
+        return lstPara;
+    }
+    public List<DM_Tree_Disease> getTreeDisease(Integer DiseaseID) {
+        List<DM_Tree_Disease> lstPara = new ArrayList<DM_Tree_Disease>();
+        String selectQuery = String.format("SELECT  A.DiseaseID,A.TreeID,A.DiseaseCode,A.DiseaseName,B.TreeName FROM DM_TREE_DISEASE A LEFT JOIN DM_TREE B ON A.TreeID=B.TreeID where A.DiseaseID='%d' ORDER BY A.TreeID,DiseaseName ASC",DiseaseID);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Tree_Disease oPara = new DM_Tree_Disease();
+                oPara.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
+                oPara.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oPara.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
+                oPara.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+                oPara.setTreeName(cursor.getString(cursor.getColumnIndex("TreeName")));
+                lstPara.add(oPara);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lstPara;
+    }
+
+    public boolean delTreeDisease(String DiseaseID,boolean isAll){
+        try {
+            String mSql;
+            SQLiteDatabase db = getWritableDatabase();
+            if(isAll) {
+                mSql = String.format("delete from DM_TREE_DISEASE");
+            }else{
+                mSql = String.format("delete from DM_TREE_DISEASE where DiseaseID='%s'",DiseaseID);
+            }
+            try {
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+
+    /*<<SM-CUSTOMER-PAY>>*/
+    /********************/
+    public boolean getCheckPayStatus(String mToday){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_CUSTOMER_PAY WHERE PayStatus<=3",null);
+            int iSq= cursor.getCount();
+            cursor.close();
+            if (iSq>0){return  true;}else{return  false;}
+        }catch(Exception ex){return false;}
+    }
+    private String getPayID(String PayDay,String mCustomerID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_CUSTOMER_PAY WHERE (julianday(OrderDate)-julianday('%s')=0) and CustomerID='%s' ", new String[]{PayDay,mCustomerID});
+            String PayID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    PayID=cursor.getString(cursor.getColumnIndex("PayID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return PayID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizePay(String PayID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_CUSTOMER_PAY WHERE PayID=?", new String[]{PayID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanCustomerPay(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_CUSTOMER_PAY where PayID in(select PayID from SM_CUSTOMER_PAY where julianday('now')-julianday(PayDate)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+            mSql = String.format("delete from SM_CUSTOMER_PAY where julianday('now')-julianday(PayDate)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_CustomerPay> getAllCustomerPay(String fday, String tDay) {
+        try {
+            List<SM_CustomerPay> lstPay = new ArrayList<SM_CustomerPay>();
+            String mSql=String.format("Select A.*,B.CustomerName,B.CustomerCode from SM_CUSTOMER_PAY A LEFT JOIN DM_CUSTOMER B on ifnull(a.CustomerID,'')=b.Customerid "+
+                    " where (julianday(A.PayDate)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.PayDate)) >=0 order by PayDate desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_CustomerPay oPay = new SM_CustomerPay();
+                    oPay.setPayID(cursor.getString(cursor.getColumnIndex("PayID")));
+                    oPay.setPayCode(cursor.getString(cursor.getColumnIndex("PayCode")));
+                    oPay.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oPay.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oPay.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+
+                    oPay.setPayDate(cursor.getString(cursor.getColumnIndex("PayDate")));
+                    oPay.setPayName(cursor.getString(cursor.getColumnIndex("PayName")));
+                    oPay.setPayNotes(cursor.getString(cursor.getColumnIndex("PayNotes")));
+                    oPay.setPayMoney(cursor.getDouble(cursor.getColumnIndex("PayMoney")));
+                    oPay.setPayPic(cursor.getString(cursor.getColumnIndex("PayPic")));
+                    oPay.setPayStatus(cursor.getInt(cursor.getColumnIndex("PayStatus")));
+                    if(cursor.getString(cursor.getColumnIndex("PayStatus"))!=null){
+                        if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("0")){
+                            oPay.setPayStatusDesc("Phiếu mới");
+                        }else if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("1")){
+                            oPay.setPayStatusDesc("Đã điều chỉnh");
+                        }else if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("3")){
+                            oPay.setPayStatusDesc("Đã hủy");
+                        }else{
+                            oPay.setPayStatusDesc("");
+                        }
+                    }
+
+                    oPay.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oPay.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oPay.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oPay.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsPost"))!=null && cursor.getString(cursor.getColumnIndex("IsPost")).contains("1")){
+                        oPay.setPost(true);
+                    }else{
+                        oPay.setPost(false);
+                    }
+                    lstPay.add(oPay);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstPay;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_PAY",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_CustomerPay getCustomerPay(String PayID) {
+        try {
+            String mSql=String.format("Select A.*,B.CustomerName,B.CustomerCode from SM_CUSTOMER_PAY A LEFT JOIN DM_CUSTOMER B on a.CustomerID=b.Customerid "+
+                    " where A.PayID='%s' order by PayDate desc",PayID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_CustomerPay oPay = new SM_CustomerPay();
+            if (cursor.moveToFirst()) {
+                do {
+                    oPay.setPayID(cursor.getString(cursor.getColumnIndex("PayID")));
+                    oPay.setPayCode(cursor.getString(cursor.getColumnIndex("PayCode")));
+                    oPay.setCustomerID(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oPay.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    oPay.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+
+                    oPay.setPayDate(cursor.getString(cursor.getColumnIndex("PayDate")));
+                    oPay.setPayName(cursor.getString(cursor.getColumnIndex("PayName")));
+                    oPay.setPayNotes(cursor.getString(cursor.getColumnIndex("PayNotes")));
+                    oPay.setPayMoney(cursor.getDouble(cursor.getColumnIndex("PayMoney")));
+                    oPay.setPayPic(cursor.getString(cursor.getColumnIndex("PayPic")));
+                    oPay.setPayStatus(cursor.getInt(cursor.getColumnIndex("PayStatus")));
+                    if(cursor.getString(cursor.getColumnIndex("PayStatus"))!=null){
+                        if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("0")){
+                            oPay.setPayStatusDesc("Phiếu mới");
+                        }else if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("1")){
+                            oPay.setPayStatusDesc("Đã điều chỉnh");
+                        }else if(cursor.getString(cursor.getColumnIndex("PayStatus")).equalsIgnoreCase("3")){
+                            oPay.setPayStatusDesc("Đã hủy");
+                        }else{
+                            oPay.setPayStatusDesc("");
+                        }
+                    }
+
+                    oPay.setLongitude(cursor.getDouble(cursor.getColumnIndex("Longitude")));
+                    oPay.setLatitude(cursor.getDouble(cursor.getColumnIndex("Latitude")));
+                    oPay.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oPay.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    if(cursor.getString(cursor.getColumnIndex("IsPost"))!=null && cursor.getString(cursor.getColumnIndex("IsPost")).contains("1")){
+                        oPay.setPost(true);
+                    }else{
+                        oPay.setPost(false);
+                    }
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return  oPay;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_ORDER",ex.getMessage().toString());}
+        return null;
+    }
+
+    public String addCustomerPay(SM_CustomerPay oPay){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String PayID=getPayID(oPay.getPayDate(),oPay.getCustomerID());
+            if(PayID!=""){
+                if(oPay.getPayID().isEmpty()|| oPay.getPayID()==null){
+                    oPay.setPayID(PayID);
+                }
+            }
+            iSq=getSizePay(oPay.getPayID());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("PayID", oPay.getPayID());
+                values.put("PayCode", oPay.getPayCode());
+                values.put("PayDate", oPay.getPayDate());
+
+                values.put("PayName", oPay.getPayName());
+                values.put("PayMoney",oPay.getPayMoney());
+                values.put("PayNotes", oPay.getPayNotes());
+                values.put("PayStatus", oPay.getPayStatus());
+                values.put("PayPic", oPay.getPayPic());
+                values.put("CustomerID", oPay.getCustomerID());
+
+                values.put("Longitude",oPay.getLongitude());
+                values.put("Latitude", oPay.getLatitude());
+                values.put("LocationAddress", oPay.getLocationAddress());
+                values.put("IsPost", oPay.getPost());
+                values.put("PostDay", oPay.getPostDay());
+
+                db.insert("SM_CUSTOMER_PAY", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("PayCode", oPay.getPayCode());
+                values.put("PayDate", oPay.getPayDate());
+
+                values.put("PayName", oPay.getPayName());
+                values.put("PayMoney",oPay.getPayMoney());
+                values.put("PayNotes", oPay.getPayNotes());
+                values.put("PayStatus", oPay.getPayStatus());
+                values.put("PayPic", oPay.getPayPic());
+                values.put("CustomerID", oPay.getCustomerID());
+
+                values.put("Longitude",oPay.getLongitude());
+                values.put("Latitude", oPay.getLatitude());
+                values.put("LocationAddress", oPay.getLocationAddress());
+                values.put("IsPost", oPay.getPost());
+                values.put("PostDay", oPay.getPostDay());
+                db.update("SM_CUSTOMER_PAY",values,"PayID=?" ,new String[] {String.valueOf(oPay.getPayID())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    public boolean editCustomerPay(SM_CustomerPay oPay){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("PayCode", oPay.getPayCode());
+            values.put("PayDate", oPay.getPayDate());
+
+            values.put("PayName", oPay.getPayName());
+            values.put("PayMoney",oPay.getPayMoney());
+            values.put("PayNotes", oPay.getPayNotes());
+            values.put("PayStatus", oPay.getPayStatus());
+            values.put("PayPic", oPay.getPayPic());
+            values.put("CustomerID", oPay.getCustomerID());
+
+            values.put("Longitude",oPay.getLongitude());
+            values.put("Latitude", oPay.getLatitude());
+            values.put("LocationAddress", oPay.getLocationAddress());
+            values.put("IsPost", oPay.getPost());
+            values.put("PostDay", oPay.getPostDay());
+            db.update("SM_CUSTOMER_PAY",values,"PayID=?" ,new String[] {String.valueOf(oPay.getPayID())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_ORDER_ERR",e.getMessage()); return  false;}
+    }
+
+    public boolean editCustomerPayStatus(SM_CustomerPay oPay){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("PayStatus", oPay.getPayStatus());
+            values.put("IsPost", oPay.getPost());
+            values.put("PostDay", oPay.getPostDay());
+            db.update("SM_CUSTOMER_PAY",values,"PayID=?" ,new String[] {String.valueOf(oPay.getPayID())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_PAY_ERR",e.getMessage()); return  false;}
+    }
+
+
+
+    public boolean delCustomerPay(SM_CustomerPay oPay){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+             try {
+                String mSql=String.format("delete from SM_CUSTOMER_PAY where PayID='%s'",oPay.getPayID());
+                db.execSQL(mSql);
+            }catch (Exception ex){
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+
+
+
+    //<<SYSTEM-FUNCTION>>
+    public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
+        if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";
+        String sCastNgay="";
+        try{
+            Date date = new SimpleDateFormat(sFormatFrom).parse(ngay);
+            sCastNgay = new SimpleDateFormat(sFormatTo).format(date);
+            return sCastNgay;
+        }catch (Exception ex){return (sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01");}
+    }
+    //<<END>>
+
+}

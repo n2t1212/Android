@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#06B174</color>
+    <color name="colorPrimaryDark">#059C66</color>
+    <color name="colorBorderBlue">#92ECAB</color>
+    <color name="colorAccent">#fff200</color>
+    <color name="white">#ffffff</color>
+    <color name="editBorder">#92ECAB</color>
+    <color name="colorBorderGray">#dcdcdc</color>
+    <color name="colorEdit">#92ECAB</color>
+    <color name="colorEditY">#ffe000</color>
+    <color name="colorBGList">#ffec99</color>
+    <color name="colorBorderList">#ffefc9</color>
+
+    <color name="colorEditBlack">#555</color>
+    <color name="colorHint">#cccccc</color>
+    <color name="colorTitle">#0A9870</color>
+    <color name="slow">#4f790f</color>
+    <color name="colorTextGray">#999999</color>
+    <color name="BackgroundFilterGrid">#fee6efc8</color>
+    <color name="BorderGrid">#92ECAB</color>
+    <color name="BackgroundHeaderGrid">#17CE8D</color>
+    <color name="TextHeaderGrid">#ffffff</color>
+    <color name="BorderHeaderGrid">#fff</color>
+    <color name="BorderCellGrid">#b1fdd8</color>
+    <color name="GridRowSelected">#f8d8e7</color>
+
+    <color name="colorTabBG">#f1c5ec</color>
+    <color name="colorTabText">#ec98c6</color>
+    <color name="colorTabTextSel">#ffffff</color>
+
+    <color name="colorTabBG21">#eee8ca</color>
+    <color name="colorTabText21">#ccc</color>
+    <color name="colorTabTextSel21">#ffffff</color>
+
+    <color name="BackgroundButton">#19d6a7</color>
+    <color name="BackgroundButtonY">#FFFFBB00</color>
+    <color name="BackgroundButton2">#ffe000</color>
+    <color name="ColorButton">#19d6a7</color>
+    <color name="ColorButtonYellow">#fff000</color>
+    <color name="ColorButtonGreen">#42daa0</color>
+    <color name="PopupItemColor">#fefefe</color>
+    <color name="colorVersion">#ddc</color>
+
+    <color name="colorFormLine">#b3e9cf</color>
+    <color name="colorFormLineGray">#f6fae7</color>
+    <color name="textEditBorder">#bef4dc</color>
+
+    <color name="SettingMenuLine">#b3e9cf</color>
+    <color name="borderYellow">#ffe000</color>
+    <color name="HeaderGridOrderDetail">#f596ca</color>
+    <color name="TextFocusBorder">#ff3c00</color>
+    <color name="TextNormalBorder">#19d6a7</color>
+    <color name="textReadonlyBorder">#c8d9ce</color>
+    <color name="SpinFocusBorder">#ff3c00</color>
+    <color name="SpinNormalBorder">#17CE8D</color>
+
+    <color name="HeaderDatePicker">#08d788</color>
+    <color name="HeaderDatePicker2">#dcf409</color>
+
+   <color name="PopupmenuBackground">#e8a8c6</color>
+   <color name="PopupmenuBorder">#ed90bc</color>
+
+    <color name="DialogTitleColor">#329c74</color>
+    <color name="DialogContentColor">#d2f2e6</color>
+    <color name="ButtonDialogBackground">#42daa0</color>
+    <color name="ButtonDialogColor">#ffffff</color>
+    <color name="ButtonDialogColor2">#42daa0</color>
+
+   <color name="status_add">#ffffff</color>
+   <color name="status_edit">#dedcb7</color>
+   <color name="status_pendding">#d5c8df</color>
+   <color name="status_delivery">#c8dfce</color>
+   <color name="status_complete">#bff2f1</color>
+   <color name="status_abort">#f1c2c7</color>
+
+    <color name="textGreen">#19d6a7</color>
+</resources>

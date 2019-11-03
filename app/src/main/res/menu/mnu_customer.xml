@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuAdd"
+          android:icon="@drawable/icon_popup_add"
+          android:title="Thêm" />
+
+    <item android:id="@+id/mnuEdit"
+          android:icon="@drawable/icon_popup_edit"
+          android:title="Sửa" />
+
+    <item android:id="@+id/mnuDel"
+          android:icon="@drawable/icon_popup_del"
+          android:title="Xóa" />
+
+     <item
+         android:id="@+id/mnuDown"
+         android:icon="@drawable/icon_popup_download"
+         android:title="Tải về" />
+
+        <item android:id="@+id/mnuUpload"
+            android:icon="@drawable/icon_popup_upload"
+            android:title="Tải lên" />
+
+       <item android:id="@+id/mnuViewMap"
+          android:icon="@drawable/icon_popup_map"
+          android:title="Bản đồ"
+            />
+    </menu>
+

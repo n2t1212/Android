@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/custom_dialog"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:id="@+id/Layout_dialog_yesno"
+            android:orientation="vertical">
+
+            <com.mimi.mimigroup.ui.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:paddingTop="15dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/DialogTitleColor"
+                android:id="@+id/dlgTitle"
+                android:textSize="20dp"
+                android:text="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorFormLineGray" />
+
+            <com.mimi.mimigroup.ui.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp"
+                android:gravity="left"
+                android:textColor="@color/colorTextGray"
+                android:id="@+id/dlgContent"
+                android:textSize="18dp"
+                android:text="" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorFormLineGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:weightSum="1">
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:id="@+id/dlgButtonNo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:layout_weight="0"
+                android:clickable="true"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="Bỏ qua"
+                android:textColor="@color/ButtonDialogColor2"
+                android:textSize="20sp" />
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:id="@+id/dlgButtonYes"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:layout_weight="0"
+                android:background="@drawable/button_dialog"
+                android:clickable="true"
+                android:gravity="right"
+                android:text="Chấp nhận"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+        </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

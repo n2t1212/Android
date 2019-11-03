@@ -1,0 +1,6 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <stroke android:width="3px" android:color="@color/PopupmenuBorder" />
+    <solid android:color="@color/PopupmenuBackground"/>
+    <corners  android:topLeftRadius="10dp" android:bottomLeftRadius="10dp"></corners>
+    <padding android:left="10dp" android:bottom="8dp" android:top="8dp"/>
+</shape>

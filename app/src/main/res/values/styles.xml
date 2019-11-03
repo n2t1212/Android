@@ -1,0 +1,35 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="android:popupMenuStyle">@style/AndroidSRC.PopupMenu</item>
+        <item name="android:itemTextAppearance">@style/AndroidSRC.TextAppearance</item>
+       <!-- <item name="android:itemBackground">@color/colorEditY</item>
+        <item name="android:itemPadding">5dp</item>-->
+    </style>
+
+    <style name="AndroidSRC.PopupMenu" parent="android:Widget.Holo.Light.PopupMenu">
+        <!--<item name="android:popupBackground">@color/colorBorderBlue</item>-->
+        <item name="android:popupBackground">@drawable/popupmenu_cornor</item>
+        <item name="android:itemBackground">@color/colorEditY</item>
+        <item name="android:itemPadding">5dp</item>
+    </style>
+
+    <style name="AndroidSRC.TextAppearance" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/PopupItemColor</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+
+    <style name="TabTitle21" parent="Base.Widget.Design.TabLayout">
+        <item name="android:textSize">18dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

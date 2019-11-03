@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivTab"
+        android:layout_gravity="center_horizontal" />
+    <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTab"
+        tools:text="mt"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:padding="3dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"/>
+</LinearLayout>

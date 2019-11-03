@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuScanHis"
+          android:icon="@drawable/icon_popup_qrcode"
+          android:title="Lịch sử quét" />
+    <item android:id="@+id/mnuSynUpload"
+          android:icon="@drawable/icon_popup_upload"
+          android:title="Tải lên" />
+    <item android:id="@+id/mnuSearchHis"
+        android:icon="@drawable/icon_popup_search"
+        android:title="Tìm kiếm" />
+    <item android:id="@+id/mnuDelHis"
+        android:icon="@drawable/icon_popup_del"
+        android:title="Xóa lịch sử" />
+</menu>
+

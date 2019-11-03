@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="3"
+    android:layout_margin="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="130dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitDay"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp"
+        android:gravity="center_horizontal"/>
+
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="120dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitType"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitCustomer"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitTime"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="550dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitAddress"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitNotes"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitSync"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="center_horizontal"/>
+
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvVisitSyncDay"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="center_horizontal"/>
+</LinearLayout>
+

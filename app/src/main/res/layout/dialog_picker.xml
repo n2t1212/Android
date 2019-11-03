@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:id="@+id/Layout_datepicker_Info"
+            android:orientation="vertical">
+
+            <com.mimi.mimigroup.ui.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:paddingTop="15dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/DialogTitleColor"
+                android:textSize="20dp"
+                android:text="Chọn khoản thời gian" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorFormLineGray" />
+
+            <DatePicker
+                android:id="@+id/dpStartDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:calendarViewShown="false"
+                android:headerBackground="@color/HeaderDatePicker"
+                android:background="@color/HeaderDatePicker"
+                android:calendarTextColor="@color/white"
+                android:datePickerMode="spinner"/>
+            <DatePicker
+                android:id="@+id/dpEndDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:calendarViewShown="false"
+                android:headerBackground="@color/HeaderDatePicker"
+                android:background="@color/HeaderDatePicker2"
+                android:calendarTextColor="@color/white"
+                android:datePickerMode="spinner"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@color/colorFormLineGray" />
+        </LinearLayout>
+    </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

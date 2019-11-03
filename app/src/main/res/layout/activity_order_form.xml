@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.order.OrderFormActivity">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        app:elevation="10dp"
+        android:translationZ="5dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/TooBarDP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="LẬP ĐƠN ĐẶT HÀNG"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        android:id="@+id/tabLayout"
+        android:layout_below="@id/layout_app_bar"
+        >
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"
+        android:layout_below="@id/tabLayout"
+        android:layout_above="@id/llBottom"
+        android:layout_marginBottom="20dp">
+
+    </android.support.v4.view.ViewPager>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnOrderDetailAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:src="@drawable/tiva_add"
+        app:backgroundTint="@color/ColorButtonGreen"
+        app:layout_anchorGravity="center|right|end"
+        android:visibility="invisible"
+        app:rippleColor="#FFF" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnOrderDetailDel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:src="@drawable/tiva_del"
+        app:backgroundTint="@color/ColorButtonGreen"
+        app:layout_anchorGravity="center|right|end"
+        android:visibility="invisible"
+        app:rippleColor="#FFF" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llBottom"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp"
+        android:weightSum="2"
+        android:background="@color/BackgroundButton">
+
+        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/btnSaveOrder"
+            android:layout_weight="1"
+            android:text="Chỉ lưu"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/form_button"
+            android:layout_margin="10dp"
+            android:textColor="#ffffff"/>
+
+
+        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/btnPostOrder"
+            android:text="Tải lên"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/form_button"
+            android:layout_margin="10dp"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuSynVisit"
+          android:icon="@drawable/icon_popup_upload"
+          android:title="Nộp chấm công" />
+    <item android:id="@+id/mnuDelVisit"
+        android:icon="@drawable/icon_popup_del"
+        android:title="Xóa chấm công" />
+</menu>
+

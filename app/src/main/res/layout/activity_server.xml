@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.server.ServerActivity"
+    android:background="@drawable/reg_ip_server">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true">
+
+        <com.mimi.mimigroup.ui.custom.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Thiết lập máy chủ"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="0dp"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="#fff"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#fff"
+        android:layout_centerInParent="true">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBorderBlue"/>
+        <com.mimi.mimigroup.ui.custom.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IP server:"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"
+            android:textColor="#ccc"/>
+        <com.mimi.mimigroup.ui.custom.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edt_bg"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:textColor="@color/colorBorderBlue"
+            android:id="@+id/edtIP"
+            android:hint="0.0.0.0"
+            android:textColorHint="@color/colorHint"/>
+
+        <com.mimi.mimigroup.ui.custom.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Port:"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:textSize="20sp"
+            android:textColor="#ccc"/>
+        <com.mimi.mimigroup.ui.custom.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edt_bg"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="10dp"
+            android:textColor="@color/colorBorderBlue"
+            android:id="@+id/edtPort"
+            android:hint="000"
+            android:textColorHint="@color/colorHint"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorBorderBlue"/>
+    </LinearLayout>
+    <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical"
+        android:text="Tiếp tục"
+        android:id="@+id/tvContinue"
+        android:padding="10dp"
+        android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="@drawable/server_btn_ripple"
+        android:textColor="#ffffff"/>
+</RelativeLayout>

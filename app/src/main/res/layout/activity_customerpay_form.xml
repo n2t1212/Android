@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.order.OrderFormActivity">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        app:elevation="10dp"
+        android:translationZ="5dp">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/TooBarDP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="LẬP PHIẾU THU TIỀN"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="5dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:id="@+id/Layout_OrderItem"
+                    android:paddingTop="20dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="vertical">
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:id="@+id/btnRegetLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:clickable="true"
+                            android:gravity="left"
+                            android:padding="2dp"
+                            android:text="Nhập khách hàng"
+                            android:textColorHighlight="@color/colorBorderBlue"
+                            android:layout_marginStart="30dp"
+                            android:textStyle="bold" />
+                        <AutoCompleteTextView
+                            android:id="@+id/spCustomerPay"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0dp"
+                            android:hint="....."
+                            android:textColorHint="@color/colorPrimary"
+                            android:textColor="@color/colorPrimary"
+                            android:layout_marginStart="30dp"
+                            android:layout_marginEnd="30dp"
+                            android:inputType="textAutoComplete|textAutoCorrect"
+                            android:background="@drawable/spindropdown"
+                            android:padding="15dp"
+                            android:textSize="15dp"
+                            android:textAllCaps="false"
+                            android:textStyle="bold"
+                            android:ems="10" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Ngày thu" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvPayDate"
+                            android:background="@drawable/edittext"
+                            android:layout_marginEnd="30dp"
+                            android:maxLines="1"
+                            android:inputType="date"
+                            android:gravity="left"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Số tiền" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvPayMoney"
+                            android:background="@drawable/edittext"
+                            android:layout_marginEnd="30dp"
+                            android:inputType="numberDecimal"
+                            android:gravity="left"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Ghi chú" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvPayNotes"
+                            android:background="@drawable/edittext"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="left"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="5dp"
+                            android:text="Số phiếu" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvPayCode"
+                            android:background="@drawable/edittext_readonly"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="left"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Mã KH" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvCustomerCode"
+                            android:background="@drawable/edittext_readonly"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="left"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Địa chỉ" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvLocationAddress"
+                            android:background="@drawable/edittext_readonly"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="left"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2" >
+                        <com.mimi.mimigroup.ui.custom.CustomTextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:gravity="right"
+                            android:padding="10dp"
+                            android:text="Trạng thái" />
+                        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="10dp"
+                            android:layout_weight="0"
+                            android:id="@+id/tvPayStatus"
+                            android:background="@drawable/edittext_readonly"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="left"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/colorEditY" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/btnPayPicAttach"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="30dp"
+                            android:layout_marginStart="20dp"
+                            android:clickable="true"
+                            android:src="@drawable/tiva_photo"
+                            app:layout_anchorGravity="bottom|right|end"
+                            app:backgroundTint="@color/ColorButtonGreen"
+                            app:rippleColor="#FFF" />
+                      <!--
+                        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:id="@+id/btnPayPic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="10dp"
+                            android:layout_weight="0"
+                            android:background="@drawable/form_button"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:text="[ Chụp hình ]"
+                            android:textColor="@color/textGreen"
+                            android:textStyle="normal" />
+
+                         <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                            android:id="@+id/btnBrownPayPic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="top"
+                            android:layout_margin="10dp"
+                            android:layout_weight="0"
+                            android:background="@drawable/form_button"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:text="[ Chọn hình ]"
+                            android:textColor="@color/colorEditY"
+                            android:textStyle="normal" /> -->
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:weightSum="1" >
+
+                        <ImageView
+                            android:id="@+id/imgPayPic"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="right"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="30dp"
+                            android:layout_marginBottom="70dp"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:contentDescription="File chứng từ"
+                            android:padding="5dp"
+                            android:scaleType="centerCrop"
+                            android:cropToPadding="true"
+                            android:background="@drawable/img_border" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llBottom"
+        android:layout_alignParentBottom="true"
+        android:padding="0dp"
+        android:weightSum="2"
+        android:background="@color/BackgroundButton">
+
+        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/btnSavePay"
+            android:layout_weight="1"
+            android:text="Chỉ lưu"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/form_button"
+            android:layout_margin="10dp"
+            android:textColor="#ffffff"/>
+
+
+        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/btnPostPay"
+            android:text="Tải lên"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/form_button"
+            android:layout_margin="10dp"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
