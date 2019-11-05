@@ -336,6 +336,110 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "DiseaseCode VARCHAR(15),"+
                 "DiseaseName VARCHAR(50))";
         db.execSQL(sqlCMM);
+
+        sqlCMM="CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY,"+
+                "SeasonCode VARCHAR(15),"+
+                "SeasonName VARCHAR(50))";
+        db.execSQL(sqlCMM);
+
+        //[[[[REPORT-TECH:BÁO CÁO KỸ THUẬT]]]]
+        sqlCMM="CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY,"+
+                "ReportCode VARCHAR(20),"+
+                "ReportName VARCHAR(50),"+
+                "ReportDay DATETIME,"+
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "ReceiverList VARCHAR(255),"+
+                "Notes VARCHAR(50),"+
+                "IsStatus INTEGER,"+
+                "IsPost BIT,"+
+                "PostDay DATETIME)";
+        db.execSQL(sqlCMM);
+        //THỊ TRƯỜNG
+        sqlCMM="CREATE TABLE SM_REPORT_TECH_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
+                "ReportTechID VARCHAR(50),"+
+                "Title VARCHAR(50),"+
+                "Notes VARCHAR(200)," +
+                "Useful VARCHAR(200),"+
+                "Harmful VARCHAR(200))";
+        db.execSQL(sqlCMM);
+        //DỊCH BỆNH
+        sqlCMM="CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
+                "ReportTechID VARCHAR(50),"+
+                "TreeCode VARCHAR(15),"+
+                "Title VARCHAR(50),"+
+                "Acreage FLOAT," +
+                "Disease VARCHAR(200),"+
+                "Price FLOAT,"+
+                "Notes VARCHAR(200))";
+        db.execSQL(sqlCMM);
+        //ĐỐI THỦ
+        sqlCMM="CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY,"+
+                "ReportTechID VARCHAR(50),"+
+                "Title VARCHAR(50),"+
+                "Notes VARCHAR(200),"+
+                "Useful VARCHAR(200),"+
+                "Harmful VARCHAR(200))";
+        db.execSQL(sqlCMM);
+        //HOẠT ĐỘNG [ISTYPE=0:TRONG TUAN, 1: KẾ HOẠCH TUẦN TỚI]
+        sqlCMM="CREATE TABLE SM_REPORT_TECH_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
+                "ReportTechID VARCHAR(50),"+
+                "IsType INTEGER,"+
+                "Title VARCHAR(50),"+
+                "Notes VARCHAR(200),"+
+                "Achievement VARCHAR(200))";
+        db.execSQL(sqlCMM);
+
+
+        //[[[[REPORT-SALEREP:BÁO CÁO SALES-REP]]]]
+        sqlCMM="CREATE TABLE SM_REPORT_SALEREP(ReportSaleID VARCHAR(50) PRIMARY KEY,"+
+                "ReportCode VARCHAR(20),"+
+                "ReportName VARCHAR(50),"+
+                "ReportDay DATETIME,"+
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "ReceiverList VARCHAR(255),"+
+                "Notes VARCHAR(50),"+
+                "IsStatus INTEGER,"+
+                "IsPost BIT,"+
+                "PostDay DATETIME)";
+        db.execSQL(sqlCMM);
+        //THỊ TRƯỜNG
+        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
+                "ReportSaleID VARCHAR(50),"+
+                "CustomerID VARCHAR(50),"+
+                "CompanyName VARCHAR(100)," +
+                "ProductCode VARCHAR(20),"+
+                "Notes VARCHAR(200),"+
+                "Price FLOAT)";
+        db.execSQL(sqlCMM);
+        //DỊCH BỆNH
+        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
+                "ReportSaleID VARCHAR(50),"+
+                "TreeCode VARCHAR(15),"+
+                "Title VARCHAR(50)," +
+                "Acreage FLOAT,"+
+                "Notes VARCHAR(200))";
+        //MÙA VỤ
+        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY,"+
+                "ReportSaleID VARCHAR(50),"+
+                "TreeCode VARCHAR(15),"+
+                "SeasonCode VARCHAR(15),"+
+                "Title VARCHAR(50)," +
+                "Acreage FLOAT,"+
+                "Notes VARCHAR(200))";
+        db.execSQL(sqlCMM);
+        //HOAT ĐỘNG - CÔNG VIỆC - LỊCH CÔNG TÁC: iStYPE: 0 : Công việc, 1: Lịch công tác
+        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
+                "ReportSaleID VARCHAR(50),"+
+                "IsType VARCHAR(15),"+
+                "Workday VARCHAR(15),"+
+                "Title VARCHAR(50)," +
+                "Place VARCHAR(100)," +
+                "Notes VARCHAR(200))";
+        db.execSQL(sqlCMM);
     }
 
     @Override
@@ -372,6 +476,110 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                         "DiseaseName VARCHAR(50))";
                 db.execSQL(sqlCMM);
 
+
+                sqlCMM="CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY,"+
+                        "SeasonCode VARCHAR(15),"+
+                        "SeasonName VARCHAR(50))";
+                db.execSQL(sqlCMM);
+
+                //[[[[REPORT-TECH:BÁO CÁO KỸ THUẬT]]]]
+                sqlCMM="CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportCode VARCHAR(20),"+
+                        "ReportName VARCHAR(50),"+
+                        "ReportDay DATETIME,"+
+                        "Longitude FLOAT," +
+                        "Latitude FLOAT," +
+                        "LocationAddress VARCHAR(255)," +
+                        "ReceiverList VARCHAR(255),"+
+                        "Notes VARCHAR(50),"+
+                        "IsStatus INTEGER,"+
+                        "IsPost BIT,"+
+                        "PostDay DATETIME)";
+                db.execSQL(sqlCMM);
+                //THỊ TRƯỜNG
+                sqlCMM="CREATE TABLE SM_REPORT_TECH_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportTechID VARCHAR(50),"+
+                        "Title VARCHAR(50),"+
+                        "Notes VARCHAR(200)," +
+                        "Useful VARCHAR(200),"+
+                        "Harmful VARCHAR(200))";
+                db.execSQL(sqlCMM);
+                //DỊCH BỆNH
+                sqlCMM="CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportTechID VARCHAR(50),"+
+                        "TreeCode VARCHAR(15),"+
+                        "Title VARCHAR(50),"+
+                        "Acreage FLOAT," +
+                        "Disease VARCHAR(200),"+
+                        "Price FLOAT,"+
+                        "Notes VARCHAR(200))";
+                db.execSQL(sqlCMM);
+                //ĐỐI THỦ
+                sqlCMM="CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportTechID VARCHAR(50),"+
+                        "Title VARCHAR(50),"+
+                        "Notes VARCHAR(200),"+
+                        "Useful VARCHAR(200),"+
+                        "Harmful VARCHAR(200))";
+                db.execSQL(sqlCMM);
+                //HOẠT ĐỘNG [ISTYPE=0:TRONG TUAN, 1: KẾ HOẠCH TUẦN TỚI]
+                sqlCMM="CREATE TABLE SM_REPORT_TECH_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportTechID VARCHAR(50),"+
+                        "IsType INTEGER,"+
+                        "Title VARCHAR(50),"+
+                        "Notes VARCHAR(200),"+
+                        "Achievement VARCHAR(200))";
+                db.execSQL(sqlCMM);
+
+
+                //[[[[REPORT-SALEREP:BÁO CÁO SALES-REP]]]]
+                sqlCMM="CREATE TABLE SM_REPORT_SALEREP(ReportSaleID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportCode VARCHAR(20),"+
+                        "ReportName VARCHAR(50),"+
+                        "ReportDay DATETIME,"+
+                        "Longitude FLOAT," +
+                        "Latitude FLOAT," +
+                        "LocationAddress VARCHAR(255)," +
+                        "ReceiverList VARCHAR(255),"+
+                        "Notes VARCHAR(50),"+
+                        "IsStatus INTEGER,"+
+                        "IsPost BIT,"+
+                        "PostDay DATETIME)";
+                db.execSQL(sqlCMM);
+                //THỊ TRƯỜNG
+                sqlCMM="CREATE TABLE SM_REPORT_SALEREP_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportSaleID VARCHAR(50),"+
+                        "CustomerID VARCHAR(50),"+
+                        "CompanyName VARCHAR(100)," +
+                        "ProductCode VARCHAR(20),"+
+                        "Notes VARCHAR(200),"+
+                        "Price FLOAT)";
+                db.execSQL(sqlCMM);
+                //DỊCH BỆNH
+                sqlCMM="CREATE TABLE SM_REPORT_SALEREP_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportSaleID VARCHAR(50),"+
+                        "TreeCode VARCHAR(15),"+
+                        "Title VARCHAR(50)," +
+                        "Acreage FLOAT,"+
+                        "Notes VARCHAR(200))";
+                //MÙA VỤ
+                sqlCMM="CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportSaleID VARCHAR(50),"+
+                        "TreeCode VARCHAR(15),"+
+                        "SeasonCode VARCHAR(15),"+
+                        "Title VARCHAR(50)," +
+                        "Acreage FLOAT,"+
+                        "Notes VARCHAR(200))";
+                db.execSQL(sqlCMM);
+                //HOAT ĐỘNG - CÔNG VIỆC - LỊCH CÔNG TÁC: iStYPE: 0 : Công việc, 1: Lịch công tác
+                sqlCMM="CREATE TABLE SM_REPORT_SALEREP_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
+                        "ReportSaleID VARCHAR(50),"+
+                        "IsType VARCHAR(15),"+
+                        "Workday VARCHAR(15),"+
+                        "Title VARCHAR(50)," +
+                        "Place VARCHAR(100)," +
+                        "Notes VARCHAR(200))";
+                db.execSQL(sqlCMM);
                 //db.execSQL("ALTER TABLE QR_QRSCAN ADD COLUMN ScanSupportID VARCHAR(50) DEFAULT ''");
                 //onCreate(db);
 
@@ -2223,7 +2431,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             int iSq = 1;
 
             String mOrderDetailID=getSMOrderDetailID(oOrderDetail.getOrderID(),oOrderDetail.getProductID());
-           if(mOrderDetailID.isEmpty()|| mOrderDetailID=="" ){
+            if(mOrderDetailID.isEmpty()|| mOrderDetailID=="" ){
                 ContentValues values = new ContentValues();
                 values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
                 values.put("OrderID", oOrderDetail.getOrderID());
@@ -2238,25 +2446,25 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("Price",oOrderDetail.getPrice());
                 values.put("OriginMoney", oOrderDetail.getOriginMoney());
                 values.put("Notes", oOrderDetail.getNotes());
-               values.put("Notes2", oOrderDetail.getNotes2());
+                values.put("Notes2", oOrderDetail.getNotes2());
 
                 db.insert("SM_ORDER_DETAIL", null, values);
             }else{
-               ContentValues values = new ContentValues();
-               values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
-               values.put("OrderID", oOrderDetail.getOrderID());
-               values.put("ProductID", oOrderDetail.getProductID());
-               values.put("ProductCode", oOrderDetail.getProductCode());
-               values.put("ProductName", oOrderDetail.getProductName());
-               values.put("Unit", oOrderDetail.getUnit());
-               values.put("Spec",oOrderDetail.getSpec());
-               values.put("ConvertBox",oOrderDetail.getConvertBox());
-               values.put("Amount", oOrderDetail.getAmount());
-               values.put("AmountBox", oOrderDetail.getAmountBox());
-               values.put("Price",oOrderDetail.getPrice());
-               values.put("OriginMoney", oOrderDetail.getOriginMoney());
-               values.put("Notes", oOrderDetail.getNotes());
-               values.put("Notes2", oOrderDetail.getNotes2());
+                ContentValues values = new ContentValues();
+                values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
+                values.put("OrderID", oOrderDetail.getOrderID());
+                values.put("ProductID", oOrderDetail.getProductID());
+                values.put("ProductCode", oOrderDetail.getProductCode());
+                values.put("ProductName", oOrderDetail.getProductName());
+                values.put("Unit", oOrderDetail.getUnit());
+                values.put("Spec",oOrderDetail.getSpec());
+                values.put("ConvertBox",oOrderDetail.getConvertBox());
+                values.put("Amount", oOrderDetail.getAmount());
+                values.put("AmountBox", oOrderDetail.getAmountBox());
+                values.put("Price",oOrderDetail.getPrice());
+                values.put("OriginMoney", oOrderDetail.getOriginMoney());
+                values.put("Notes", oOrderDetail.getNotes());
+                values.put("Notes2", oOrderDetail.getNotes2());
 
                 db.update("SM_ORDER_DETAIL",values,"OrderDetailID=?" ,new String[] {String.valueOf(oOrderDetail.getOrderDetailID())});
             }
@@ -2299,54 +2507,54 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     }
 
 
-   /****SM_DELIVERY_ORDER****/
-   private String getDeliveryID(String mOrderID,String mTransportCode){
-       try {
-           SQLiteDatabase db = getReadableDatabase();
-           Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER WHERE (OrderID='%s' AND TransportCode='%s')", new String[]{mOrderID,mTransportCode});
-           String mDeliveryOrderID="";
-           if (cursor.moveToFirst()) {
-               do {
-                   mDeliveryOrderID=cursor.getString(cursor.getColumnIndex("DeliveryOrderID"));
-                   break;
-               } while (cursor.moveToNext());
-           }
-           cursor.close();
-           return mDeliveryOrderID;
-       }catch(Exception ex){return  "";}
-   }
+    /****SM_DELIVERY_ORDER****/
+    private String getDeliveryID(String mOrderID,String mTransportCode){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER WHERE (OrderID='%s' AND TransportCode='%s')", new String[]{mOrderID,mTransportCode});
+            String mDeliveryOrderID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    mDeliveryOrderID=cursor.getString(cursor.getColumnIndex("DeliveryOrderID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return mDeliveryOrderID;
+        }catch(Exception ex){return  "";}
+    }
 
-   public List<SM_OrderDelivery> getAllDelivery(String mOrderID) {
-       try {
-           List<SM_OrderDelivery> lstOrderDetail = new ArrayList<SM_OrderDelivery>();
-           String mSql=String.format("Select A.* from SM_DELIVERY_ORDER A  where A.OrderID='%s' order by DeliveryNum asc",mOrderID);
+    public List<SM_OrderDelivery> getAllDelivery(String mOrderID) {
+        try {
+            List<SM_OrderDelivery> lstOrderDetail = new ArrayList<SM_OrderDelivery>();
+            String mSql=String.format("Select A.* from SM_DELIVERY_ORDER A  where A.OrderID='%s' order by DeliveryNum asc",mOrderID);
 
-           SQLiteDatabase db = this.getReadableDatabase();
-           Cursor cursor = db.rawQuery(mSql, null);
-           if (cursor.moveToFirst()) {
-               do {
-                   SM_OrderDelivery oOrderDelivery = new SM_OrderDelivery();
-                   oOrderDelivery.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
-                   oOrderDelivery.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
-                   oOrderDelivery.setTransportCode(cursor.getString(cursor.getColumnIndex("TransportCode")));
-                   oOrderDelivery.setNumberPlate(cursor.getString(cursor.getColumnIndex("NumberPlate")));
-                   oOrderDelivery.setCarType(cursor.getString(cursor.getColumnIndex("CarType")));
-                   oOrderDelivery.setDeliveryStaff(cursor.getString(cursor.getColumnIndex("DeliveryStaff")));
-                   oOrderDelivery.setDeliveryNum(cursor.getInt(cursor.getColumnIndex("DeliveryNum")));
-                   oOrderDelivery.setDeliveryDate(cursor.getString(cursor.getColumnIndex("DeliveryDate")));
-                   oOrderDelivery.setHandlingStaff(cursor.getString(cursor.getColumnIndex("HandlingStaff")));
-                   oOrderDelivery.setHandlingDate(cursor.getString(cursor.getColumnIndex("HandlingDate")));
-                   oOrderDelivery.setTotalMoney(cursor.getFloat(cursor.getColumnIndex("TotalMoney")));
-                   oOrderDelivery.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
-                   lstOrderDetail.add(oOrderDelivery);
-               } while (cursor.moveToNext());
-           }
-           cursor.close();
-           db.close();
-           return lstOrderDetail;
-       }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
-       return null;
-   }
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_OrderDelivery oOrderDelivery = new SM_OrderDelivery();
+                    oOrderDelivery.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+                    oOrderDelivery.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+                    oOrderDelivery.setTransportCode(cursor.getString(cursor.getColumnIndex("TransportCode")));
+                    oOrderDelivery.setNumberPlate(cursor.getString(cursor.getColumnIndex("NumberPlate")));
+                    oOrderDelivery.setCarType(cursor.getString(cursor.getColumnIndex("CarType")));
+                    oOrderDelivery.setDeliveryStaff(cursor.getString(cursor.getColumnIndex("DeliveryStaff")));
+                    oOrderDelivery.setDeliveryNum(cursor.getInt(cursor.getColumnIndex("DeliveryNum")));
+                    oOrderDelivery.setDeliveryDate(cursor.getString(cursor.getColumnIndex("DeliveryDate")));
+                    oOrderDelivery.setHandlingStaff(cursor.getString(cursor.getColumnIndex("HandlingStaff")));
+                    oOrderDelivery.setHandlingDate(cursor.getString(cursor.getColumnIndex("HandlingDate")));
+                    oOrderDelivery.setTotalMoney(cursor.getFloat(cursor.getColumnIndex("TotalMoney")));
+                    oOrderDelivery.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
+                    lstOrderDetail.add(oOrderDelivery);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstOrderDetail;
+        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+        return null;
+    }
 
     public String addDelivery(SM_OrderDelivery oOrderDelivery){
         try {
@@ -2409,38 +2617,38 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){return false;}
     }
 
-     //DELIVERY DETAIL
-     public List<SM_OrderDeliveryDetail> getAllDeliveryDetail(String mDeliveryOrderID) {
-         try {
-             List<SM_OrderDeliveryDetail> lstOrderDetail = new ArrayList<SM_OrderDeliveryDetail>();
-             String mSql=String.format("Select A.* from SM_DELIVERY_ORDER_DETAIL A  where A.DeliveryOrderID='%s' order by ProductCode asc",mDeliveryOrderID);
+    //DELIVERY DETAIL
+    public List<SM_OrderDeliveryDetail> getAllDeliveryDetail(String mDeliveryOrderID) {
+        try {
+            List<SM_OrderDeliveryDetail> lstOrderDetail = new ArrayList<SM_OrderDeliveryDetail>();
+            String mSql=String.format("Select A.* from SM_DELIVERY_ORDER_DETAIL A  where A.DeliveryOrderID='%s' order by ProductCode asc",mDeliveryOrderID);
 
-             SQLiteDatabase db = this.getReadableDatabase();
-             Cursor cursor = db.rawQuery(mSql, null);
-             if (cursor.moveToFirst()) {
-                 do {
-                     SM_OrderDeliveryDetail oDLT = new SM_OrderDeliveryDetail();
-                     oDLT.setDeliveryOrderDetailID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderDetailID")));
-                     oDLT.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_OrderDeliveryDetail oDLT = new SM_OrderDeliveryDetail();
+                    oDLT.setDeliveryOrderDetailID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderDetailID")));
+                    oDLT.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
 
-                     oDLT.setProductCode(cursor.getString(cursor.getColumnIndex(    "ProductCode")));
-                     oDLT.setProductName(cursor.getString(cursor.getColumnIndex(    "ProductName")));
-                     oDLT.setUnit(cursor.getString(cursor.getColumnIndex(    "Unit")));
-                     oDLT.setSpec(cursor.getString(cursor.getColumnIndex(    "Spec")));
-                     oDLT.setAmount(cursor.getInt(cursor.getColumnIndex(    "Amount")));
-                     oDLT.setAmountBox(cursor.getFloat(cursor.getColumnIndex(    "AmountBox")));
-                     oDLT.setPrice(cursor.getFloat(cursor.getColumnIndex(    "Price")));
-                     oDLT.setOriginMoney(cursor.getFloat(cursor.getColumnIndex(    "OriginMoney")));
-                     oDLT.setNotes(cursor.getString(cursor.getColumnIndex(    "Notes")));
-                     lstOrderDetail.add(oDLT);
-                 } while (cursor.moveToNext());
-             }
-             cursor.close();
-             db.close();
-             return lstOrderDetail;
-         }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
-         return null;
-     }
+                    oDLT.setProductCode(cursor.getString(cursor.getColumnIndex(    "ProductCode")));
+                    oDLT.setProductName(cursor.getString(cursor.getColumnIndex(    "ProductName")));
+                    oDLT.setUnit(cursor.getString(cursor.getColumnIndex(    "Unit")));
+                    oDLT.setSpec(cursor.getString(cursor.getColumnIndex(    "Spec")));
+                    oDLT.setAmount(cursor.getInt(cursor.getColumnIndex(    "Amount")));
+                    oDLT.setAmountBox(cursor.getFloat(cursor.getColumnIndex(    "AmountBox")));
+                    oDLT.setPrice(cursor.getFloat(cursor.getColumnIndex(    "Price")));
+                    oDLT.setOriginMoney(cursor.getFloat(cursor.getColumnIndex(    "OriginMoney")));
+                    oDLT.setNotes(cursor.getString(cursor.getColumnIndex(    "Notes")));
+                    lstOrderDetail.add(oDLT);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lstOrderDetail;
+        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+        return null;
+    }
 
     private String getDeliveryDetailID(String mDeliveryOrderID,String mProductCode){
         try {
@@ -2977,7 +3185,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     public boolean delCustomerPay(SM_CustomerPay oPay){
         try {
             SQLiteDatabase db = getWritableDatabase();
-             try {
+            try {
                 String mSql=String.format("delete from SM_CUSTOMER_PAY where PayID='%s'",oPay.getPayID());
                 db.execSQL(mSql);
             }catch (Exception ex){
