@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseActivity;
@@ -114,13 +116,13 @@ public class ReportTechActivity extends BaseActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.mnuAdd:
-                        //onAddReportTechClicked();
+                        onAddReportTechClicked();
                         return true;
                     case R.id.mnuEdit:
-                        //onEditReportTechClicked();
+                        onEditReportTechClicked();
                         return true;
                     case R.id.mnuDel:
-                        //onDelReportTechClicked();
+                        onDelReportTechClicked();
                         return true;
                     case R.id.mnuSynPost:
                         final Dialog oDlg=new Dialog(ReportTechActivity.this);
@@ -137,7 +139,7 @@ public class ReportTechActivity extends BaseActivity {
                         btnYes.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //onPostReportTech();
+                                onPostReportTech();
                                 oDlg.dismiss();
                             }
                         });
@@ -152,7 +154,7 @@ public class ReportTechActivity extends BaseActivity {
                         return true;
 
                     case R.id.mnuSearch:
-                        //onSearchRreportTechClicked();
+                        onSearchReportTechClicked();
                         return true;
 
                     default:
@@ -167,4 +169,24 @@ public class ReportTechActivity extends BaseActivity {
     final int REQUEST_CODE_ADD=1;
     final int REQUEST_CODE_EDIT=2;
     boolean isEditAdd=false;
+
+    public void onAddReportTechClicked(){
+        String mParSymbol=mDB.getParam("PAR_SYMBOL");
+        if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
+        SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+        String mReportTechID = "BCKT"+mParSymbol+Od.format(new Date());
+        if(!mReportTechID.isEmpty()) {
+            Intent intent = new Intent(ReportTechActivity.this, ReportTechFormActivity.class);
+            intent.setAction("ADD");
+            intent.putExtra("ReportTechID",mReportTechID);
+            intent.putExtra("PAR_SYMBOL", mParSymbol);
+            startActivityForResult(intent, REQUEST_CODE_ADD);
+            isEditAdd = true;
+        }else{
+            Toast oT= Toast.makeText(ReportTechActivity.this,"Không thể tạo Số Phiếu..", Toast.LENGTH_SHORT);
+            oT.setGravity(Gravity.CENTER,0,0);
+            oT.show();
+        }
+    }
+
 }
