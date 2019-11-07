@@ -136,7 +136,7 @@
             android:layout_height="1dp"
             android:background="@color/SettingMenuLine" />
         <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-            android:id="@+id/tvSystem"
+            android:id="@+id/tvReportSale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_item_ripple"
@@ -159,7 +159,7 @@
             android:background="@drawable/bg_item_ripple"
             android:drawableLeft="@drawable/tiva_setting_help"
             android:clickable="true"
-            android:id="@+id/tvHelp"
+            android:id="@+id/tvReportTech"
             android:paddingStart="20dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"

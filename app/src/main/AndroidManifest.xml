@@ -9,27 +9,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-feature android:name="android.hardware.camera.flash" />
     <uses-feature android:name="android.hardware.location" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
 
-    <!-- [04092019]-->
-    <supports-screens android:resizeable="true"
-        android:smallScreens="true"
-        android:normalScreens="true"
+    <!-- [04092019] -->
+    <supports-screens
+        android:anyDensity="true"
         android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true" />
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
-        android:name="com.mimi.mimigroup.app.App"
+        android:name=".app.App"
         android:allowBackup="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
@@ -40,12 +42,16 @@
         tools:replace="android:icon">
 
         <!-- 30082019: SUPPORT ANDROID (Pie) -->
-        <!--<uses-library
+        <!--
+            <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" /> -->
-        <!-- END-->
+            android:required="false" />
+        -->
+        <!-- END -->
 
-        <!-- FOR BROWN PHOTO-->
+
+        <!-- FOR BROWN PHOTO -->
+        <!--
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -55,10 +61,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_photo_paths"/>
         </provider>
-
+        -->
 
         <activity
-            android:name="com.mimi.mimigroup.ui.splash.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -68,104 +74,108 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mimi.mimigroup.ui.login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.ParamActivity"
+            android:name=".ui.setting.ParamActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.ItemActivity"
+            android:name=".ui.setting.ItemActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.server.ServerActivity"
+            android:name=".ui.server.ServerActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.help.HelpActivity"
+            android:name=".ui.help.HelpActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.scan.ScanResultActivity"
+            android:name=".ui.scan.ScanResultActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.CustomerActivity"
+            android:name=".ui.setting.CustomerActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.CustomerFormActivity"
+            android:name=".ui.setting.CustomerFormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.ProductActivity"
+            android:name=".ui.setting.ProductActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.TreeActivity"
+            android:name=".ui.setting.TreeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.EmployeeActivity"
+            android:name=".ui.setting.EmployeeActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.setting.SearchActivity"
+            android:name=".ui.setting.SearchActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.history.HistoryServerActivity"
+            android:name=".ui.history.HistoryServerActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.visitcard.VisitCardActivity"
+            android:name=".ui.visitcard.VisitCardActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.visitcard.VisitCardResultActivity"
+            android:name=".ui.visitcard.VisitCardResultActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.order.OrderActivity"
+            android:name=".ui.order.OrderActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.order.OrderDeliveryActivity"
+            android:name=".ui.order.OrderDeliveryActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.order.OrderFormActivity"
+            android:name=".ui.order.OrderFormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.mimi.mimigroup.ui.order.OrderTotalSalesActivity"
+            android:name=".ui.order.OrderTotalSalesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.utility.CustomerPayActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.utility.CustomerPayFormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.mimi.mimigroup.ui.utility.CustomerPayActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.mimi.mimigroup.ui.utility.CustomerPayFormActivity"
+            android:name=".ui.utility.ReportTechActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <service
-            android:name="com.mimi.mimigroup.ui.services.mimiService"
+            android:name=".ui.services.mimiService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name="com.mimi.mimigroup.ui.services.mimiBroadcastReceiver"
+            android:name=".ui.services.mimiBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
     </application>
 
 </manifest>

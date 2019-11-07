@@ -26,6 +26,11 @@ import com.mimi.mimigroup.model.SM_OrderDelivery;
 import com.mimi.mimigroup.model.SM_OrderDeliveryDetail;
 import com.mimi.mimigroup.model.SM_OrderDetail;
 import com.mimi.mimigroup.model.SM_OrderStatus;
+import com.mimi.mimigroup.model.SM_ReportTech;
+import com.mimi.mimigroup.model.SM_ReportTechActivity;
+import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
+import com.mimi.mimigroup.model.SM_ReportTechDisease;
+import com.mimi.mimigroup.model.SM_ReportTechMarket;
 import com.mimi.mimigroup.model.SM_VisitCard;
 
 import java.text.SimpleDateFormat;
@@ -3195,8 +3200,765 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){return false;}
     }
 
+    /* REPORT TECH */
+    public boolean getIsStatus(String mToday){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH WHERE IsStatus<=3",null);
+            int iSq= cursor.getCount();
+            cursor.close();
+            if (iSq>0){return  true;}else{return  false;}
+        }catch(Exception ex){return false;}
+    }
+    private String getReportTechId(String ReportDate){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH WHERE (julianday(ReportDay)-julianday('%s')=0) ", new String[]{ReportDate});
+            String ReportTechId="";
+            if (cursor.moveToFirst()) {
+                do {
+                    ReportTechId=cursor.getString(cursor.getColumnIndex("ReportTechID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return ReportTechId;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportTech(String ReportTechID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH WHERE ReportTechID=?", new String[]{ReportTechID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
 
+    public void CleanReportTech(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
 
+            String mSql = String.format("delete from SM_REPORT_TECH where ReportTechID in(select ReportTechID from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+            mSql = String.format("delete from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportTech> getAllReportTech(String fday, String tDay) {
+        try {
+            List<SM_ReportTech> lst = new ArrayList<SM_ReportTech>();
+            String mSql=String.format("Select A.* from SM_REPORT_TECH A"+
+                    " where (julianday(A.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.ReportDay)) >=0 order by A.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportTech oRptTech = new SM_ReportTech();
+                    oRptTech.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTech.setReportCode(cursor.getString(cursor.getColumnIndex("ReportCode")));
+                    oRptTech.setReportName(cursor.getString(cursor.getColumnIndex("ReportName")));
+                    oRptTech.setReportDate(cursor.getString(cursor.getColumnIndex("ReportDay")));
+                    oRptTech.setLongtitude(cursor.getFloat(cursor.getColumnIndex("Longitude")));
+                    oRptTech.setLatitude(cursor.getFloat(cursor.getColumnIndex("Latitude")));
+                    oRptTech.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oRptTech.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
+                    oRptTech.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            oRptTech.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            oRptTech.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            oRptTech.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            oRptTech.setIsStatus("");
+                        }
+
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        oRptTech.setPost(true);
+                    }else{
+                        oRptTech.setPost(false);
+                    }
+                    oRptTech.setPostDate(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                    lst.add(oRptTech);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_PAY",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportTech getReportTechById(String reportTechId)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_TECH A "+
+                    " where A.ReportTechID='%s' order by ReportDay desc",reportTechId);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportTech oRptTech = new SM_ReportTech();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptTech.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTech.setReportCode(cursor.getString(cursor.getColumnIndex("ReportCode")));
+                    oRptTech.setReportName(cursor.getString(cursor.getColumnIndex("ReportName")));
+                    oRptTech.setReportDate(cursor.getString(cursor.getColumnIndex("ReportDay")));
+                    oRptTech.setLongtitude(cursor.getFloat(cursor.getColumnIndex("Longitude")));
+                    oRptTech.setLatitude(cursor.getFloat(cursor.getColumnIndex("Latitude")));
+                    oRptTech.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oRptTech.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
+                    oRptTech.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            oRptTech.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            oRptTech.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            oRptTech.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            oRptTech.setIsStatus("");
+                        }
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        oRptTech.setPost(true);
+                    }else{
+                        oRptTech.setPost(false);
+                    }
+                    oRptTech.setPostDate(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptTech;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SM_PAY",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportTech(SM_ReportTech oRptTech){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String ReportTechID=getReportTechId(oRptTech.getReportDate());
+            if(ReportTechID!=""){
+                if(oRptTech.getReportTechId().isEmpty()|| oRptTech.getReportTechId()==null){
+                    oRptTech.setReportTechId(ReportTechID);
+                }
+            }
+            iSq=getSizePay(oRptTech.getReportTechId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptTech.getReportTechId());
+                values.put("ReportCode", oRptTech.getReportCode());
+                values.put("ReportName", oRptTech.getReportName());
+
+                values.put("ReportDay", oRptTech.getReportDate());
+                values.put("Longitude", oRptTech.getLongtitude());
+                values.put("Latitude", oRptTech.getLatitude());
+                values.put("LocationAddress", oRptTech.getLocationAddress());
+                values.put("ReceiverList", oRptTech.getReceiverList());
+                values.put("Notes", oRptTech.getNotes());
+
+                values.put("IsStatus", oRptTech.getIsStatus());
+                values.put("IsPost", oRptTech.isPost());
+                values.put("PostDay", oRptTech.getPostDate());
+
+                db.insert("SM_REPORT_TECH", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportCode", oRptTech.getReportCode());
+                values.put("ReportName", oRptTech.getReportName());
+
+                values.put("ReportDay", oRptTech.getReportDate());
+                values.put("Longitude", oRptTech.getLongtitude());
+                values.put("Latitude", oRptTech.getLatitude());
+                values.put("LocationAddress", oRptTech.getLocationAddress());
+                values.put("ReceiverList", oRptTech.getReceiverList());
+                values.put("Notes", oRptTech.getNotes());
+
+                values.put("IsStatus", oRptTech.getIsStatus());
+                values.put("IsPost", oRptTech.isPost());
+                values.put("PostDay", oRptTech.getPostDate());
+                db.update("SM_REPORT_TECH",values,"ReportTechID=?" ,new String[] {String.valueOf(oRptTech.getReportTechId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT TECH */
+
+    /* REPORT TECH THỊ TRƯỜNG */
+    private String getReportTechMarketID(String ReportTechID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_TECH_MARKET A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID WHERE B.ReportTechID=? ", new String[]{ReportTechID});
+            String MarketID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    MarketID=cursor.getString(cursor.getColumnIndex("MarketID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return MarketID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportTechMarket(String MarketID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_MARKET WHERE MarketID=?", new String[]{MarketID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportTechMarket(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_TECH_MARKET where ReportTechID in(select ReportTechID from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportTechMarket> getAllReportTechMarket(String fday, String tDay) {
+        try {
+            List<SM_ReportTechMarket> lst = new ArrayList<SM_ReportTechMarket>();
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_MARKET A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
+                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportTechMarket oRptTechMarket = new SM_ReportTechMarket();
+                    oRptTechMarket.setMarketId(cursor.getString(cursor.getColumnIndex("MarketID")));
+                    oRptTechMarket.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechMarket.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechMarket.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechMarket.setUsefull(cursor.getString(cursor.getColumnIndex("Useful")));
+                    oRptTechMarket.setHarmful(cursor.getString(cursor.getColumnIndex("Harmful")));
+                    lst.add(oRptTechMarket);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_TECH_MARKET",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportTechMarket getReportTechMarketById(String MarketID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_MARKET A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID "+
+                    " where A.MarketID='%s' order by B.ReportDay desc",MarketID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportTechMarket oRptTechMarket = new SM_ReportTechMarket();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptTechMarket.setMarketId(cursor.getString(cursor.getColumnIndex("MarketID")));
+                    oRptTechMarket.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechMarket.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechMarket.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechMarket.setUsefull(cursor.getString(cursor.getColumnIndex("Useful")));
+                    oRptTechMarket.setHarmful(cursor.getString(cursor.getColumnIndex("Harmful")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptTechMarket;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_TECH_MARKET",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportTechMarket(SM_ReportTechMarket oRptTechMarket){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String MarketID=getReportTechMarketID(oRptTechMarket.getReportTechId());
+            if(MarketID!=""){
+                if(oRptTechMarket.getMarketId().isEmpty()|| oRptTechMarket.getMarketId()==null){
+                    oRptTechMarket.setMarketId(MarketID);
+                }
+            }
+            iSq=getSizeReportTechMarket(oRptTechMarket.getMarketId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("MarketID", oRptTechMarket.getMarketId());
+                values.put("ReportTechID", oRptTechMarket.getReportTechId());
+                values.put("Title", oRptTechMarket.getTitle());
+                values.put("Notes", oRptTechMarket.getNotes());
+                values.put("Useful", oRptTechMarket.getUsefull());
+                values.put("Harmful", oRptTechMarket.getHarmful());
+                db.insert("SM_REPORT_TECH_MARKET", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptTechMarket.getReportTechId());
+                values.put("Title", oRptTechMarket.getTitle());
+                values.put("Notes", oRptTechMarket.getNotes());
+                values.put("Useful", oRptTechMarket.getUsefull());
+                values.put("Harmful", oRptTechMarket.getHarmful());
+                db.update("SM_REPORT_TECH_MARKET",values,"MarketID=?" ,new String[] {String.valueOf(oRptTechMarket.getMarketId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT TECH THI TRUONG */
+
+    /* REPORT TECH DỊCH BỆNH */
+    private String getReportTechDiseaseID(String ReportTechID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_TECH_DISEASE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID WHERE B.ReportTechID=? ", new String[]{ReportTechID});
+            String DiseaseID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    DiseaseID=cursor.getString(cursor.getColumnIndex("DiseaseID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return DiseaseID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportTechDisease(String DiseaseID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_DISEASE WHERE DiseaseID=?", new String[]{DiseaseID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportTechDisease(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_TECH_DISEASE where ReportTechID in(select ReportTechID from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportTechDisease> getAllReportTechDisease(String fday, String tDay) {
+        try {
+            List<SM_ReportTechDisease> lst = new ArrayList<SM_ReportTechDisease>();
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_DISEASE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
+                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportTechDisease oRptTechDisease = new SM_ReportTechDisease();
+                    oRptTechDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
+                    oRptTechDisease.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptTechDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechDisease.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptTechDisease.setDisease(cursor.getString(cursor.getColumnIndex("Disease")));
+                    oRptTechDisease.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
+                    oRptTechDisease.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    lst.add(oRptTechDisease);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_TECH_DISEASE",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportTechDisease getReportTechDiseaseById(String DiseaseID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_DISEASE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID "+
+                    " where A.DiseaseID='%s' order by B.ReportDay desc",DiseaseID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportTechDisease oRptTechDisease = new SM_ReportTechDisease();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptTechDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
+                    oRptTechDisease.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptTechDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechDisease.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptTechDisease.setDisease(cursor.getString(cursor.getColumnIndex("Disease")));
+                    oRptTechDisease.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
+                    oRptTechDisease.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptTechDisease;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_TECH_DISEASE",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportTechDisease(SM_ReportTechDisease oRptTechDisease){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String DiseaseID=getReportTechDiseaseID(oRptTechDisease.getReportTechId());
+            if(DiseaseID!=""){
+                if(oRptTechDisease.getDiseaseId().isEmpty()|| oRptTechDisease.getDiseaseId()==null){
+                    oRptTechDisease.setDiseaseId(DiseaseID);
+                }
+            }
+            iSq=getSizeReportTechDisease(oRptTechDisease.getDiseaseId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("DiseaseID", oRptTechDisease.getDiseaseId());
+                values.put("ReportTechID", oRptTechDisease.getReportTechId());
+                values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("Title", oRptTechDisease.getTitle());
+                values.put("Acreage", oRptTechDisease.getAcreage());
+                values.put("Disease", oRptTechDisease.getDisease());
+                values.put("Price", oRptTechDisease.getPrice());
+                values.put("Notes", oRptTechDisease.getNotes());
+                db.insert("SM_REPORT_TECH_DISEASE", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptTechDisease.getReportTechId());
+                values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("Title", oRptTechDisease.getTitle());
+                values.put("Acreage", oRptTechDisease.getAcreage());
+                values.put("Disease", oRptTechDisease.getDisease());
+                values.put("Price", oRptTechDisease.getPrice());
+                values.put("Notes", oRptTechDisease.getNotes());
+                db.update("SM_REPORT_TECH_DISEASE",values,"MarketID=?" ,new String[] {String.valueOf(oRptTechDisease.getDiseaseId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT TECH DỊCH BỆNH */
+
+    /* REPORT TECH ĐỐI THỦ */
+    private String getReportTechCompetitorID(String ReportTechID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_TECH_COMPETITOR A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID WHERE B.ReportTechID=? ", new String[]{ReportTechID});
+            String CompetitorID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    CompetitorID=cursor.getString(cursor.getColumnIndex("CompetitorID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return CompetitorID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportTechCompetitor(String CompetitorID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_COMPETITOR WHERE CompetitorID=?", new String[]{CompetitorID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportTechCompetitor(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_TECH_COMPETITOR where ReportTechID in(select ReportTechID from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportTechCompetitor> getAllReportTechCompetitor(String fday, String tDay) {
+        try {
+            List<SM_ReportTechCompetitor> lst = new ArrayList<SM_ReportTechCompetitor>();
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_COMPETITOR A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
+                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportTechCompetitor oRptTechCompetitor = new SM_ReportTechCompetitor();
+                    oRptTechCompetitor.setCompetitorId(cursor.getString(cursor.getColumnIndex("CompetitorID")));
+                    oRptTechCompetitor.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechCompetitor.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechCompetitor.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechCompetitor.setUseful(cursor.getString(cursor.getColumnIndex("Useful")));
+                    oRptTechCompetitor.setHarmful(cursor.getString(cursor.getColumnIndex("Harmful")));
+                    lst.add(oRptTechCompetitor);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_TECHCOMPETITOR",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportTechCompetitor getReportTechCompetitorById(String CompetitorID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_COMPETITOR A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID "+
+                    " where A.DiseaseID='%s' order by B.ReportDay desc",CompetitorID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportTechCompetitor oRptTechCompetitor = new SM_ReportTechCompetitor();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptTechCompetitor.setCompetitorId(cursor.getString(cursor.getColumnIndex("CompetitorID")));
+                    oRptTechCompetitor.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechCompetitor.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechCompetitor.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechCompetitor.setUseful(cursor.getString(cursor.getColumnIndex("Useful")));
+                    oRptTechCompetitor.setHarmful(cursor.getString(cursor.getColumnIndex("Harmful")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptTechCompetitor;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_TECHCOMPETITOR",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportTechCompetitor(SM_ReportTechCompetitor oRptTechCompetotitor){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String CompetitorID=getReportTechCompetitorID(oRptTechCompetotitor.getReportTechId());
+            if(CompetitorID!=""){
+                if(oRptTechCompetotitor.getCompetitorId().isEmpty()|| oRptTechCompetotitor.getCompetitorId()==null){
+                    oRptTechCompetotitor.setCompetitorId(CompetitorID);
+                }
+            }
+            iSq=getSizeReportTechCompetitor(oRptTechCompetotitor.getCompetitorId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("CompetitorID", oRptTechCompetotitor.getCompetitorId());
+                values.put("ReportTechID", oRptTechCompetotitor.getReportTechId());
+                values.put("Title", oRptTechCompetotitor.getTitle());
+                values.put("Notes", oRptTechCompetotitor.getNotes());
+                values.put("Useful", oRptTechCompetotitor.getUseful());
+                values.put("Harmful", oRptTechCompetotitor.getHarmful());
+                db.insert("SM_REPORT_TECH_COMPETITOR", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptTechCompetotitor.getReportTechId());
+                values.put("Title", oRptTechCompetotitor.getTitle());
+                values.put("Notes", oRptTechCompetotitor.getNotes());
+                values.put("Useful", oRptTechCompetotitor.getUseful());
+                values.put("Harmful", oRptTechCompetotitor.getHarmful());
+                db.update("SM_REPORT_TECH_COMPETITOR",values,"CompetitorID=?" ,new String[] {String.valueOf(oRptTechCompetotitor.getCompetitorId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT TECH ĐỐI THỦ */
+
+    /* REPORT TECH HOẠT ĐỘNG */
+    private String getReportTechActivityID(String ReportTechID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_TECH_ACTIVITIE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID WHERE B.ReportTechID=? ", new String[]{ReportTechID});
+            String ActivitieID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    ActivitieID=cursor.getString(cursor.getColumnIndex("ActivitieID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return ActivitieID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportTechActivity(String ActivitieID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_COMPETITOR WHERE ActivitieID=?", new String[]{ActivitieID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportTechActivity(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_TECH_ACTIVITIE where ReportTechID in(select ReportTechID from SM_REPORT_TECH where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportTechActivity> getAllReportTechActivity(String fday, String tDay) {
+        try {
+            List<SM_ReportTechActivity> lst = new ArrayList<SM_ReportTechActivity>();
+            String mSql=String.format("Select A.* from SM_ReportTechActivity A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
+                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportTechActivity oRptTechActivity = new SM_ReportTechActivity();
+                    oRptTechActivity.setActivitieId(cursor.getString(cursor.getColumnIndex("ActivitieID")));
+                    oRptTechActivity.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechActivity.setIsType(cursor.getInt(cursor.getColumnIndex("IsType")));
+                    oRptTechActivity.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechActivity.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechActivity.setAchievement(cursor.getString(cursor.getColumnIndex("Achievement")));
+                    lst.add(oRptTechActivity);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_TECH_ACTIVITY",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportTechActivity getReportTechActivityById(String ActivitieID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_ACTIVITIE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID "+
+                    " where A.DiseaseID='%s' order by B.ReportDay desc",ActivitieID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportTechActivity oRptTechActivity = new SM_ReportTechActivity();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptTechActivity.setActivitieId(cursor.getString(cursor.getColumnIndex("ActivitieID")));
+                    oRptTechActivity.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechActivity.setIsType(cursor.getInt(cursor.getColumnIndex("IsType")));
+                    oRptTechActivity.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptTechActivity.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechActivity.setAchievement(cursor.getString(cursor.getColumnIndex("Achievement")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptTechActivity;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_TECH_ACTIVITY",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportTechActivity(SM_ReportTechActivity oRptTechActivity){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String ActivitieID=getReportTechCompetitorID(oRptTechActivity.getReportTechId());
+            if(ActivitieID!=""){
+                if(oRptTechActivity.getActivitieId().isEmpty()|| oRptTechActivity.getActivitieId()==null){
+                    oRptTechActivity.setActivitieId(ActivitieID);
+                }
+            }
+            iSq=getSizeReportTechCompetitor(oRptTechActivity.getActivitieId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("ActivitieID", oRptTechActivity.getActivitieId());
+                values.put("ReportTechID", oRptTechActivity.getReportTechId());
+                values.put("IsType", oRptTechActivity.getIsType());
+                values.put("Title", oRptTechActivity.getTitle());
+                values.put("Notes", oRptTechActivity.getNotes());
+                values.put("Achievement", oRptTechActivity.getAchievement());
+                db.insert("SM_REPORT_TECH_ACTIVITIE", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptTechActivity.getReportTechId());
+                values.put("IsType", oRptTechActivity.getIsType());
+                values.put("Title", oRptTechActivity.getTitle());
+                values.put("Notes", oRptTechActivity.getNotes());
+                values.put("Achievement", oRptTechActivity.getAchievement());
+                db.update("SM_REPORT_TECH_ACTIVITIE",values,"ActivitieID=?" ,new String[] {String.valueOf(oRptTechActivity.getActivitieId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT TECH HOẠT ĐỘNG */
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){

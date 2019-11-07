@@ -10,14 +10,14 @@ public class SM_ReportTech {
     String locationAddress;
     String receiverList;
     String notes;
-    Integer isStatus;
+    String isStatus;
     Boolean isPost;
     String postDate;
 
     public SM_ReportTech() {
     }
 
-    public SM_ReportTech(String reportTechId, String reportCode, String reportName, String reportDate, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, Integer isStatus, Boolean isPost, String postDate) {
+    public SM_ReportTech(String reportTechId, String reportCode, String reportName, String reportDate, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, String isStatus, Boolean isPost, String postDate) {
         this.reportTechId = reportTechId;
         this.reportCode = reportCode;
         this.reportName = reportName;
@@ -104,11 +104,11 @@ public class SM_ReportTech {
         this.notes = notes;
     }
 
-    public Integer getIsStatus() {
+    public String getIsStatus() {
         return isStatus;
     }
 
-    public void setIsStatus(Integer isStatus) {
+    public void setIsStatus(String isStatus) {
         this.isStatus = isStatus;
     }
 
