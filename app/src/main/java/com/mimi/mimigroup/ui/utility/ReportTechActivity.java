@@ -1,13 +1,18 @@
 package com.mimi.mimigroup.ui.utility;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -61,6 +66,7 @@ public class ReportTechActivity extends BaseActivity {
             }
             mfDay=fDay;
             mtDay=tDay;
+
             ((BaseActivity)ReportTechActivity.this).showProgressDialog("Đang nạp danh sách báo cáo kỹ thuật...");
             List<SM_ReportTech> lst= mDB.getAllReportTech(fDay,tDay);
             adapter.setReportTechList(lst);
@@ -139,7 +145,7 @@ public class ReportTechActivity extends BaseActivity {
                         btnYes.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                onPostReportTech();
+                                //onPostReportTech();
                                 oDlg.dismiss();
                             }
                         });
@@ -187,6 +193,137 @@ public class ReportTechActivity extends BaseActivity {
             oT.setGravity(Gravity.CENTER,0,0);
             oT.show();
         }
+    }
+
+    public void onEditReportTechClicked(){
+        try {
+            List<SM_ReportTech> oReportTechSel = adapter.SelectedList;
+
+            if(oReportTechSel == null || oReportTechSel.size() <=0) {
+                Toast.makeText(ReportTechActivity.this, "Bạn chưa chọn báo cáo", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(oReportTechSel.size() > 1){
+                Toast.makeText(ReportTechActivity.this, "Bạn chọn quá nhiều báo cáo để sửa. Vui lòng chọn lại...", Toast.LENGTH_SHORT).show();
+                adapter.clearSelected();
+                return;
+            }
+
+            if (oReportTechSel.get(0).getReportTechId() != "") {
+                String mParSymbol=mDB.getParam("PAR_SYMBOL");
+                if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
+                Intent intent = new Intent(ReportTechActivity.this,ReportTechFormActivity.class);
+                intent.setAction("EDIT");
+                intent.putExtra("ReportTechID", oReportTechSel.get(0).getReportTechId());
+                intent.putExtra("PAR_SYMBOL", mParSymbol);
+                startActivityForResult(intent,REQUEST_CODE_EDIT);
+                isEditAdd=true;
+            } else {
+                Toast.makeText(ReportTechActivity.this, "Bạn chưa chọn báo cáo.", Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception ex){
+            Toast.makeText(ReportTechActivity.this, "ERR."+ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean  onDelReportTechClicked(){
+        final List<SM_ReportTech> lstReportTech = adapter.SelectedList;
+        if(lstReportTech.size()<=0){
+            Toast.makeText(ReportTechActivity.this,"Bạn chưa chọn mẫu tin để xóa.",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        final Dialog oDlg=new Dialog(ReportTechActivity.this);
+        oDlg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        oDlg.setContentView(R.layout.dialog_yesno);
+        oDlg.setTitle("");
+        CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
+        dlgTitle.setText("XÁC NHẬN XÓA");
+        CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
+        dlgContent.setText("Bạn có chắc muốn xóa ?");
+        CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
+        CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (SM_ReportTech oReportTech : lstReportTech) {
+                    mDB.delReportTech(oReportTech.getReportTechId());
+                }
+                onLoadDataSource(mfDay,mtDay);
+                Toast.makeText(ReportTechActivity.this,"Đã xóa mẫu tin thành công",Toast.LENGTH_SHORT).show();
+                oDlg.dismiss();
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oDlg.dismiss();
+                return;
+            }
+        });
+        oDlg.show();
+        return  true;
+    }
+
+    private int startYear, startMonth, startDay, endYear, endMonth, endDay;
+    public void onSearchReportTechClicked(){
+        try{
+            LayoutInflater inflater = (LayoutInflater) getLayoutInflater();
+            View customView = inflater.inflate(R.layout.dialog_picker, null);
+            final DatePicker dpStartDate = (DatePicker) customView.findViewById(R.id.dpStartDate);
+            final DatePicker dpEndDate = (DatePicker) customView.findViewById(R.id.dpEndDate);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ReportTechActivity.this);
+            builder.setView(customView); // Set the view of the dialog to your custom layout
+            builder.setTitle("");
+            builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startYear = dpStartDate.getYear();
+                    startMonth = dpStartDate.getMonth();
+                    startDay = dpStartDate.getDayOfMonth();
+                    endYear = dpEndDate.getYear();
+                    endMonth = dpEndDate.getMonth();
+                    endDay = dpEndDate.getDayOfMonth();
+
+                    Date dFday,dTday;
+                    dFday=AppUtils.getDate(startYear,startMonth,startDay);
+                    dTday=AppUtils.getDate(endYear,endMonth,endDay);
+
+                    if(dFday.after(dTday)){
+                        Toast.makeText(ReportTechActivity.this,"Chọn khoản thời gian không hợp lệ.",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    mfDay=sdf.format(dFday);
+                    mtDay=sdf.format(dTday);
+                    mtDay=AppUtils.DateAdd(mtDay,1,"yyyy-MM-dd");
+
+                    if(mfDay!="" && mtDay!="") {
+                        onLoadDataSource(mfDay,mtDay);
+                    }
+                    dialog.dismiss();
+                }});
+            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }});
+
+            Dialog dialog=builder.create();
+            dialog.show();
+
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialogdate);
+            Button btnPositiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            Button btnNegetiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+
+            btnPositiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor));
+            btnPositiveButton.setBackgroundColor(getResources().getColor(R.color.ButtonDialogBackground));
+            btnPositiveButton.setPaddingRelative(20,2,20,2);
+            btnNegetiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor2));
+
+        }catch (Exception ex){}
     }
 
 }

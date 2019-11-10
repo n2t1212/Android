@@ -167,6 +167,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.utility.ReportTechFormActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".ui.services.mimiService"
             android:enabled="true"

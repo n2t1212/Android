@@ -13,6 +13,7 @@ import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
+import com.mimi.mimigroup.ui.custom.CustomTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,7 +24,7 @@ import butterknife.OnClick;
 public class ReportTechFormItemFragment extends BaseFragment {
 
     @BindView(R.id.tvReportCode)
-    CustomBoldTextView tvReportCode;
+    CustomTextView tvReportCode;
     @BindView(R.id.tvReportDay)
     CustomBoldTextView tvReportDay;
 
@@ -58,9 +59,9 @@ public class ReportTechFormItemFragment extends BaseFragment {
 
         if(oReportTech != null && oReportTech.getReportTechId() != "")
         {
-            if(oReportTech.getReportTechId() != null)
+            if(oReportTech.getReportCode() != null)
             {
-                tvReportCode.setText(oReportTech.getReportTechId());
+                tvReportCode.setText(oReportTech.getReportCode());
             }
             if(oReportTech.getReportName() != null)
             {

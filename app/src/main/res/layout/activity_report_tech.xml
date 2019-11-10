@@ -46,10 +46,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
+        android:layout_below="@+id/layout_app_bar"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,323 +68,327 @@
                     android:layout_width="180dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
                     android:padding="10dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
                     android:text="Mã báo cáo"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Tên báo cáo"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Ngày báo cáo"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Kinh độ"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Vĩ độ"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Địa chỉ"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Người nhận"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Ghi chú"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Trạng thái"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Đã gửi"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
                     android:text="Ngày gửi"
-                    android:gravity="center"/>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
 
             <!-- FILTER GRID-->
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/llSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_below="@+id/llTop"
                 android:background="@color/BackgroundHeaderGrid"
-                android:visibility="gone"
-                android:id="@+id/llSearch">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterReportCode"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:id="@+id/filterReportCode"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:background="@color/BackgroundFilterGrid"
+                    android:hint=""
+                    android:padding="5dp"
                     android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="start"
                     android:id="@+id/filterReportName"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
                     android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterReportDate"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterReportDate"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:id="@+id/filterLongitude"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterLongitude"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterLatitude"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterLatitude"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
                     android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterLocationAddress"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterLocationAddress"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
                     android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterReceiverList"
                     android:layout_width="400dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterReceiverList"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterNotes"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterNotes"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:id="@+id/filterIsStatus"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterIsStatus"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
+                    android:id="@+id/filterIsPost"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterIsPost"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <com.mimi.mimigroup.ui.custom.CustomEditText
-                    android:layout_width="400dp"
+                    android:id="@+id/filterPostDay"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:gravity="start"
-                    android:id="@+id/filterPostDay"
-                    android:padding="5dp"
-                    android:hint=""
-                    android:textColorHint="@color/BorderHeaderGrid"
                     android:layout_marginLeft="0.5dp"
                     android:background="@color/BackgroundFilterGrid"
-                    android:textColor="@color/BackgroundHeaderGrid"
-                    android:textSize="16sp"
                     android:enabled="false"
+                    android:gravity="start"
+                    android:hint=""
+                    android:padding="5dp"
+                    android:textColor="@color/BackgroundHeaderGrid"
+                    android:textColorHint="@color/BorderHeaderGrid"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
 
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvReportTechList"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/llBottom"
-                android:layout_below="@+id/llSearch">
-            </android.support.v7.widget.RecyclerView>
+                android:layout_below="@+id/llSearch"
+                android:layout_marginTop="-1dp"></android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
 

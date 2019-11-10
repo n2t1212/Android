@@ -96,8 +96,8 @@ public class ReportTechAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         CustomTextView tvIsStatus;
         @BindView(R.id.tvIsPost)
         CustomTextView tvIsPost;
-        @BindView(R.id.tvPostDate)
-        CustomTextView tvPostDate;
+        @BindView(R.id.tvPostDay)
+        CustomTextView tvPostDay;
 
         public ReportTechHolder(@NonNull View itemView)
         {
@@ -160,7 +160,7 @@ public class ReportTechAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                     if(oReportTech.getPostDate() != null)
                     {
-                        tvPostDate.setText(oReportTech.getPostDate());
+                        tvPostDay.setText(oReportTech.getPostDate());
                     }
                 }
 

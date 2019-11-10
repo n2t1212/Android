@@ -3379,7 +3379,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptTech.setReportTechId(ReportTechID);
                 }
             }
-            iSq=getSizePay(oRptTech.getReportTechId());
+            iSq=getSizeReportTech(oRptTech.getReportTechId());
             if (iSq<=0) {
                 ContentValues values = new ContentValues();
                 values.put("ReportTechID", oRptTech.getReportTechId());
@@ -3460,11 +3460,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         } catch (Exception ex) {
         }
     }
-    public List<SM_ReportTechMarket> getAllReportTechMarket(String fday, String tDay) {
+    public List<SM_ReportTechMarket> getAllReportTechMarket(String mReportTechId) {
         try {
             List<SM_ReportTechMarket> lst = new ArrayList<SM_ReportTechMarket>();
             String mSql=String.format("Select A.* from SM_REPORT_TECH_MARKET A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
-                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+                    " where A.ReportTechID='%s' order by B.ReportDay desc", mReportTechId);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -3592,11 +3592,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         } catch (Exception ex) {
         }
     }
-    public List<SM_ReportTechDisease> getAllReportTechDisease(String fday, String tDay) {
+    public List<SM_ReportTechDisease> getAllReportTechDisease(String mReportTechId) {
         try {
             List<SM_ReportTechDisease> lst = new ArrayList<SM_ReportTechDisease>();
             String mSql=String.format("Select A.* from SM_REPORT_TECH_DISEASE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
-                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+                    " where A.ReportTechID='%s' order by B.ReportDay desc", mReportTechId);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -3732,11 +3732,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         } catch (Exception ex) {
         }
     }
-    public List<SM_ReportTechCompetitor> getAllReportTechCompetitor(String fday, String tDay) {
+    public List<SM_ReportTechCompetitor> getAllReportTechCompetitor(String mReportTechId) {
         try {
             List<SM_ReportTechCompetitor> lst = new ArrayList<SM_ReportTechCompetitor>();
             String mSql=String.format("Select A.* from SM_REPORT_TECH_COMPETITOR A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
-                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+                    " where A.ReportTechID='%s' order by B.ReportDay desc", mReportTechId);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -3864,11 +3864,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         } catch (Exception ex) {
         }
     }
-    public List<SM_ReportTechActivity> getAllReportTechActivity(String fday, String tDay) {
+    public List<SM_ReportTechActivity> getAllReportTechActivity(String mReportTechId) {
         try {
             List<SM_ReportTechActivity> lst = new ArrayList<SM_ReportTechActivity>();
             String mSql=String.format("Select A.* from SM_ReportTechActivity A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
-                    " where (julianday(B.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(B.ReportDay)) >=0 order by B.ReportDay desc",fday,tDay);
+                    " where A.ReportTechId='%s' order by B.ReportDay desc", mReportTechId);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -3959,6 +3959,52 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     }
 
     /* END REPORT TECH HOẠT ĐỘNG */
+
+    public boolean delReportTech(String mReportTechId){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSqlReportTech=String.format("delete from SM_REPORT_TECH where ReportTechID ='%s'",mReportTechId);
+            String mSqlMarket=String.format("delete from SM_REPORT_TECH_MARKET where ReportTechID ='%s'",mReportTechId);
+            String mSqlDisease=String.format("delete from SM_REPORT_TECH_DISEASE where ReportTechID ='%s'",mReportTechId);
+            String mSqlCompetitor=String.format("delete from SM_REPORT_TECH_COMPETITOR where ReportTechID ='%s'",mReportTechId);
+            String mSqlActivity=String.format("delete from SM_REPORT_TECH_ACTIVITIE where ReportTechID ='%s'",mReportTechId);
+
+            try {
+                db.execSQL(mSqlReportTech);
+                db.execSQL(mSqlMarket);
+                db.execSQL(mSqlDisease);
+                db.execSQL(mSqlCompetitor);
+                db.execSQL(mSqlActivity);
+
+            }catch (Exception ex){
+                Log.d("DEL_SM_ODT",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+    public boolean delReportTechDetail(String mReportTechId){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSqlMarket=String.format("delete from SM_REPORT_TECH_MARKET where ReportTechID ='%s'",mReportTechId);
+            String mSqlDisease=String.format("delete from SM_REPORT_TECH_DISEASE where ReportTechID ='%s'",mReportTechId);
+            String mSqlCompetitor=String.format("delete from SM_REPORT_TECH_COMPETITOR where ReportTechID ='%s'",mReportTechId);
+            String mSqlActivity=String.format("delete from SM_REPORT_TECH_ACTIVITIE where ReportTechID ='%s'",mReportTechId);
+
+            try {
+                db.execSQL(mSqlMarket);
+                db.execSQL(mSqlDisease);
+                db.execSQL(mSqlCompetitor);
+                db.execSQL(mSqlActivity);
+
+            }catch (Exception ex){
+                Log.d("DEL_SM_ODT",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
