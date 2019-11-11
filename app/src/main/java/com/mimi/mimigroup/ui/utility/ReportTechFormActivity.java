@@ -1,7 +1,6 @@
 package com.mimi.mimigroup.ui.utility;
 
 import android.app.Dialog;
-import android.arch.lifecycle.ReportFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -20,7 +19,6 @@ import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.model.SM_ReportTechMarket;
 import com.mimi.mimigroup.ui.adapter.FragmentPagerTabAdapter;
-import com.mimi.mimigroup.ui.adapter.OrderAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 import com.mimi.mimigroup.utils.AppUtils;
@@ -65,10 +63,13 @@ public class ReportTechFormActivity extends BaseActivity {
     List<SM_ReportTechMarket> oReportTechMarket;
     List<SM_ReportTechDisease> oReportTechDisease;
     List<SM_ReportTechCompetitor> oReportTechCompetitor;
-    List<SM_ReportTechActivity> oReportTechActivity;
+    List<SM_ReportTechActivity> oReportTechActivityThisWeek;
+    List<SM_ReportTechActivity> oReportTechActivityNextWeek;
 
     ReportTechFormItemFragment ReportTechFragment;
     ReportTechMarketItemFragment ReportTechMarketFragment;
+    ReportTechCompetitorItemFragment ReportTechCompetitorFragment;
+    ReportTechActivityThisWeekItemFragment ReportTechActivityThisWeekFragment;
 
     public String getAction(){return this.mAction;}
 
@@ -88,8 +89,11 @@ public class ReportTechFormActivity extends BaseActivity {
         return oReportTechCompetitor;
     }
 
-    public List<SM_ReportTechActivity> getoReportTechActivity() {
-        return oReportTechActivity;
+    public List<SM_ReportTechActivity> getoReportTechActivityThisWeek() {
+        return oReportTechActivityThisWeek;
+    }
+    public List<SM_ReportTechActivity> getoReportTechActivityNextWeek() {
+        return oReportTechActivityNextWeek;
     }
 
     @Override
@@ -109,13 +113,15 @@ public class ReportTechFormActivity extends BaseActivity {
             oReportTechMarket = mDB.getAllReportTechMarket(mReportTechID);
             oReportTechDisease = mDB.getAllReportTechDisease(mReportTechID);
             oReportTechCompetitor = mDB.getAllReportTechCompetitor(mReportTechID);
-            oReportTechActivity = mDB.getAllReportTechActivity(mReportTechID);
+            oReportTechActivityThisWeek = mDB.getAllReportTechActivity(mReportTechID, 0);
+            oReportTechActivityNextWeek = mDB.getAllReportTechActivity(mReportTechID, 1);
         }else{
             oReportTech = new SM_ReportTech();
             oReportTechMarket = new ArrayList<>();
             oReportTechDisease = new ArrayList<>();
             oReportTechCompetitor= new ArrayList<>();
-            oReportTechActivity = new ArrayList<>();
+            oReportTechActivityThisWeek = new ArrayList<>();
+            oReportTechActivityNextWeek = new ArrayList<>();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String mReportDate = sdf.format(new Date());
@@ -143,7 +149,13 @@ public class ReportTechFormActivity extends BaseActivity {
                         adapter.addFragment(ReportTechFragment, "Báo Cáo Kỹ Thuật");
 
                         ReportTechMarketFragment = new ReportTechMarketItemFragment();
-                        adapter.addFragment(ReportTechMarketFragment, "Báo Cáo Thị Trường");
+                        adapter.addFragment(ReportTechMarketFragment, "Thị Trường");
+
+                        ReportTechCompetitorFragment = new ReportTechCompetitorItemFragment();
+                        adapter.addFragment(ReportTechCompetitorFragment, "Đối Thủ");
+
+                        ReportTechActivityThisWeekFragment = new ReportTechActivityThisWeekItemFragment();
+                        adapter.addFragment(ReportTechCompetitorFragment, "Trong Tuần");
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
@@ -154,6 +166,16 @@ public class ReportTechFormActivity extends BaseActivity {
                                         btnReportTechDetailDel.setVisibility(View.INVISIBLE);
                                         break;
                                     case 1:
+                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
+                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                        btnReportTechDetailAdd.setTag("ADD");
+                                        break;
+                                    case 2:
+                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
+                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                        btnReportTechDetailAdd.setTag("ADD");
+                                        break;
+                                    case 3:
                                         btnReportTechDetailAdd.setVisibility(View.VISIBLE);
                                         btnReportTechDetailDel.setVisibility(View.INVISIBLE);
                                         btnReportTechDetailAdd.setTag("ADD");
@@ -195,7 +217,8 @@ public class ReportTechFormActivity extends BaseActivity {
         //SAVE DETAIL
         try{
             if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")) {
-                onReportTechMarketAdd();
+                onReportTechDetailAdd();
+
             }
         }catch (Exception ex){}
 
@@ -204,6 +227,12 @@ public class ReportTechFormActivity extends BaseActivity {
         }
         if(ReportTechMarketFragment!=null) {
             oReportTechMarket = ReportTechMarketFragment.getListReportTechMarket();
+        }
+        if(ReportTechCompetitorFragment!=null) {
+            oReportTechCompetitor = ReportTechCompetitorFragment.getListReportTechCompetitor();
+        }
+        if(ReportTechActivityThisWeekFragment != null){
+            oReportTechActivityThisWeek = ReportTechActivityThisWeekFragment.getListReportTechActivityThisWeek();
         }
     }
 
@@ -285,7 +314,7 @@ public class ReportTechFormActivity extends BaseActivity {
     }
 
     @OnClick(R.id.btnReportTechDetailAdd)
-    public void onReportTechMarketAdd(){
+    public void onReportTechDetailAdd(){
         final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
 
         if(currentFragment instanceof ReportTechMarketItemFragment){
@@ -305,6 +334,40 @@ public class ReportTechFormActivity extends BaseActivity {
                 btnReportTechDetailAdd.setTag("SAVE");
                 btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
+        } else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+            if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
+                if(((ReportTechCompetitorItemFragment) currentFragment).onSaveReportTechCompetitor()) {
+                    btnReportTechDetailAdd.setTag("ADD");
+                    btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                }
+            }else if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("EDIT")){
+                //CHI HIỂN THỊ BOX ĐỂ CẬP NHẬT
+                ((ReportTechCompetitorItemFragment) currentFragment).onAddReportTechCompetitor(false);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }else {
+                //HIỂN THỊ BOX MỚI ĐỂ THÊM
+                ((ReportTechCompetitorItemFragment) currentFragment).onAddReportTechCompetitor(true);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }
+        } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
+            if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
+                if(((ReportTechActivityThisWeekItemFragment) currentFragment).onSaveReportTechActivity()) {
+                    btnReportTechDetailAdd.setTag("ADD");
+                    btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                }
+            }else if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("EDIT")){
+                //CHI HIỂN THỊ BOX ĐỂ CẬP NHẬT
+                ((ReportTechActivityThisWeekItemFragment) currentFragment).onAddReportTechActivity(false);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }else {
+                //HIỂN THỊ BOX MỚI ĐỂ THÊM
+                ((ReportTechActivityThisWeekItemFragment) currentFragment).onAddReportTechActivity(true);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }
         }
     }
 
@@ -313,6 +376,10 @@ public class ReportTechFormActivity extends BaseActivity {
         final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
         if(currentFragment instanceof ReportTechMarketItemFragment){
             ((ReportTechMarketItemFragment) currentFragment).onDeletedReportTechMarket();
+        } else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+            ((ReportTechCompetitorItemFragment) currentFragment).onDeletedReportTechCompetitor();
+        } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
+            ((ReportTechActivityThisWeekItemFragment) currentFragment).onDeletedReportTechActivity();
         }
     }
 
@@ -332,8 +399,19 @@ public class ReportTechFormActivity extends BaseActivity {
 
         if(mDB.getSizeReportTech(oReportTech.getReportTechId())>0) {
             mDB.delReportTechDetail(oReportTech.getReportTechId());
+            // Save market report
             for (SM_ReportTechMarket oDetail : oReportTechMarket) {
                 mDB.addReportTechMarket(oDetail);
+            }
+
+            // Save competitor report
+            for (SM_ReportTechCompetitor oDetail : oReportTechCompetitor) {
+                mDB.addReportTechCompetitor(oDetail);
+            }
+
+            // Save activity this week
+            for (SM_ReportTechActivity oDetail : oReportTechActivityThisWeek) {
+                mDB.addReportTechActivity(oDetail);
             }
         }
         Toast.makeText(this, "Ghi báo cáo kĩ thuật thành công", Toast.LENGTH_SHORT).show();

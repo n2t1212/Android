@@ -3864,11 +3864,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         } catch (Exception ex) {
         }
     }
-    public List<SM_ReportTechActivity> getAllReportTechActivity(String mReportTechId) {
+    public List<SM_ReportTechActivity> getAllReportTechActivity(String mReportTechId, Integer type) {
         try {
             List<SM_ReportTechActivity> lst = new ArrayList<SM_ReportTechActivity>();
             String mSql=String.format("Select A.* from SM_ReportTechActivity A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
-                    " where A.ReportTechId='%s' order by B.ReportDay desc", mReportTechId);
+                    " where A.ReportTechId='%s' and A.IsType=%d order by B.ReportDay desc", mReportTechId, type);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
