@@ -202,28 +202,32 @@ public class ReportTechMarketItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tiêu đề...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            return false;
         } else {
             oDetail.setTitle(tvTitle.getText().toString());
         }
 
-        if (tvNotes.getText() == null && tvNotes.getText().toString().isEmpty()) {
+        if (tvNotes.getText() == null || tvNotes.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ghi chú...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            return false;
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
-        if (tvUseful.getText() == null && tvUseful.getText().toString().isEmpty()) {
+        if (tvUseful.getText() == null || tvUseful.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tác động có lợi...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            return false;
         } else {
             oDetail.setUsefull(tvUseful.getText().toString());
         }
-        if (tvHarmful.getText() == null && tvHarmful.getText().toString().isEmpty()) {
+        if (tvHarmful.getText() == null || tvHarmful.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tác động có hại...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            return false;
         } else {
             oDetail.setHarmful(tvHarmful.getText().toString());
         }
@@ -308,6 +312,9 @@ public class ReportTechMarketItemFragment extends BaseFragment {
                 }
                 adapter.SelectedList.clear();
                 adapter.setSmoReportTechMarket(lstReportTechMarket);
+
+                // Set view
+                rvReportTechMarketList.setAdapter(adapter);
                 ((ReportTechFormActivity) getActivity()).setVisibleDetailDelete(false);
                 ((ReportTechFormActivity) getActivity()).setButtonEditStatus(false);
                 Toast.makeText(getContext(), "Đã xóa mẫu tin thành công", Toast.LENGTH_SHORT).show();
