@@ -13,6 +13,7 @@ import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.api.APINet;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.model.SM_ReportTechActivity;
 import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
@@ -68,6 +69,7 @@ public class ReportTechFormActivity extends BaseActivity {
 
     ReportTechFormItemFragment ReportTechFragment;
     ReportTechMarketItemFragment ReportTechMarketFragment;
+    ReportTechDiseaseItemFragment ReportTechDiseaseFragment;
     ReportTechCompetitorItemFragment ReportTechCompetitorFragment;
     ReportTechActivityThisWeekItemFragment ReportTechActivityThisWeekFragment;
     ReportTechActivityNextWeekItemFragment ReportTechActivityNextWeekFragment;
@@ -152,6 +154,9 @@ public class ReportTechFormActivity extends BaseActivity {
                         ReportTechMarketFragment = new ReportTechMarketItemFragment();
                         adapter.addFragment(ReportTechMarketFragment, "Thị Trường");
 
+                        ReportTechDiseaseFragment = new ReportTechDiseaseItemFragment();
+                        adapter.addFragment(ReportTechDiseaseFragment, "Dịch Bệnh");
+
                         ReportTechCompetitorFragment = new ReportTechCompetitorItemFragment();
                         adapter.addFragment(ReportTechCompetitorFragment, "Đối Thủ");
 
@@ -189,6 +194,11 @@ public class ReportTechFormActivity extends BaseActivity {
                                         btnReportTechDetailDel.setVisibility(View.INVISIBLE);
                                         btnReportTechDetailAdd.setTag("ADD");
                                         break;
+                                    case 5:
+                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
+                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                        btnReportTechDetailAdd.setTag("ADD");
+                                        break;
                                 }
                             }
                             @Override
@@ -202,6 +212,13 @@ public class ReportTechFormActivity extends BaseActivity {
                 },300);
     }
 
+    public List<DM_Tree> getListTree(){
+        List<DM_Tree> lstTree=new ArrayList<DM_Tree>();
+        try{
+            lstTree=mDB.getAllTree();
+        }catch (Exception ex){}
+        return  lstTree;
+    }
 
     /*[TRANSFER DATA FOR FRAMGMENT]*/
     public void setVisibleDetailDelete(boolean isVisible){
@@ -236,6 +253,9 @@ public class ReportTechFormActivity extends BaseActivity {
         }
         if(ReportTechMarketFragment!=null) {
             oReportTechMarket = ReportTechMarketFragment.getListReportTechMarket();
+        }
+        if(ReportTechDiseaseFragment != null) {
+            oReportTechDisease = ReportTechDiseaseFragment.getListReportTechDisease();
         }
         if(ReportTechCompetitorFragment!=null) {
             oReportTechCompetitor = ReportTechCompetitorFragment.getListReportTechCompetitor();
@@ -346,7 +366,26 @@ public class ReportTechFormActivity extends BaseActivity {
                 btnReportTechDetailAdd.setTag("SAVE");
                 btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
-        } else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+        }else if(currentFragment instanceof ReportTechDiseaseItemFragment){
+            if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
+                if(((ReportTechDiseaseItemFragment) currentFragment).onSaveReportTechDisease()) {
+                    btnReportTechDetailAdd.setTag("ADD");
+                    btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                }
+            }else if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("EDIT")){
+                //CHI HIỂN THỊ BOX ĐỂ CẬP NHẬT
+                ((ReportTechDiseaseItemFragment) currentFragment).onAddReportTechDisease(false);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }else {
+                //HIỂN THỊ BOX MỚI ĐỂ THÊM
+                ((ReportTechDiseaseItemFragment) currentFragment).onAddReportTechDisease(true);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }
+        }
+
+        else if(currentFragment instanceof ReportTechCompetitorItemFragment){
             if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
                 if(((ReportTechCompetitorItemFragment) currentFragment).onSaveReportTechCompetitor()) {
                     btnReportTechDetailAdd.setTag("ADD");
@@ -405,7 +444,9 @@ public class ReportTechFormActivity extends BaseActivity {
         final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
         if(currentFragment instanceof ReportTechMarketItemFragment){
             ((ReportTechMarketItemFragment) currentFragment).onDeletedReportTechMarket();
-        } else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+        }else if(currentFragment instanceof ReportTechDiseaseItemFragment){
+            ((ReportTechDiseaseItemFragment) currentFragment).onDeletedReportTechDisease();
+        }else if(currentFragment instanceof ReportTechCompetitorItemFragment){
             ((ReportTechCompetitorItemFragment) currentFragment).onDeletedReportTechCompetitor();
         } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
             ((ReportTechActivityThisWeekItemFragment) currentFragment).onDeletedReportTechActivity();
@@ -442,6 +483,12 @@ public class ReportTechFormActivity extends BaseActivity {
             if(oReportTechMarket != null && oReportTechMarket.size() >0){
                 for (SM_ReportTechMarket oDetail : oReportTechMarket) {
                     mDB.addReportTechMarket(oDetail);
+                }
+            }
+            // Save disease report
+            if(oReportTechDisease != null && oReportTechDisease.size() >0){
+                for (SM_ReportTechDisease oDetail : oReportTechDisease) {
+                    mDB.addReportTechDisease(oDetail);
                 }
             }
             // Save competitor report

@@ -1,6 +1,8 @@
 package com.mimi.mimigroup.ui.utility;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,34 +10,46 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
+import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.SM_ReportTechDisease;
+import com.mimi.mimigroup.ui.adapter.ReportTechDiseaseAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ReportTechDiseaseItemFragment extends BaseFragment {
 
     @BindView(R.id.rvReportTechDiseaseList)
     RecyclerView rvReportTechDiseaseList;
+    @BindView(R.id.tvTree)
+    CustomTextView tvTree;
     @BindView(R.id.tvTitle)
     CustomBoldEditText tvTitle;
+    @BindView(R.id.tvAcreage)
+    CustomBoldEditText tvAcreage;
+    @BindView(R.id.tvDisease)
+    CustomBoldEditText tvDisease;
+    @BindView(R.id.tvPrice)
+    CustomBoldEditText tvPrice;
     @BindView(R.id.tvNotes)
     CustomBoldEditText tvNotes;
-    @BindView(R.id.tvUseful)
-    CustomBoldEditText tvUseful;
-    @BindView(R.id.tvHarmful)
-    CustomBoldEditText tvHarmful;
     @BindView(R.id.Layout_ReportTechDiseaseItem)
     LinearLayout Layout_ReportTechDiseaseItem;
 
@@ -46,6 +60,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
 
     List<SM_ReportTechDisease> lstReportTechDisease;
     String currentDiseaseId;
+    List<DM_Tree> lstTree;
 
     @Override
     protected int getLayoutResourceId() {
@@ -90,9 +105,11 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                         mReportTechId=oActivity.getmReportTechID();
                         mAction=oActivity.getAction();
                         if (lstReportTechDisease != null) {
-                            adapter.setSmoReportTechDisease(lstReportTechDisease);
+                            adapter.setsmoReportTechDisease(lstReportTechDisease);
                         }
                         mParSymbol=oActivity.getmPar_Symbol();
+                        lstTree=oActivity.getListTree();
+                        initDropdownCT();
                     }} ,300);
 
         Layout_ReportTechDiseaseItem.setVisibility(View.GONE);
@@ -101,6 +118,118 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     // CALL FROM ACTIVITY
     public List<SM_ReportTechDisease> getListReportTechDisease(){
         return lstReportTechDisease;
+    }
+
+    private String[] lstTreeSelect;
+    private boolean[] lstTreeSelectChecked;
+    private ArrayList<Integer> lstTreeSelectPos = new ArrayList<>();
+
+    private void initDropdownCT(){
+        try{
+            if(lstTree==null){lstTree=new ArrayList<DM_Tree>();}
+
+            lstTreeSelect=new String[lstTree.size()];
+            lstTreeSelectChecked=new boolean[lstTree.size()];
+
+            for(int i=0;i<lstTree.size();i++){
+                lstTreeSelect[i]=lstTree.get(i).getTreeName();
+                lstTreeSelectChecked[i]=false;
+            }
+        }catch (Exception ex){}
+    }
+
+    private String getListTreeName(String mlstTreeSelect){
+        try{
+            String mTreeListName="";
+            lstTreeSelectPos.clear();
+            if(!mlstTreeSelect.isEmpty()){
+                String[] mlstTreeCode=mlstTreeSelect.split(",");
+                for(int iP=0;iP<mlstTreeCode.length;iP++){
+                    for(int jP=0;jP<lstTree.size();jP++){
+                        if(lstTree.get(jP).getTreeCode().contains(mlstTreeCode[iP])){
+                            lstTreeSelectPos.add(jP);
+                            mTreeListName=mTreeListName+lstTree.get(jP).getTreeName();
+                            if(iP!=mlstTreeCode.length-1) {
+                                mTreeListName =mTreeListName + ",";
+                            }
+                        }
+                    }
+                }
+            }
+            return  mTreeListName;
+        }catch (Exception ex){return  "";}
+    }
+    @OnClick(R.id.tvTree)
+    public void onClickTree(){
+        try{
+            Arrays.fill(lstTreeSelectChecked,false);
+            for(int i=0;i<lstTreeSelectPos.size();i++){
+                lstTreeSelectChecked[lstTreeSelectPos.get(i)]=true;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setCancelable(false);
+            builder.setTitle("Chọn cây trồng");
+            builder.setMultiChoiceItems(lstTreeSelect,lstTreeSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+                    if(isChecked){
+                        lstTreeSelectPos.add(position);
+                    }else{
+                        lstTreeSelectPos.remove(Integer.valueOf(position));
+                    }
+                }
+            });
+
+            builder.setPositiveButton("Chấp nhận", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    tvTree.setText("");
+                    String mTreeSelectCode="",mTreeSelectName="";
+                    for (int i = 0; i<lstTreeSelectPos.size(); i++){
+                        mTreeSelectCode=mTreeSelectCode+ lstTree.get(lstTreeSelectPos.get(i)).getTreeCode();
+                        mTreeSelectName=mTreeSelectName+ lstTree.get(lstTreeSelectPos.get(i)).getTreeName();
+                        if(i!=lstTreeSelectPos.size()-1){
+                            mTreeSelectCode=mTreeSelectCode+",";
+                            mTreeSelectName=mTreeSelectName+",";
+                        }
+                        tvTree.setText(mTreeSelectName);
+                        tvTree.setTag(mTreeSelectCode);
+                    }
+                }
+            });
+            builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNeutralButton("Bỏ chọn", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    for (int i = 0; i < lstTreeSelectChecked.length; i++) {
+                        lstTreeSelectChecked[i] = false;
+                        lstTreeSelectPos.clear();
+                        tvTree.setText("");
+                    }
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialog_2);
+            Button btnPositiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            Button btnNegetiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+
+            btnPositiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor));
+            btnPositiveButton.setBackgroundColor(getResources().getColor(R.color.ButtonDialogBackground));
+            btnPositiveButton.setPaddingRelative(20,2,20,2);
+            btnNegetiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor2));
+
+        }
+        catch(Exception ex) { }
+
     }
 
     private int setPosSpin(List<String> lstSpin, String mValue) {
@@ -131,22 +260,32 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     private void setReportTechDiseaseRow(SM_ReportTechDisease osmDT) {
         try {
             if (osmDT != null) {
-                if (osmDT.getTitle() != null) {
+                if (osmDT.getTreeCode() != null) {
+                    tvTree.setText(getListTreeName(osmDT.getTreeCode()));
+                    tvTree.setTag(osmDT.getTreeCode());
+                }else {
+                    tvTree.setText("");
+                    tvTree.setTag("");
+                }
+                if(osmDT.getTitle() != null){
                     tvTitle.setText(osmDT.getTitle());
+                }
+                if(osmDT.getAcreage() != null){
+                    tvAcreage.setText(osmDT.getAcreage().toString());
+                }
+                if(osmDT.getDisease() != null){
+                    tvDisease.setText(osmDT.getDisease());
+                }
+                if(osmDT.getPrice() != null){
+                    tvPrice.setText(osmDT.getPrice().toString());
                 }
                 if (osmDT.getNotes() != null) {
                     tvNotes.setText(osmDT.getNotes());
                 }
-                if (osmDT.getUsefull() != null) {
-                    tvUseful.setText(osmDT.getUsefull());
-                }
-                if (osmDT.getHarmful() != null) {
-                    tvHarmful.setText(osmDT.getHarmful());
-                }
 
                 currentDiseaseId = osmDT.getDiseaseId();
             } else {
-                Toast.makeText(getContext(), "Không tồn tại báo cáo thị trường..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Không tồn tại báo cáo dịch bệnh..", Toast.LENGTH_SHORT).show();
             }
 
         } catch (Exception ex) {
@@ -162,10 +301,14 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             //Clear Input
             try {
                 if (isAddnew) {
+                    tvTree.setText("");
+                    tvTree.setTag("");
                     tvTitle.setText("");
+                    tvAcreage.setText("");
+                    tvDisease.setText("");
+                    tvPrice.setText("");
                     tvNotes.setText("");
-                    tvUseful.setText("");
-                    tvHarmful.setText("");
+
                 }
             } catch (Exception ex) {
             }
@@ -196,13 +339,13 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             currentDiseaseId = "";
         }
 
-        if (tvTitle.getText() == null || tvTitle.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tiêu đề...", Toast.LENGTH_LONG);
+        if (tvTree.getTag().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn cây trồng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             return false;
         } else {
-            oDetail.setTitle(tvTitle.getText().toString());
+            oDetail.setTreeCode(tvTree.getTag().toString());
         }
 
         if (tvNotes.getText() == null || tvNotes.getText().toString().isEmpty()) {
@@ -213,21 +356,37 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
-        if (tvUseful.getText() == null || tvUseful.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tác động có lợi...", Toast.LENGTH_LONG);
+        if (tvTitle.getText() == null || tvTitle.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tiêu dề...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             return false;
         } else {
-            oDetail.setUsefull(tvUseful.getText().toString());
+            oDetail.setTitle(tvTitle.getText().toString());
         }
-        if (tvHarmful.getText() == null || tvHarmful.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tác động có hại...", Toast.LENGTH_LONG);
+        if (tvAcreage.getText() == null || tvAcreage.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập diện tích...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             return false;
         } else {
-            oDetail.setHarmful(tvHarmful.getText().toString());
+            oDetail.setAcreage(Float.parseFloat(tvAcreage.getText().toString()));
+        }
+        if (tvDisease.getText() == null || tvDisease.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập dịch hại...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setDisease(tvDisease.getText().toString());
+        }
+        if (tvPrice.getText() == null || tvPrice.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập giá cây trồng...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setPrice(Float.parseFloat(tvPrice.getText().toString()));
         }
 
         boolean isExist = false;
@@ -244,43 +403,56 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                 } else {
                     lstReportTechDisease.get(i).setNotes("");
                 }
-                if (oDetail.getUsefull() != null) {
-                    lstReportTechDisease.get(i).setUsefull(oDetail.getUsefull());
+                if (oDetail.getTreeCode() != null) {
+                    lstReportTechDisease.get(i).setTreeCode(oDetail.getTreeCode());
                 } else {
-                    lstReportTechDisease.get(i).setUsefull("");
+                    lstReportTechDisease.get(i).setTreeCode("");
                 }
-                if (oDetail.getHarmful() != null) {
-                    lstReportTechDisease.get(i).setHarmful(oDetail.getHarmful());
+                if (oDetail.getDisease() != null) {
+                    lstReportTechDisease.get(i).setDisease(oDetail.getDisease());
                 } else {
-                    lstReportTechDisease.get(i).setHarmful("");
+                    lstReportTechDisease.get(i).setDisease("");
+                }
+                if (oDetail.getAcreage() != null) {
+                    lstReportTechDisease.get(i).setAcreage(oDetail.getAcreage());
+                } else {
+                    lstReportTechDisease.get(i).setPrice(0f);
+                }
+                if (oDetail.getPrice() != null) {
+                    lstReportTechDisease.get(i).setPrice(oDetail.getPrice());
+                } else {
+                    lstReportTechDisease.get(i).setPrice(0f);
                 }
 
-                Toast.makeText(getContext(), "Báo cáo thị trường đã được thêm..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Báo cáo dịch hại đã được thêm..", Toast.LENGTH_SHORT).show();
                 break;
             }
         }
 
         if (!isExist) {
             SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            String mDiseaseId = "BCTT" + mParSymbol + Od.format(new Date());
+            String mDiseaseId = "BCDH" + mParSymbol + Od.format(new Date());
             oDetail.setDiseaseId(mDiseaseId);
             oDetail.setReportTechId(mReportTechId);
             lstReportTechDisease.add(oDetail);
         }
 
-        adapter.setSmoReportTechDisease(lstReportTechDisease);
-        Toast.makeText(getContext(), String.valueOf(lstReportTechDisease.size()) + ": Báo cáo thị trường được chọn..", Toast.LENGTH_SHORT).show();
+        adapter.setsmoReportTechDisease(lstReportTechDisease);
+        Toast.makeText(getContext(), String.valueOf(lstReportTechDisease.size()) + ": Báo cáo dịch hại được chọn..", Toast.LENGTH_SHORT).show();
 
         tvTitle.setText("");
         tvNotes.setText("");
-        tvUseful.setText("");
-        tvHarmful.setText("");
+        tvTree.setText("");
+        tvTree.setTag("");
+        tvAcreage.setText("");
+        tvDisease.setText("");
+        tvPrice.setText("");
         return true;
     }
 
     public void onDeletedReportTechDisease(){
         if(adapter.SelectedList==null || adapter.SelectedList.size()<=0) {
-            Toast oToat=Toast.makeText(getContext(),"Bạn chưa chọn báo cáo thị trường để xóa...",Toast.LENGTH_LONG);
+            Toast oToat=Toast.makeText(getContext(),"Bạn chưa chọn báo cáo dịch hại để xóa...",Toast.LENGTH_LONG);
             oToat.setGravity(Gravity.CENTER,0,0);
             oToat.show();
             return;
@@ -309,7 +481,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                     }
                 }
                 adapter.SelectedList.clear();
-                adapter.setSmoReportTechDisease(lstReportTechDisease);
+                adapter.setsmoReportTechDisease(lstReportTechDisease);
 
                 // Set view
                 rvReportTechDiseaseList.setAdapter(adapter);

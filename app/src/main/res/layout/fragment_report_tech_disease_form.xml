@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:weightSum="2" >
                 <com.mimi.mimigroup.ui.custom.CustomTextView
                     android:layout_width="100dp"
@@ -33,13 +34,13 @@
                     android:gravity="right"
                     android:padding="10dp"
                     android:text="Cây trồng" />
-                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                <com.mimi.mimigroup.ui.custom.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:padding="10dp"
                     android:layout_weight="0"
-                    android:id="@+id/tvTreeCode"
+                    android:id="@+id/tvTree"
                     android:background="@drawable/edittext"
                     android:layout_marginEnd="30dp"
                     android:inputType="textMultiLine"
