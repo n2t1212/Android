@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportTechActivityThisWeekAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ReportTechActivityNextWeekAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public void setsmoReportTechActivity(List<SM_ReportTechActivity> smoReportTechActivity) {
         this.smoReportTechActivity = smoReportTechActivity;
@@ -32,20 +32,20 @@ public class ReportTechActivityThisWeekAdapter extends RecyclerView.Adapter<Recy
 
     private final ListItemClickListener mOnItemClicked;
 
-    public ReportTechActivityThisWeekAdapter(ListItemClickListener mOnClickListener) {
+    public ReportTechActivityNextWeekAdapter(ListItemClickListener mOnClickListener) {
         smoReportTechActivity = new ArrayList<>();
         this.mOnItemClicked=mOnClickListener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ReportTechActivityThisWeekHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_tech_activity_this_week_item,viewGroup,false));
+        return new ReportTechActivityNextWeekHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_tech_activity_next_week_item,viewGroup,false));
     }
 
     @Override
     public void onBindViewHolder( final RecyclerView.ViewHolder viewHolder,final int iPos) {
-        if(viewHolder instanceof ReportTechActivityThisWeekAdapter.ReportTechActivityThisWeekHolder){
-            ((ReportTechActivityThisWeekHolder) viewHolder).bind(smoReportTechActivity.get(iPos));
+        if(viewHolder instanceof ReportTechActivityNextWeekAdapter.ReportTechActivityNextWeekHolder){
+            ((ReportTechActivityNextWeekHolder) viewHolder).bind(smoReportTechActivity.get(iPos));
         }
 
         setRowSelected(SelectedList.contains(smoReportTechActivity.get(iPos)),viewHolder);
@@ -84,7 +84,7 @@ public class ReportTechActivityThisWeekAdapter extends RecyclerView.Adapter<Recy
         notifyDataSetChanged();
     }
 
-    class ReportTechActivityThisWeekHolder  extends RecyclerView.ViewHolder {
+    class ReportTechActivityNextWeekHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTitle)
         CustomTextView tvTitle;
         @BindView(R.id.tvNotes)
@@ -92,7 +92,7 @@ public class ReportTechActivityThisWeekAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.tvAchievement)
         CustomTextView tvAchievement;
 
-        public ReportTechActivityThisWeekHolder(View itemView) {
+        public ReportTechActivityNextWeekHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -123,4 +123,5 @@ public class ReportTechActivityThisWeekAdapter extends RecyclerView.Adapter<Recy
         }
     }
 }
+
 

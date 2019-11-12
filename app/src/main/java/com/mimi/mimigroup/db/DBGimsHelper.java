@@ -3847,7 +3847,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     public int getSizeReportTechActivity(String ActivitieID){
         try {
             SQLiteDatabase db = getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_COMPETITOR WHERE ActivitieID=?", new String[]{ActivitieID});
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_TECH_ACTIVITIE WHERE ActivitieID=?", new String[]{ActivitieID});
             int iSq= cursor.getCount();
             cursor.close();
             return  iSq;
@@ -3867,7 +3867,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     public List<SM_ReportTechActivity> getAllReportTechActivity(String mReportTechId, Integer type) {
         try {
             List<SM_ReportTechActivity> lst = new ArrayList<SM_ReportTechActivity>();
-            String mSql=String.format("Select A.* from SM_ReportTechActivity A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
+            String mSql=String.format("Select A.* from SM_REPORT_TECH_ACTIVITIE A LEFT JOIN SM_REPORT_TECH B ON A.ReportTechID = B.ReportTechID"+
                     " where A.ReportTechId='%s' and A.IsType=%d order by B.ReportDay desc", mReportTechId, type);
 
             SQLiteDatabase db = this.getReadableDatabase();
@@ -3926,13 +3926,13 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             SQLiteDatabase db = this.getWritableDatabase();
             int iSq = 1;
 
-            String ActivitieID=getReportTechCompetitorID(oRptTechActivity.getReportTechId());
+            String ActivitieID=getReportTechActivityID(oRptTechActivity.getReportTechId());
             if(ActivitieID!=""){
                 if(oRptTechActivity.getActivitieId().isEmpty()|| oRptTechActivity.getActivitieId()==null){
                     oRptTechActivity.setActivitieId(ActivitieID);
                 }
             }
-            iSq=getSizeReportTechCompetitor(oRptTechActivity.getActivitieId());
+            iSq=getSizeReportTechActivity(oRptTechActivity.getActivitieId());
             if (iSq<=0) {
                 ContentValues values = new ContentValues();
                 values.put("ActivitieID", oRptTechActivity.getActivitieId());

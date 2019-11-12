@@ -70,6 +70,7 @@ public class ReportTechFormActivity extends BaseActivity {
     ReportTechMarketItemFragment ReportTechMarketFragment;
     ReportTechCompetitorItemFragment ReportTechCompetitorFragment;
     ReportTechActivityThisWeekItemFragment ReportTechActivityThisWeekFragment;
+    ReportTechActivityNextWeekItemFragment ReportTechActivityNextWeekFragment;
 
     public String getAction(){return this.mAction;}
 
@@ -155,7 +156,10 @@ public class ReportTechFormActivity extends BaseActivity {
                         adapter.addFragment(ReportTechCompetitorFragment, "Đối Thủ");
 
                         ReportTechActivityThisWeekFragment = new ReportTechActivityThisWeekItemFragment();
-                        adapter.addFragment(ReportTechCompetitorFragment, "Trong Tuần");
+                        adapter.addFragment(ReportTechActivityThisWeekFragment, "Trong Tuần");
+
+                        ReportTechActivityNextWeekFragment = new ReportTechActivityNextWeekItemFragment();
+                        adapter.addFragment(ReportTechActivityNextWeekFragment, "Tuần Tới");
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
@@ -176,6 +180,11 @@ public class ReportTechFormActivity extends BaseActivity {
                                         btnReportTechDetailAdd.setTag("ADD");
                                         break;
                                     case 3:
+                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
+                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                        btnReportTechDetailAdd.setTag("ADD");
+                                        break;
+                                    case 4:
                                         btnReportTechDetailAdd.setVisibility(View.VISIBLE);
                                         btnReportTechDetailDel.setVisibility(View.INVISIBLE);
                                         btnReportTechDetailAdd.setTag("ADD");
@@ -233,6 +242,9 @@ public class ReportTechFormActivity extends BaseActivity {
         }
         if(ReportTechActivityThisWeekFragment != null){
             oReportTechActivityThisWeek = ReportTechActivityThisWeekFragment.getListReportTechActivityThisWeek();
+        }
+        if(ReportTechActivityNextWeekFragment != null){
+            oReportTechActivityNextWeek = ReportTechActivityNextWeekFragment.getListReportTechActivityNextWeek();
         }
     }
 
@@ -368,6 +380,23 @@ public class ReportTechFormActivity extends BaseActivity {
                 btnReportTechDetailAdd.setTag("SAVE");
                 btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
+        } else if(currentFragment instanceof ReportTechActivityNextWeekItemFragment){
+            if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
+                if(((ReportTechActivityNextWeekItemFragment) currentFragment).onSaveReportTechActivity()) {
+                    btnReportTechDetailAdd.setTag("ADD");
+                    btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                }
+            }else if(btnReportTechDetailAdd.getTag()!=null && btnReportTechDetailAdd.getTag().toString().equalsIgnoreCase("EDIT")){
+                //CHI HIỂN THỊ BOX ĐỂ CẬP NHẬT
+                ((ReportTechActivityNextWeekItemFragment) currentFragment).onAddReportTechActivity(false);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }else {
+                //HIỂN THỊ BOX MỚI ĐỂ THÊM
+                ((ReportTechActivityNextWeekItemFragment) currentFragment).onAddReportTechActivity(true);
+                btnReportTechDetailAdd.setTag("SAVE");
+                btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
+            }
         }
     }
 
@@ -380,6 +409,8 @@ public class ReportTechFormActivity extends BaseActivity {
             ((ReportTechCompetitorItemFragment) currentFragment).onDeletedReportTechCompetitor();
         } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
             ((ReportTechActivityThisWeekItemFragment) currentFragment).onDeletedReportTechActivity();
+        } else if(currentFragment instanceof ReportTechActivityNextWeekItemFragment){
+            ((ReportTechActivityNextWeekItemFragment) currentFragment).onDeletedReportTechActivity();
         }
     }
 
@@ -390,30 +421,51 @@ public class ReportTechFormActivity extends BaseActivity {
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo kỹ thuật..", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(oReportTechMarket==null || oReportTechMarket.size()<=0){
+        /*if(oReportTechMarket==null || oReportTechMarket.size()<=0){
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo thị trường..", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(oReportTechCompetitor==null || oReportTechCompetitor.size()<=0){
+            Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo đối thủ..", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(oReportTechActivityThisWeek==null || oReportTechActivityThisWeek.size()<=0){
+            Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo trong tuần trường..", Toast.LENGTH_SHORT).show();
+            return;
+        }*/
 
         mDB.addReportTech(oReportTech);
 
         if(mDB.getSizeReportTech(oReportTech.getReportTechId())>0) {
             mDB.delReportTechDetail(oReportTech.getReportTechId());
             // Save market report
-            for (SM_ReportTechMarket oDetail : oReportTechMarket) {
-                mDB.addReportTechMarket(oDetail);
+            if(oReportTechMarket != null && oReportTechMarket.size() >0){
+                for (SM_ReportTechMarket oDetail : oReportTechMarket) {
+                    mDB.addReportTechMarket(oDetail);
+                }
             }
-
             // Save competitor report
-            for (SM_ReportTechCompetitor oDetail : oReportTechCompetitor) {
-                mDB.addReportTechCompetitor(oDetail);
+            if(oReportTechCompetitor != null && oReportTechCompetitor.size() > 0){
+                for (SM_ReportTechCompetitor oDetail : oReportTechCompetitor) {
+                    mDB.addReportTechCompetitor(oDetail);
+                }
             }
 
             // Save activity this week
-            for (SM_ReportTechActivity oDetail : oReportTechActivityThisWeek) {
-                mDB.addReportTechActivity(oDetail);
+            if(oReportTechActivityThisWeek != null && oReportTechActivityThisWeek.size() > 0){
+                for (SM_ReportTechActivity oDetail : oReportTechActivityThisWeek) {
+                    mDB.addReportTechActivity(oDetail);
+                }
+            }
+
+            // Save activity next week
+            if(oReportTechActivityNextWeek != null && oReportTechActivityNextWeek.size() >0){
+                for (SM_ReportTechActivity oDetail : oReportTechActivityNextWeek) {
+                    mDB.addReportTechActivity(oDetail);
+                }
             }
         }
+
         Toast.makeText(this, "Ghi báo cáo kĩ thuật thành công", Toast.LENGTH_SHORT).show();
         finish();
         isSaved=true;
