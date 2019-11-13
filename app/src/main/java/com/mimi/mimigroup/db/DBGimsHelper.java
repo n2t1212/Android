@@ -4006,6 +4006,85 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){return false;}
     }
 
+    public List<DM_Tree_Disease> getListTreeDiseaseByTreeCode(String treeCode)
+    { try {
+            List<DM_Tree_Disease> lst = new ArrayList<>();
+            String mSql=String.format("Select A.* from DM_TREE_DISEASE A LEFT JOIN DM_TREE B ON A.TreeID = B.TreeID"+
+                    " where B.TreeCode='%s' ", treeCode);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
+                    oTreeDisease.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
+                    oTreeDisease.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                    oTreeDisease.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
+                    oTreeDisease.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+                    lst.add(oTreeDisease);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){
+            Log.d("GET_TREE_DISEASES",ex.getMessage());
+        }
+        return null;
+    }
+
+    public DM_Tree getTreeByCode(String treeCode)
+    {
+        try {
+            String mSql=String.format("Select A.* from DM_TREE A where A.TreeCode='%s' ", treeCode);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            DM_Tree oTree = new DM_Tree();
+            if (cursor.moveToFirst()) {
+                do {
+                    oTree.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                    oTree.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oTree.setTreeGroupCode(cursor.getString(cursor.getColumnIndex("TreeGroupCode")));
+                    oTree.setTreeName(cursor.getString(cursor.getColumnIndex("TreeName")));
+
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oTree;
+        }catch (Exception ex){
+            Log.d("GET_TREE", ex.getMessage());
+        }
+        return null;
+    }
+
+    public DM_Tree_Disease getTreeDiseaseByCode(String DiseaseCode)
+    {
+        try {
+            String mSql=String.format("Select * from DM_TREE_DISEASE where DiseaseCode='%s' ", DiseaseCode);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
+            if (cursor.moveToFirst()) {
+                do {
+                    oTreeDisease.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
+                    oTreeDisease.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                    oTreeDisease.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
+                    oTreeDisease.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+                }while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oTreeDisease;
+        }catch (Exception ex){
+            Log.d("GET_TREE_DISEASE", ex.getMessage());
+        }
+        return null;
+    }
+
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
         if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";

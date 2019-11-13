@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
-import com.mimi.mimigroup.ui.utility.ReportTechActivity;
+import com.mimi.mimigroup.ui.utility.ReportTechFormActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 
 public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private DBGimsHelper mDB = null;
     public void setsmoReportTechDisease(List<SM_ReportTechDisease> smoReportTechDisease) {
         this.smoReportTechDisease = smoReportTechDisease;
     }
@@ -41,6 +44,7 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        mDB = DBGimsHelper.getInstance(viewGroup.getContext());
         return new ReportTechCompetitorHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_tech_disease_item,viewGroup,false));
     }
 
@@ -107,9 +111,14 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void bind(SM_ReportTechDisease oDetail){
             if(oDetail != null){
-
                 if(oDetail.getTreeCode() != null){
-                    tvTreeCode.setText(oDetail.getTreeCode());
+                    DM_Tree tree = mDB.getTreeByCode(oDetail.getTreeCode());
+
+                    if(tree != null){
+                        tvTreeCode.setText(tree.getTreeName());
+                    }else{
+                        tvTreeCode.setText("");
+                    }
                 }
                 if(oDetail.getTitle() != null){
                     tvTitle.setText(oDetail.getTitle());
@@ -120,7 +129,25 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
                 if(oDetail.getDisease() != null)
                 {
-                    tvDisease.setText(oDetail.getDisease());
+                    String diseaseCodes = oDetail.getDisease();
+                    String[] diseaseCode = diseaseCodes.split(",");
+                    String diseaseName = "";
+                    if(diseaseCode.length > 0){
+                        for(int i = 0; i < diseaseCode.length; i++){
+                            DM_Tree_Disease treeDisease = mDB.getTreeDiseaseByCode(diseaseCode[i]);
+                            if(treeDisease != null) {
+                                if(i != 0){
+                                    diseaseName += ",";
+                                }
+                                diseaseName += treeDisease.getDiseaseName();
+                            }
+                        }
+                    }
+                    if(diseaseName.length() > 0){
+                        tvDisease.setText(diseaseName);
+                    }else{
+                        tvDisease.setText("");
+                    }
                 }
                 if(oDetail.getPrice() != null)
                 {

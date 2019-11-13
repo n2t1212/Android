@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
+import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.ui.adapter.ReportTechDiseaseAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
@@ -61,6 +63,9 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     List<SM_ReportTechDisease> lstReportTechDisease;
     String currentDiseaseId;
     List<DM_Tree> lstTree;
+    List<DM_Tree_Disease> lstTreeDisease;
+
+    DBGimsHelper mDB = null;
 
     @Override
     protected int getLayoutResourceId() {
@@ -70,6 +75,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mDB = DBGimsHelper.getInstance(getActivity().getBaseContext());
         adapter = new ReportTechDiseaseAdapter(new ReportTechDiseaseAdapter.ListItemClickListener() {
             @Override
             public void onItemClick(List<SM_ReportTechDisease> SelectList) {
@@ -123,6 +129,9 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     private String[] lstTreeSelect;
     private boolean[] lstTreeSelectChecked;
     private ArrayList<Integer> lstTreeSelectPos = new ArrayList<>();
+    private String[] lstTreeDiseaseSelect;
+    private boolean[] lstTreeDiseaseSelectChecked;
+    private ArrayList<Integer> lstTreeDiseaseSelectPos = new ArrayList<>();
 
     private void initDropdownCT(){
         try{
@@ -134,6 +143,22 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             for(int i=0;i<lstTree.size();i++){
                 lstTreeSelect[i]=lstTree.get(i).getTreeName();
                 lstTreeSelectChecked[i]=false;
+            }
+        }catch (Exception ex){}
+    }
+
+    private void initDropDownTreeDisease(){
+        try {
+            if(lstTreeDisease == null) {
+                lstReportTechDisease = new ArrayList<>();
+            }
+
+            lstTreeDiseaseSelect=new String[lstTreeDisease.size()];
+            lstTreeDiseaseSelectChecked=new boolean[lstTreeDisease.size()];
+
+            for(int i=0;i<lstTreeDisease.size();i++){
+                lstTreeDiseaseSelect[i]=lstTreeDisease.get(i).getDiseaseName();
+                lstTreeDiseaseSelectChecked[i]=false;
             }
         }catch (Exception ex){}
     }
@@ -159,6 +184,29 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             return  mTreeListName;
         }catch (Exception ex){return  "";}
     }
+
+    private String getListTreeDiseaseName(String mlstTreeDiseaseSelect){
+        try{
+            String mTreeDiseaseListName="";
+            lstTreeDiseaseSelectPos.clear();
+            if(!mlstTreeDiseaseSelect.isEmpty()){
+                String[] mlstDiseaseCode=mlstTreeDiseaseSelect.split(",");
+                for(int iP=0;iP<mlstDiseaseCode.length;iP++){
+                    for(int jP=0;jP<lstTreeDisease.size();jP++){
+                        if(lstTreeDisease.get(jP).getDiseaseCode().contains(mlstDiseaseCode[iP])){
+                            lstTreeDiseaseSelectPos.add(jP);
+                            mTreeDiseaseListName=mTreeDiseaseListName+lstTreeDisease.get(jP).getDiseaseName();
+                            if(iP!=mlstDiseaseCode.length-1) {
+                                mTreeDiseaseListName =mTreeDiseaseListName + ",";
+                            }
+                        }
+                    }
+                }
+            }
+            return  mTreeDiseaseListName;
+        }catch (Exception ex){return  "";}
+    }
+
     @OnClick(R.id.tvTree)
     public void onClickTree(){
         try{
@@ -194,6 +242,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                         }
                         tvTree.setText(mTreeSelectName);
                         tvTree.setTag(mTreeSelectCode);
+                        lstTreeDisease = mDB.getListTreeDiseaseByTreeCode(mTreeSelectCode);
+                        initDropDownTreeDisease();
                     }
                 }
             });
@@ -211,6 +261,79 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                         lstTreeSelectChecked[i] = false;
                         lstTreeSelectPos.clear();
                         tvTree.setText("");
+                    }
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            dialog.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialog_2);
+            Button btnPositiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            Button btnNegetiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+
+            btnPositiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor));
+            btnPositiveButton.setBackgroundColor(getResources().getColor(R.color.ButtonDialogBackground));
+            btnPositiveButton.setPaddingRelative(20,2,20,2);
+            btnNegetiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor2));
+
+        }
+        catch(Exception ex) { }
+
+    }
+
+    @OnClick(R.id.tvDisease)
+    public void onClickTreeDisease(){
+        try{
+            Arrays.fill(lstTreeDiseaseSelectChecked,false);
+            for(int i=0;i<lstTreeDiseaseSelectPos.size();i++){
+                lstTreeDiseaseSelectChecked[lstTreeDiseaseSelectPos.get(i)]=true;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setCancelable(false);
+            builder.setTitle("Chọn cây trồng");
+            builder.setMultiChoiceItems(lstTreeDiseaseSelect,lstTreeDiseaseSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+                    if(isChecked){
+                        lstTreeDiseaseSelectPos.add(position);
+                    }else{
+                        lstTreeDiseaseSelectPos.remove(Integer.valueOf(position));
+                    }
+                }
+            });
+
+            builder.setPositiveButton("Chấp nhận", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    tvDisease.setText("");
+                    String mTreeSelectCode="",mTreeSelectName="";
+                    for (int i = 0; i<lstTreeDiseaseSelectPos.size(); i++){
+                        mTreeSelectCode=mTreeSelectCode+ lstTreeDisease.get(lstTreeDiseaseSelectPos.get(i)).getDiseaseCode();
+                        mTreeSelectName=mTreeSelectName+ lstTreeDisease.get(lstTreeDiseaseSelectPos.get(i)).getDiseaseName();
+                        if(i!=lstTreeDiseaseSelectPos.size()-1){
+                            mTreeSelectCode=mTreeSelectCode+",";
+                            mTreeSelectName=mTreeSelectName+",";
+                        }
+                        tvDisease.setText(mTreeSelectName);
+                        tvDisease.setTag(mTreeSelectCode);
+                    }
+                }
+            });
+            builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNeutralButton("Bỏ chọn", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    for (int i = 0; i < lstTreeDiseaseSelectChecked.length; i++) {
+                        lstTreeDiseaseSelectChecked[i] = false;
+                        lstTreeDiseaseSelectPos.clear();
+                        tvDisease.setText("");
                     }
                 }
             });
@@ -263,6 +386,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                 if (osmDT.getTreeCode() != null) {
                     tvTree.setText(getListTreeName(osmDT.getTreeCode()));
                     tvTree.setTag(osmDT.getTreeCode());
+                    lstTreeDisease = mDB.getListTreeDiseaseByTreeCode(osmDT.getTreeCode());
                 }else {
                     tvTree.setText("");
                     tvTree.setTag("");
@@ -274,7 +398,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                     tvAcreage.setText(osmDT.getAcreage().toString());
                 }
                 if(osmDT.getDisease() != null){
-                    tvDisease.setText(osmDT.getDisease());
+                    tvDisease.setText(getListTreeDiseaseName(osmDT.getDisease()));
+                    tvDisease.setTag(osmDT.getDisease());
                 }
                 if(osmDT.getPrice() != null){
                     tvPrice.setText(osmDT.getPrice().toString());
@@ -306,6 +431,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                     tvTitle.setText("");
                     tvAcreage.setText("");
                     tvDisease.setText("");
+                    tvDisease.setTag("");
                     tvPrice.setText("");
                     tvNotes.setText("");
 
@@ -372,13 +498,13 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         } else {
             oDetail.setAcreage(Float.parseFloat(tvAcreage.getText().toString()));
         }
-        if (tvDisease.getText() == null || tvDisease.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập dịch hại...", Toast.LENGTH_LONG);
+        if (tvDisease.getTag().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn dịch hại...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             return false;
         } else {
-            oDetail.setDisease(tvDisease.getText().toString());
+            oDetail.setDisease(tvDisease.getTag().toString());
         }
         if (tvPrice.getText() == null || tvPrice.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập giá cây trồng...", Toast.LENGTH_LONG);
@@ -446,6 +572,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         tvTree.setTag("");
         tvAcreage.setText("");
         tvDisease.setText("");
+        tvDisease.setTag("");
         tvPrice.setText("");
         return true;
     }
