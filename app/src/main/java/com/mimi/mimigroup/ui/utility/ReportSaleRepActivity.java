@@ -183,7 +183,7 @@ public class ReportSaleRepActivity extends BaseActivity {
         if(!mReportSaleRepID.isEmpty()) {
             Intent intent = new Intent(ReportSaleRepActivity.this, ReportSaleRepFormActivity.class);
             intent.setAction("ADD");
-            intent.putExtra("ReportSaleID",mReportSaleRepID);
+            intent.putExtra("ReportSaleRepID",mReportSaleRepID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);
             startActivityForResult(intent, REQUEST_CODE_ADD);
             isEditAdd = true;
