@@ -249,9 +249,10 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             }
         }catch (Exception ex){}
 
-        /*if(ReportSaleRepFragment !=null) {
+        if(ReportSaleRepFragment !=null) {
             oReportSaleRep = ReportSaleRepFragment.getSMReportSaleRep();
         }
+        /*
         if(ReportSaleRepMarketFragment!=null) {
             oReportSaleRepMarket = ReportSaleRepMarketFragment.getListReportSaleRepMarket();
         }
@@ -459,7 +460,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     @OnClick(R.id.btnSaveReportSaleRep)
     public void onSaveOnly(){
         ReceiveDataFragment();
-        if(oReportSaleRep==null || oReportSaleRep.getReportSaleId().isEmpty()){
+        if(oReportSaleRep==null || oReportSaleRep.getReportSaleId() == null || oReportSaleRep.getReportSaleId().isEmpty()){
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo kỹ thuật..", Toast.LENGTH_SHORT).show();
             return;
         }

@@ -144,7 +144,7 @@ public class ReportSaleRepFormItemFragment extends BaseFragment {
             if(tvIsStatus.getText().toString().isEmpty()){
                 oReportSaleRep.setIsStatus("");
             }else{
-                oReportSaleRep.setIsStatus("");
+                oReportSaleRep.setIsStatus(tvIsStatus.getText().toString());
             }
 
         }catch (Exception ex){}

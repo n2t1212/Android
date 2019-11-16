@@ -432,6 +432,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "Title VARCHAR(50)," +
                 "Acreage FLOAT,"+
                 "Notes VARCHAR(200))";
+        db.execSQL(sqlCMM);
         //MÙA VỤ
         sqlCMM="CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY,"+
                 "ReportSaleID VARCHAR(50),"+
@@ -572,6 +573,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                         "Title VARCHAR(50)," +
                         "Acreage FLOAT,"+
                         "Notes VARCHAR(200))";
+                db.execSQL(sqlCMM);
                 //MÙA VỤ
                 sqlCMM="CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY,"+
                         "ReportSaleID VARCHAR(50),"+
@@ -4279,7 +4281,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             iSq=getSizeReportSaleRep(oRptSaleRep.getReportSaleId());
             if (iSq<=0) {
                 ContentValues values = new ContentValues();
-                values.put("ReportTechID", oRptSaleRep.getReportSaleId());
+                values.put("ReportSaleID", oRptSaleRep.getReportSaleId());
                 values.put("ReportCode", oRptSaleRep.getReportCode());
                 values.put("ReportName", oRptSaleRep.getReportName());
 

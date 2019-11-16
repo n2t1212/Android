@@ -74,7 +74,7 @@ public class UtilityFragment extends BaseFragment {
     @OnClick(R.id.tvReportSale)
     public void onReportSale()
     {
-        startActivity(new Intent(getContext(), ReportTechActivity.class));
+        startActivity(new Intent(getContext(), ReportSaleRepActivity.class));
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
