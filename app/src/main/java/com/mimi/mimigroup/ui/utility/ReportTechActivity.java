@@ -292,7 +292,7 @@ public class ReportTechActivity extends BaseActivity {
                     dTday=AppUtils.getDate(endYear,endMonth,endDay);
 
                     if(dFday.after(dTday)){
-                        Toast.makeText(ReportTechActivity.this,"Chọn khoản thời gian không hợp lệ.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReportTechActivity.this,"Chọn khoảng thời gian không hợp lệ.",Toast.LENGTH_SHORT).show();
                         return;
                     }
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
