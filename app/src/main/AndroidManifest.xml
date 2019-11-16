@@ -179,6 +179,10 @@
             android:name=".ui.utility.ReportSaleRepFormActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.setting.SeasonActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".ui.services.mimiService"

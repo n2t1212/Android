@@ -75,7 +75,7 @@ public class SeasonFragment extends BaseFragment {
         new SyncGet(new APINetCallBack() {
             @Override
             public void onHttpStart() {
-                ((BaseActivity) getActivity()).showProgressDialog("Đang tải dữ liệu cây trồng.");
+                ((BaseActivity) getActivity()).showProgressDialog("Đang tải dữ liệu mùa vụ.");
                 Log.d("URL_SYNC_Season",mUrlGet);
             }
 

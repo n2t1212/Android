@@ -61,14 +61,14 @@ public class SeasonActivity extends BaseActivity {
             btnAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((TreeFragment)currentFragment).onDownloadClicked(true);
+                    ((SeasonFragment)currentFragment).onDownloadClicked(true);
                     oDlg.dismiss();
                 }
             });
             btnNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((TreeFragment)currentFragment).onDownloadClicked(false);
+                    ((SeasonFragment)currentFragment).onDownloadClicked(false);
                     oDlg.dismiss();
                 }
             });
