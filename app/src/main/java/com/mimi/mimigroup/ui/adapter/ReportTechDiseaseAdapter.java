@@ -133,13 +133,14 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
                     String[] diseaseCode = diseaseCodes.split(",");
                     String diseaseName = "";
                     if(diseaseCode.length > 0){
-                        for(int i = 0; i < diseaseCode.length; i++){
-                            DM_Tree_Disease treeDisease = mDB.getTreeDiseaseByCode(diseaseCode[i]);
-                            if(treeDisease != null) {
-                                if(i != 0){
+
+                        List<DM_Tree_Disease> lst = mDB.getTreeDiseasesByCode(diseaseCode);
+                        for(int i = 0; i < lst.size(); i++){
+                            if(lst.get(i) != null) {
+                                if(i > 0){
                                     diseaseName += ",";
                                 }
-                                diseaseName += treeDisease.getDiseaseName();
+                                diseaseName += lst.get(i).getDiseaseName();
                             }
                         }
                     }
