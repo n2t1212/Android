@@ -4878,6 +4878,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptTechActivity.setWorkDay(cursor.getString(cursor.getColumnIndex("Workday")));
                     oRptTechActivity.setPlace(cursor.getString(cursor.getColumnIndex("Place")));
                     oRptTechActivity.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptTechActivity.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
                     lst.add(oRptTechActivity);
 
                 } while (cursor.moveToNext());
