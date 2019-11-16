@@ -4961,6 +4961,27 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
+    public DM_Season getSeasonByCode(String code){
+        try {
+            String mSql=String.format("select * from DM_SEASON where SeasonCode='%s'", code);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            DM_Season season = new DM_Season();
+            if (cursor.moveToFirst()) {
+                do {
+                    season.setSeasonCode(cursor.getString(cursor.getColumnIndex("SeasonCode")));
+                    season.setSeasonName(cursor.getString(cursor.getColumnIndex("SeasonName")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return season;
+        }catch (Exception ex){Log.d("ERR_LOAD_SEASON",ex.getMessage().toString());}
+        return null;
+    }
+
     public boolean delSeason(){
         String mSqlMarket=String.format("delete from DM_SEASON ");
         SQLiteDatabase db = this.getReadableDatabase();
