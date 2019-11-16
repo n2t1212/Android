@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:id="@+id/Layout_ReportSaleRepMarketItem"
+            android:id="@+id/Layout_ReportTechMarketItem"
             android:paddingTop="10dp"
             android:visibility="gone"
             android:orientation="vertical">
@@ -152,43 +152,10 @@
                     android:textColor="@color/TextHeaderGrid"
                     android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
-                    android:text="Khách hàng"
+                    android:text="Tiêu đề"
                     android:gravity="center"/>
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@color/HeaderGridOrderDetail"
-                    android:textColor="@color/TextHeaderGrid"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
-                    android:text="Công ty"
-                    android:gravity="center"/>
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@color/HeaderGridOrderDetail"
-                    android:textColor="@color/TextHeaderGrid"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
-                    android:text="Sản phẩm"
-                    android:gravity="center"/>
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@color/HeaderGridOrderDetail"
-                    android:textColor="@color/TextHeaderGrid"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
-                    android:text="Giá"
-                    android:gravity="center"/>
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="200dp"
+                    android:layout_width="350dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="5dp"
@@ -198,12 +165,34 @@
                     android:layout_marginRight="0.5dp"
                     android:text="Ghi chú"
                     android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Tác động có lợi"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Tác động có hại"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/rvReportSaleRepMarketList"
+                android:id="@+id/rvReportTechMarketList"
                 android:layout_below="@+id/llTop"></android.support.v7.widget.RecyclerView>
 
 
