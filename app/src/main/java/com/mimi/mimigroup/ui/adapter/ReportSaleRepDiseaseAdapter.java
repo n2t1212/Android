@@ -11,9 +11,8 @@ import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
-import com.mimi.mimigroup.model.SM_ReportTechDisease;
+import com.mimi.mimigroup.model.SM_ReportSaleRepDisease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
-import com.mimi.mimigroup.ui.utility.ReportTechFormActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,49 +20,49 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ReportSaleRepDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private DBGimsHelper mDB = null;
-    public void setsmoReportTechDisease(List<SM_ReportTechDisease> smoReportTechDisease) {
-        this.smoReportTechDisease = smoReportTechDisease;
+    public void setsmoReportSaleRepDisease(List<SM_ReportSaleRepDisease> smoReportSaleRepDisease) {
+        this.smoReportSaleRepDisease = smoReportSaleRepDisease;
     }
 
-    List<SM_ReportTechDisease> smoReportTechDisease;
-    public List<SM_ReportTechDisease> SelectedList = new ArrayList<>();
+    List<SM_ReportSaleRepDisease> smoReportSaleRepDisease;
+    public List<SM_ReportSaleRepDisease> SelectedList = new ArrayList<>();
 
     public interface ListItemClickListener{
-        void onItemClick(List<SM_ReportTechDisease> SelectList);
+        void onItemClick(List<SM_ReportSaleRepDisease> SelectList);
     }
 
-    private final ReportTechDiseaseAdapter.ListItemClickListener mOnItemClicked;
+    private final ReportSaleRepDiseaseAdapter.ListItemClickListener mOnItemClicked;
 
-    public ReportTechDiseaseAdapter(ReportTechDiseaseAdapter.ListItemClickListener mOnClickListener) {
-        smoReportTechDisease = new ArrayList<>();
+    public ReportSaleRepDiseaseAdapter(ReportSaleRepDiseaseAdapter.ListItemClickListener mOnClickListener) {
+        smoReportSaleRepDisease = new ArrayList<>();
         this.mOnItemClicked=mOnClickListener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         mDB = DBGimsHelper.getInstance(viewGroup.getContext());
-        return new ReportTechDiseaseHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_tech_disease_item,viewGroup,false));
+        return new ReportSaleRepDiseaseAdapter.ReportSaleRepDiseaseHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_sale_rep_disease_item,viewGroup,false));
     }
 
     @Override
     public void onBindViewHolder( final RecyclerView.ViewHolder viewHolder,final int iPos) {
-        if(viewHolder instanceof ReportTechDiseaseAdapter.ReportTechDiseaseHolder){
-            ((ReportTechDiseaseHolder) viewHolder).bind(smoReportTechDisease.get(iPos));
+        if(viewHolder instanceof ReportSaleRepDiseaseAdapter.ReportSaleRepDiseaseHolder){
+            ((ReportSaleRepDiseaseAdapter.ReportSaleRepDiseaseHolder) viewHolder).bind(smoReportSaleRepDisease.get(iPos));
         }
 
-        setRowSelected(SelectedList.contains(smoReportTechDisease.get(iPos)),viewHolder);
+        setRowSelected(SelectedList.contains(smoReportSaleRepDisease.get(iPos)),viewHolder);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(SelectedList.contains(smoReportTechDisease.get(iPos))){
-                    SelectedList.remove(smoReportTechDisease.get(iPos));
+                if(SelectedList.contains(smoReportSaleRepDisease.get(iPos))){
+                    SelectedList.remove(smoReportSaleRepDisease.get(iPos));
                     setRowSelected(false,viewHolder);
                     clearSelected();
                 }else{
-                    SelectedList.add(smoReportTechDisease.get(iPos));
+                    SelectedList.add(smoReportSaleRepDisease.get(iPos));
                     setRowSelected(true,viewHolder);
                 }
                 mOnItemClicked.onItemClick(SelectedList);
@@ -79,8 +78,8 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        if(smoReportTechDisease != null) {
-            return  smoReportTechDisease.size();
+        if(smoReportSaleRepDisease != null) {
+            return  smoReportSaleRepDisease.size();
         }
         return 0;
     }
@@ -90,26 +89,22 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyDataSetChanged();
     }
 
-    class ReportTechDiseaseHolder  extends RecyclerView.ViewHolder {
+    class ReportSaleRepDiseaseHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTreeCode)
         CustomTextView tvTreeCode;
         @BindView(R.id.tvTitle)
         CustomTextView tvTitle;
         @BindView(R.id.tvAcreage)
         CustomTextView tvAcreage;
-        @BindView(R.id.tvDisease)
-        CustomTextView tvDisease;
-        @BindView(R.id.tvPrice)
-        CustomTextView tvPrice;
         @BindView(R.id.tvNotes)
         CustomTextView tvNotes;
 
-        public ReportTechDiseaseHolder(View itemView) {
+        public ReportSaleRepDiseaseHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(SM_ReportTechDisease oDetail){
+        public void bind(SM_ReportSaleRepDisease oDetail){
             if(oDetail != null){
                 if(oDetail.getTreeCode() != null){
                     DM_Tree tree = mDB.getTreeByCode(oDetail.getTreeCode());
@@ -123,36 +118,9 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
                 if(oDetail.getTitle() != null){
                     tvTitle.setText(oDetail.getTitle());
                 }
-                if(oDetail.getAcreage() != null)
+                if(oDetail.getArceage() != null)
                 {
-                    tvAcreage.setText(oDetail.getAcreage().toString());
-                }
-                if(oDetail.getDisease() != null)
-                {
-                    String diseaseCodes = oDetail.getDisease();
-                    String[] diseaseCode = diseaseCodes.split(",");
-                    String diseaseName = "";
-                    if(diseaseCode.length > 0){
-
-                        List<DM_Tree_Disease> lst = mDB.getTreeDiseasesByCode(diseaseCode);
-                        for(int i = 0; i < lst.size(); i++){
-                            if(lst.get(i) != null) {
-                                if(i > 0){
-                                    diseaseName += ",";
-                                }
-                                diseaseName += lst.get(i).getDiseaseName();
-                            }
-                        }
-                    }
-                    if(diseaseName.length() > 0){
-                        tvDisease.setText(diseaseName);
-                    }else{
-                        tvDisease.setText("");
-                    }
-                }
-                if(oDetail.getPrice() != null)
-                {
-                    tvPrice.setText(oDetail.getPrice().toString());
+                    tvAcreage.setText(oDetail.getArceage().toString());
                 }
                 if(oDetail.getNotes() != null){
                     tvNotes.setText(oDetail.getNotes());

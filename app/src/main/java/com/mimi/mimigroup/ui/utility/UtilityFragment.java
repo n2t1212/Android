@@ -27,6 +27,7 @@ import com.mimi.mimigroup.model.DM_District;
 import com.mimi.mimigroup.model.DM_Employee;
 import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.DM_Province;
+import com.mimi.mimigroup.model.DM_Season;
 import com.mimi.mimigroup.model.DM_Ward;
 import com.mimi.mimigroup.model.HT_PARA;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
@@ -166,6 +167,7 @@ public class UtilityFragment extends BaseFragment {
         lstSyncType.add("DM_WARD");
         lstSyncType.add("DM_CUSTOMER");
         lstSyncType.add("DM_EMPLOYEE");
+        lstSyncType.add("DM_SEASON");
 
         String mSyncTitle = "";
         String mUrlSync = "";
@@ -206,6 +208,9 @@ public class UtilityFragment extends BaseFragment {
                     mUrlSync = AppSetting.getInstance().URL_SyncDM(mIMEI, mImeiSim, mType, isAll);
                     mSyncTitle = "Đang tải danh mục khách hàng";
                     break;
+                case "DM_SEASON":
+                    mUrlSync = AppSetting.getInstance().URL_SyncDM(mIMEI, mImeiSim, mType, isAll);
+                    mSyncTitle = "Đang tải danh mục mùa vụ";
 
             }
             final String isType=mType;
@@ -441,7 +446,31 @@ public class UtilityFragment extends BaseFragment {
                                     oSyncUpdate.execute();
                                 }
                                 break;
-
+                            case "DM_SEASON":
+                                type = new TypeToken<Collection<DM_Employee>>() {}.getType();
+                                Collection<DM_Employee> enums8 = gson.fromJson(ResPonseRs, type);
+                                DM_Season[] ArrSeason = enums8.toArray(new DM_Season[enums8.size()]);
+                                if(ArrSeason!=null && ArrSeason.length>0){
+                                    AsyncUpdate oSyncUpdate=new AsyncUpdate(mType,new SyncCallBack() {
+                                        @Override
+                                        public void onSyncStart() {
+                                            Toast.makeText(getContext(), "Đang cập nhật dữ liệu.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        @Override
+                                        public void onSyncSuccess(String ResPonseRs) {
+                                            Toast.makeText(getContext(), "Tải dữ liệu thành công.", Toast.LENGTH_SHORT).show();
+                                            //((BaseActivity) getActivity()).dismissProgressDialog();
+                                        }
+                                        @Override
+                                        public void onSyncFailer(Exception e) {
+                                            Toast.makeText(getContext(), "Lỗi cập nhật mùa vụ:" + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                            //((BaseActivity) getActivity()).dismissProgressDialog();
+                                        }
+                                    });//.execute(ArrWard);
+                                    oSyncUpdate.oDMSeason=ArrSeason;
+                                    oSyncUpdate.execute();
+                                }
+                                break;
                         }
 
 
@@ -497,6 +526,7 @@ public class UtilityFragment extends BaseFragment {
         public DM_Ward[] oDMWard;
         public DM_Customer[] oDMCus;
         public DM_Employee[] oDMEmp;
+        public DM_Season[] oDMSeason;
 
 
         private AsyncUpdate(String isType,SyncCallBack mCallBack){
@@ -617,7 +647,19 @@ public class UtilityFragment extends BaseFragment {
                             }
                         }
                         break;
-
+                    case "DM_SEASON":
+                        mSyncTitle="Đang tải mùa vụ";
+                        if(oDMEmp!=null) {
+                            iSize = oDMEmp.length;
+                            for (DM_Employee oPar : oDMEmp) {
+                                if (!oPar.getEmployeeid().isEmpty()) {
+                                    mDB.addEmployee(oPar);
+                                    publishProgress("Mùa vụ: [" + Integer.toString(iSqno) + "/" + Integer.toString(iSize) + "] " + oPar.getEmployeeName());
+                                }
+                                iSqno += 1;
+                            }
+                        }
+                        break;
                 }
 
 

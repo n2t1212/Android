@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:id="@+id/llTop">
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/TextHeaderGrid"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Mã mùa vụ"
+                android:gravity="center"/>
+            <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:background="@color/BackgroundHeaderGrid"
+                android:textColor="@color/TextHeaderGrid"
+                android:textSize="16sp"
+                android:layout_marginRight="0.5dp"
+                android:text="Tên mùa vụ"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvSeason"
+            android:layout_above="@+id/llBottom"
+            android:layout_below="@+id/llTop"></android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+</HorizontalScrollView>

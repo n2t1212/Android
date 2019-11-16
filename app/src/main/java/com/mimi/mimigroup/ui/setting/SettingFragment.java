@@ -27,6 +27,7 @@ import com.mimi.mimigroup.model.DM_District;
 import com.mimi.mimigroup.model.DM_Employee;
 import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.DM_Province;
+import com.mimi.mimigroup.model.DM_Season;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.DM_Ward;
@@ -111,6 +112,13 @@ public class SettingFragment extends BaseFragment {
     @OnClick(R.id.tvHelp)
     public void onHelp() {
         startActivity(new Intent(getContext(), HelpActivity.class));
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @OnClick(R.id.tvSeason)
+    public void onSeason()
+    {
+        startActivity(new Intent(getContext(), SeasonActivity.class));
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
@@ -205,6 +213,7 @@ public class SettingFragment extends BaseFragment {
         lstSyncType.add("DM_EMPLOYEE");
         lstSyncType.add("DM_TREE");
         lstSyncType.add("DM_TREE_DISEASE");
+        lstSyncType.add("DM_SEASON");
 
         String mSyncTitle = "";
         String mUrlSync = "";
@@ -254,6 +263,11 @@ public class SettingFragment extends BaseFragment {
                 case "DM_TREE_DISEASE":
                     mUrlSync = AppSetting.getInstance().URL_SyncDM(mIMEI, mImeiSim, mType, isAll);
                     mSyncTitle = "Đang tải danh mục dịch bệnh";
+                    break;
+
+                case "DM_SEASON":
+                    mUrlSync = AppSetting.getInstance().URL_SyncDM(mIMEI, mImeiSim, mType, isAll);
+                    mSyncTitle = "Đang tải danh mục mùa vụ";
                     break;
 
             }
@@ -545,6 +559,33 @@ public class SettingFragment extends BaseFragment {
                                 }
                                 break;
 
+                            case "DM_SEASON":
+                                type = new TypeToken<Collection<DM_Season>>() {}.getType();
+                                Collection<DM_Season> enums10 = gson.fromJson(ResPonseRs, type);
+                                DM_Season[] ArrSeason = enums10.toArray(new DM_Season[enums10.size()]);
+                                if(ArrSeason!=null && ArrSeason.length>0){
+                                    AsyncUpdate oSyncUpdate=  new AsyncUpdate(mType,new SyncCallBack() {
+                                        @Override
+                                        public void onSyncStart() {
+                                            Toast.makeText(getContext(), "Đang cập nhật dữ liệu.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        @Override
+                                        public void onSyncSuccess(String ResPonseRs) {
+                                            Toast.makeText(getContext(), "Tải dữ liệu thành công.", Toast.LENGTH_SHORT).show();
+                                            //((BaseActivity) getActivity()).dismissProgressDialog();
+                                        }
+                                        @Override
+                                        public void onSyncFailer(Exception e) {
+                                            Toast.makeText(getContext(), "Lỗi cập nhật mùa vụ:" + e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                            //((BaseActivity) getActivity()).dismissProgressDialog();
+                                        }
+                                    });
+                                    oSyncUpdate.oDMSeason=ArrSeason;
+                                    oSyncUpdate.execute();
+
+                                }
+                                break;
+
                         }
 
 
@@ -602,6 +643,7 @@ public class SettingFragment extends BaseFragment {
         public DM_Employee[] oDMEmp;
         public DM_Tree[] oDMTree;
         public DM_Tree_Disease[] oDMTreeDisease;
+        public DM_Season[] oDMSeason;
 
         private AsyncUpdate(String isType,SyncCallBack mCallBack){
             this.mSyncCallBack=mCallBack;
@@ -744,6 +786,19 @@ public class SettingFragment extends BaseFragment {
                                 if (!oPar.getDiseaseName().isEmpty()) {
                                     mDB.addTreeDisease(oPar);
                                     publishProgress("Dịch hại: [" + Integer.toString(iSqno) + "/" + Integer.toString(iSize) + "] " + oPar.getDiseaseName());
+                                }
+                                iSqno += 1;
+                            }
+                        }
+                        break;
+                    case "DM_SEASON":
+                        mSyncTitle="Đang tải mùa vụ";
+                        if(oDMSeason!=null) {
+                            iSize = oDMSeason.length;
+                            for (DM_Season oPar : oDMSeason) {
+                                if (!oPar.getSeasonCode().isEmpty()) {
+                                    mDB.addSeason(oPar);
+                                    publishProgress("Dịch hại: [" + Integer.toString(iSqno) + "/" + Integer.toString(iSize) + "] " + oPar.getSeasonName());
                                 }
                                 iSqno += 1;
                             }

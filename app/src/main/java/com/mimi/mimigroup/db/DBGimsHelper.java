@@ -13,6 +13,7 @@ import com.mimi.mimigroup.model.DM_Customer_Distance;
 import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Employee;
 import com.mimi.mimigroup.model.DM_Product;
+import com.mimi.mimigroup.model.DM_Season;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.HT_PARA;
@@ -4934,9 +4935,80 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             return  true;
         }catch (Exception ex){return false;}
     }
-
-
     /* END REPORT SALE REP THI TRUONG */
+
+    public List<DM_Season> getAllSeason(){
+        try {
+            List<DM_Season> lst = new ArrayList<DM_Season>();
+            String mSql=String.format("select * from DM_SEASON");
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Season season = new DM_Season();
+                    season.setSeasonCode(cursor.getString(cursor.getColumnIndex("SeasonCode")));
+                    season.setSeasonName(cursor.getString(cursor.getColumnIndex("SeasonName")));
+
+                    lst.add(season);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SEASON",ex.getMessage().toString());}
+        return null;
+    }
+
+    public boolean delSeason(){
+        String mSqlMarket=String.format("delete from DM_SEASON ");
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            db.execSQL(mSqlMarket);
+        }catch (Exception ex){
+            Log.d("DEL_SM_SEASON",ex.getMessage());
+            return  false;
+        }
+        return  true;
+    }
+
+    public int getSizeSeason(String code){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_SEASON WHERE SeasonCode=?", new String[]{code});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public boolean addSeason(DM_Season obj){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            iSq=getSizeSeason(obj.getSeasonCode());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("SeasonID","");
+                values.put("SeasonCode", obj.getSeasonCode());
+                values.put("SeasonName", obj.getSeasonName());
+                db.insert("DM_SEASON", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("SeasonID","");
+                values.put("SeasonCode", obj.getSeasonCode());
+                values.put("SeasonName", obj.getSeasonName());
+                db.update("DM_SEASON",values,"SeasonCode=?" ,new String[] { String.valueOf(obj.getSeasonCode())});
+            }
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
+    }
+
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
         if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";

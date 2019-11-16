@@ -127,6 +127,19 @@
                     android:textColor="@color/colorTextGray"
                     android:textSize="16sp" />
 
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:id="@+id/tvSeason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_ripple"
+                    android:drawableLeft="@drawable/tiva_list_nav"
+                    android:clickable="true"
+                    android:paddingStart="35dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:text="  Mùa vụ"
+                    android:textColor="@color/colorTextGray"
+                    android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomTextView
                     android:id="@+id/tvSyncAll"

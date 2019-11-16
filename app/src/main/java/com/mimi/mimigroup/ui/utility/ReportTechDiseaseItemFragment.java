@@ -216,7 +216,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
-            builder.setTitle("Chọn dịch hại");
+            builder.setTitle("Chọn cây trồng");
             builder.setMultiChoiceItems(lstTreeSelect,lstTreeSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position, boolean isChecked) {
@@ -291,7 +291,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
-            builder.setTitle("Chọn cây trồng");
+            builder.setTitle("Chọn dịch hại");
             builder.setMultiChoiceItems(lstTreeDiseaseSelect,lstTreeDiseaseSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position, boolean isChecked) {
@@ -542,7 +542,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                 if (oDetail.getAcreage() != null) {
                     lstReportTechDisease.get(i).setAcreage(oDetail.getAcreage());
                 } else {
-                    lstReportTechDisease.get(i).setPrice(0f);
+                    lstReportTechDisease.get(i).setAcreage(0f);
                 }
                 if (oDetail.getPrice() != null) {
                     lstReportTechDisease.get(i).setPrice(oDetail.getPrice());
