@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/Layout_ReportSaleRepActivityItem"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Ngày làm" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvWorkday"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Tiêu đề" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvTitle"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Địa điểm" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvPlace"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Ghi chú" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvNotes"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorFormLineGray" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <HorizontalScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                android:id="@+id/llTop">
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Ngày làm"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="350dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Tiêu đề"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Địa điểm"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Ghi chú"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rvReportSaleRepActivityList"
+                android:layout_below="@+id/llTop"></android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+    </HorizontalScrollView>
+</LinearLayout>
