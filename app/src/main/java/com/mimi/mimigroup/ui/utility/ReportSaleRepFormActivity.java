@@ -13,6 +13,7 @@ import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.api.APINet;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
 import com.mimi.mimigroup.model.SM_ReportSaleRepActivitie;
@@ -109,7 +110,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         adapter = new FragmentPagerTabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-        mReportSaleRepID = getIntent().getStringExtra("ReportSaleID");
+        mReportSaleRepID = getIntent().getStringExtra("ReportSaleRepID");
         mPar_Symbol  = getIntent().getStringExtra("PAR_SYMBOL");
         mAction=getIntent().getAction().toString();
         if(mAction=="EDIT"){
@@ -160,12 +161,13 @@ public class ReportSaleRepFormActivity extends BaseActivity {
 
                         ReportSaleRepSeasonFragment = new ReportSaleRepSeasonItemFragment();
                         adapter.addFragment(ReportSaleRepSeasonFragment, "Mùa Vụ");
+                        /*
 
                         ReportSaleRepTaskFragment = new ReportSaleRepTaskItemFragment();
                         adapter.addFragment(ReportSaleRepTaskFragment, "Công việc");
 
                         ReportSaleRepActivityFragment = new ReportSaleRepActivityItemFragment();
-                        adapter.addFragment(ReportSaleRepActivityFragment, "HĐ Tuần Tới");
+                        adapter.addFragment(ReportSaleRepActivityFragment, "HĐ Tuần Tới");*/
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
@@ -252,16 +254,16 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         if(ReportSaleRepFragment !=null) {
             oReportSaleRep = ReportSaleRepFragment.getSMReportSaleRep();
         }
-        /*
+
         if(ReportSaleRepMarketFragment!=null) {
             oReportSaleRepMarket = ReportSaleRepMarketFragment.getListReportSaleRepMarket();
         }
         if(ReportSaleRepDiseaseFragment != null) {
             oReportSaleRepDisease = ReportSaleRepDiseaseFragment.getListReportSaleRepDisease();
         }
-        if(ReportSaleRepCompetitorFragment!=null) {
-            oReportSaleRepCompetitor = ReportSaleRepCompetitorFragment.getListReportSaleRepCompetitor();
-        }
+        if(ReportSaleRepSeasonFragment!=null) {
+            oReportSaleRepSeason = ReportSaleRepSeasonFragment.getListReportSaleRepSeason();
+        }/*
         if(ReportSaleRepActivityThisWeekFragment != null){
             oReportSaleRepActivityThisWeek = ReportSaleRepActivityThisWeekFragment.getListReportSaleRepActivityThisWeek();
         }
@@ -368,7 +370,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 btnReportSaleRepDetailAdd.setTag("SAVE");
                 btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
-        }/*else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+        }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
             if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
                 if(((ReportSaleRepDiseaseItemFragment) currentFragment).onSaveReportSaleRepDisease()) {
                     btnReportSaleRepDetailAdd.setTag("ADD");
@@ -389,22 +391,24 @@ public class ReportSaleRepFormActivity extends BaseActivity {
 
         else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
             if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
-                if(((ReportSaleRepSeasonItemFragment) currentFragment).onSaveReportSaleRepCompetitor()) {
+                if(((ReportSaleRepSeasonItemFragment) currentFragment).onSaveReportSaleRepSeason()) {
                     btnReportSaleRepDetailAdd.setTag("ADD");
                     btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
                 }
             }else if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("EDIT")){
                 //CHI HIỂN THỊ BOX ĐỂ CẬP NHẬT
-                ((ReportSaleRepSeasonItemFragment) currentFragment).onAddReportSaleRepCompetitor(false);
+                ((ReportSaleRepSeasonItemFragment) currentFragment).onAddReportSaleRepSeason(false);
                 btnReportSaleRepDetailAdd.setTag("SAVE");
                 btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }else {
                 //HIỂN THỊ BOX MỚI ĐỂ THÊM
-                ((ReportSaleRepSeasonItemFragment) currentFragment).onAddReportSaleRepCompetitor(true);
+                ((ReportSaleRepSeasonItemFragment) currentFragment).onAddReportSaleRepSeason(true);
                 btnReportSaleRepDetailAdd.setTag("SAVE");
                 btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
-        } else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
+        }
+
+        /*else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
             if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
                 if(((ReportSaleRepActivityItemFragment) currentFragment).onSaveReportSaleRepActivity()) {
                     btnReportSaleRepDetailAdd.setTag("ADD");
@@ -446,9 +450,10 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
         if(currentFragment instanceof ReportSaleRepMarketItemFragment){
             ((ReportSaleRepMarketItemFragment) currentFragment).onDeletedReportSaleRepMarket();
-        }/*else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+        }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
             ((ReportSaleRepDiseaseItemFragment) currentFragment).onDeletedReportSaleRepDisease();
-        }else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
+        }
+        /*else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
             ((ReportSaleRepSeasonItemFragment) currentFragment).onDeletedReportSaleRepCompetitor();
         } else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
             ((ReportSaleRepActivityItemFragment) currentFragment).onDeletedReportSaleRepActivity();
@@ -461,7 +466,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     public void onSaveOnly(){
         ReceiveDataFragment();
         if(oReportSaleRep==null || oReportSaleRep.getReportSaleId() == null || oReportSaleRep.getReportSaleId().isEmpty()){
-            Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo kỹ thuật..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo sale..", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -503,7 +508,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             }
         }
 
-        Toast.makeText(this, "Ghi báo cáo kĩ thuật thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ghi báo cáo sale thành công", Toast.LENGTH_SHORT).show();
         finish();
         isSaved=true;
     }

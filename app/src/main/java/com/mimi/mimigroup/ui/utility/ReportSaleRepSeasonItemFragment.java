@@ -409,7 +409,7 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
 
                 currentSeasonId = osmDT.getSeasonId();
             } else {
-                Toast.makeText(getContext(), "Không tồn tại báo cáo dịch bệnh..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Không tồn tại báo cáo mùa vụ..", Toast.LENGTH_SHORT).show();
             }
 
         } catch (Exception ex) {
@@ -542,8 +542,8 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
 
         if (!isExist) {
             SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            String mDiseaseId = "BCMV" + mParSymbol + Od.format(new Date());
-            oDetail.setSeasonId(mDiseaseId);
+            String mSeasonId = "BCMV" + mParSymbol + Od.format(new Date());
+            oDetail.setSeasonId(mSeasonId);
             oDetail.setReportSaleId(mReportSaleRepId);
             lstReportSaleRepSeason.add(oDetail);
         }
@@ -556,6 +556,8 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
         tvTree.setText("");
         tvTree.setTag("");
         tvAcreage.setText("");
+        tvSeason.setText("");
+        tvSeason.setTag("");
         return true;
     }
 

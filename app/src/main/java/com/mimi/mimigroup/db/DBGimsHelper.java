@@ -4568,7 +4568,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             iSq=getSizeReportSaleRepSeason(oRptTechSeason.getSeasonId());
             if (iSq<=0) {
                 ContentValues values = new ContentValues();
-                values.put("SeasonID", oRptTechSeason.getSeasonCode());
+                values.put("SeasonID", oRptTechSeason.getSeasonId());
                 values.put("ReportSaleID", oRptTechSeason.getReportSaleId());
                 values.put("TreeCode", oRptTechSeason.getTreeCode());
                 values.put("SeasonCode", oRptTechSeason.getSeasonCode());
