@@ -216,7 +216,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false);
-            builder.setTitle("Chọn cây trồng");
+            builder.setTitle("Chọn dịch hại");
             builder.setMultiChoiceItems(lstTreeSelect,lstTreeSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int position, boolean isChecked) {
