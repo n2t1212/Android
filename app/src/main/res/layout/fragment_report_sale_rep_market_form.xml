@@ -24,6 +24,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:id="@+id/btnRegetLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:clickable="true"
+                    android:gravity="left"
+                    android:padding="2dp"
+                    android:text="Nhập khách hàng"
+                    android:textColorHighlight="@color/colorBorderBlue"
+                    android:layout_marginStart="30dp"
+                    android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/spCustomer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:hint="....."
+                    android:textColorHint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="textAutoComplete|textAutoCorrect"
+                    android:background="@drawable/spindropdown"
+                    android:padding="15dp"
+                    android:textSize="15dp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:ems="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2" >
                 <com.mimi.mimigroup.ui.custom.CustomTextView
@@ -32,20 +69,79 @@
                     android:layout_weight="0"
                     android:gravity="right"
                     android:padding="10dp"
-                    android:text="Tiêu đề" />
+                    android:text="Công ty" />
                 <com.mimi.mimigroup.ui.custom.CustomBoldEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:padding="10dp"
                     android:layout_weight="0"
-                    android:id="@+id/tvTitle"
+                    android:id="@+id/tvCompanyName"
                     android:background="@drawable/edittext"
                     android:layout_marginEnd="30dp"
                     android:inputType="text"
                     android:gravity="left"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:clickable="true"
+                    android:gravity="left"
+                    android:padding="2dp"
+                    android:text="Nhập sản phẩm"
+                    android:textColorHighlight="@color/colorBorderBlue"
+                    android:layout_marginStart="30dp"
+                    android:textStyle="bold" />
+                <AutoCompleteTextView
+                    android:id="@+id/spProduct"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:hint="....."
+                    android:textColorHint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="textAutoComplete|textAutoCorrect"
+                    android:background="@drawable/spindropdown"
+                    android:padding="15dp"
+                    android:textSize="14dp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:dropDownWidth="match_parent"
+                    android:ems="10" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Giá" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvPrice"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="number"
+                    android:gravity="left"/>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,55 +161,6 @@
                     android:padding="10dp"
                     android:layout_weight="0"
                     android:id="@+id/tvNotes"
-                    android:background="@drawable/edittext"
-                    android:layout_marginEnd="30dp"
-                    android:inputType="text"
-                    android:gravity="left"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2" >
-                <com.mimi.mimigroup.ui.custom.CustomTextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:text="T.động có lợi" />
-                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:padding="10dp"
-                    android:layout_weight="0"
-                    android:id="@+id/tvUseful"
-                    android:background="@drawable/edittext"
-                    android:layout_marginEnd="30dp"
-                    android:inputType="text"
-                    android:gravity="left"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2" >
-                <com.mimi.mimigroup.ui.custom.CustomTextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:text="T.động có hại" />
-                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:padding="10dp"
-                    android:layout_weight="0"
-                    android:id="@+id/tvHarmful"
                     android:background="@drawable/edittext_readonly"
                     android:layout_marginEnd="30dp"
                     android:inputType="text"
@@ -152,10 +199,43 @@
                     android:textColor="@color/TextHeaderGrid"
                     android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
-                    android:text="Tiêu đề"
+                    android:text="Khách hàng"
                     android:gravity="center"/>
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="350dp"
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Công ty"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Sản phẩm"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Giá"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="5dp"
@@ -164,28 +244,6 @@
                     android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
                     android:text="Ghi chú"
-                    android:gravity="center"/>
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="300dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@color/HeaderGridOrderDetail"
-                    android:textColor="@color/TextHeaderGrid"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
-                    android:text="Tác động có lợi"
-                    android:gravity="center"/>
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="300dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@color/HeaderGridOrderDetail"
-                    android:textColor="@color/TextHeaderGrid"
-                    android:textSize="16sp"
-                    android:layout_marginRight="0.5dp"
-                    android:text="Tác động có hại"
                     android:gravity="center"/>
             </LinearLayout>
 

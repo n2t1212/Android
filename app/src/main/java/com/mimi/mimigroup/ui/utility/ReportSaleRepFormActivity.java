@@ -367,7 +367,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 btnReportSaleRepDetailAdd.setTag("SAVE");
                 btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
-        }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+        }/*else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
             if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")){
                 if(((ReportSaleRepDiseaseItemFragment) currentFragment).onSaveReportSaleRepDisease()) {
                     btnReportSaleRepDetailAdd.setTag("ADD");
@@ -437,7 +437,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 btnReportSaleRepDetailAdd.setTag("SAVE");
                 btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_accept));
             }
-        }
+        }*/
     }
 
     @OnClick(R.id.btnReportSaleRepDetailDel)
@@ -445,7 +445,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
         if(currentFragment instanceof ReportSaleRepMarketItemFragment){
             ((ReportSaleRepMarketItemFragment) currentFragment).onDeletedReportSaleRepMarket();
-        }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+        }/*else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
             ((ReportSaleRepDiseaseItemFragment) currentFragment).onDeletedReportSaleRepDisease();
         }else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
             ((ReportSaleRepSeasonItemFragment) currentFragment).onDeletedReportSaleRepCompetitor();
@@ -453,7 +453,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             ((ReportSaleRepActivityItemFragment) currentFragment).onDeletedReportSaleRepActivity();
         } else if(currentFragment instanceof ReportSaleRepTaskItemFragment){
             ((ReportSaleRepTaskItemFragment) currentFragment).onDeletedReportSaleRepActivity();
-        }
+        }*/
     }
 
     @OnClick(R.id.btnSaveReportSaleRep)

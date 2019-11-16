@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mimi.mimigroup.R;
+import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Customer;
+import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
@@ -19,11 +22,12 @@ import butterknife.ButterKnife;
 
 public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    public void setSmoReportTechMarket(List<SM_ReportSaleRepMarke> smoReportTechMarket) {
-        this.smoReportTechMarket = smoReportTechMarket;
+    public DBGimsHelper mDB = null;
+    public void setsmoReportSaleRepMarket(List<SM_ReportSaleRepMarket> smoReportSaleRepMarket) {
+        this.smoReportSaleRepMarket = smoReportSaleRepMarket;
     }
 
-    List<SM_ReportSaleRepMarket> smoReportTechMarket;
+    List<SM_ReportSaleRepMarket> smoReportSaleRepMarket;
     public List<SM_ReportSaleRepMarket> SelectedList = new ArrayList<>();
 
     public interface ListItemClickListener{
@@ -33,31 +37,32 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
     private final ReportSaleRepMarketAdapter.ListItemClickListener mOnItemClicked;
 
     public ReportSaleRepMarketAdapter(ReportSaleRepMarketAdapter.ListItemClickListener mOnClickListener) {
-        smoReportTechMarket = new ArrayList<>();
+        smoReportSaleRepMarket = new ArrayList<>();
         this.mOnItemClicked=mOnClickListener;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ReportSaleRepMarketAdapter.ReportTechMarketHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_tech_market_item,viewGroup,false));
+        mDB = DBGimsHelper.getInstance(viewGroup.getContext());
+        return new ReportSaleRepMarketAdapter.ReportTechMarketHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_sale_rep_market_item,viewGroup,false));
     }
 
     @Override
     public void onBindViewHolder( final RecyclerView.ViewHolder viewHolder,final int iPos) {
         if(viewHolder instanceof ReportSaleRepMarketAdapter.ReportTechMarketHolder){
-            ((ReportSaleRepMarketAdapter.ReportTechMarketHolder) viewHolder).bind(smoReportTechMarket.get(iPos));
+            ((ReportSaleRepMarketAdapter.ReportTechMarketHolder) viewHolder).bind(smoReportSaleRepMarket.get(iPos));
         }
 
-        setRowSelected(SelectedList.contains(smoReportTechMarket.get(iPos)),viewHolder);
+        setRowSelected(SelectedList.contains(smoReportSaleRepMarket.get(iPos)),viewHolder);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(SelectedList.contains(smoReportTechMarket.get(iPos))){
-                    SelectedList.remove(smoReportTechMarket.get(iPos));
+                if(SelectedList.contains(smoReportSaleRepMarket.get(iPos))){
+                    SelectedList.remove(smoReportSaleRepMarket.get(iPos));
                     setRowSelected(false,viewHolder);
                     clearSelected();
                 }else{
-                    SelectedList.add(smoReportTechMarket.get(iPos));
+                    SelectedList.add(smoReportSaleRepMarket.get(iPos));
                     setRowSelected(true,viewHolder);
                 }
                 mOnItemClicked.onItemClick(SelectedList);
@@ -73,8 +78,8 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        if(smoReportTechMarket != null) {
-            return  smoReportTechMarket.size();
+        if(smoReportSaleRepMarket != null) {
+            return  smoReportSaleRepMarket.size();
         }
         return 0;
     }
@@ -85,14 +90,16 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class ReportTechMarketHolder  extends RecyclerView.ViewHolder {
-        @BindView(R.id.tvTitle)
-        CustomTextView tvTitle;
+        @BindView(R.id.tvCustomer)
+        CustomTextView tvCustomer;
+        @BindView(R.id.tvCompanyName)
+        CustomTextView tvCompanyName;
+        @BindView(R.id.tvProductCode)
+        CustomTextView tvProductCode;
+        @BindView(R.id.tvPrice)
+        CustomTextView tvPrice;
         @BindView(R.id.tvNotes)
         CustomTextView tvNotes;
-        @BindView(R.id.tvUseful)
-        CustomTextView tvUseful;
-        @BindView(R.id.tvHarmful)
-        CustomTextView tvHarmful;
 
         public ReportTechMarketHolder(View itemView) {
             super(itemView);
@@ -101,20 +108,33 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public void bind(SM_ReportSaleRepMarket oDetail){
             if(oDetail != null){
-                if(oDetail.getTitle() != null){
-                    tvTitle.setText(oDetail.getTitle());
+                if(oDetail.getCustomerId() != null){
+                    DM_Customer customer = mDB.getCustomer(oDetail.getCustomerId());
+                    if(customer != null){
+                        tvCustomer.setText(customer.getCustomerName());
+                        tvCustomer.setTag(oDetail.getCustomerId());
+                    }else{
+                        tvCustomer.setText("");
+                        tvCustomer.setTag("");
+                    }
                 }
-                if(oDetail.getNotes() != null){
-                    tvNotes.setText(oDetail.getNotes());
+                if(oDetail.getCompanyName() != null){
+                    tvCompanyName.setText(oDetail.getCompanyName());
                 }
-                if(oDetail.getUsefull() != null)
+                if(oDetail.getProductCode() != null)
                 {
-                    tvUseful.setText(oDetail.getUsefull());
+                    DM_Product product = mDB.getProduct(oDetail.getProductCode());
+                    tvProductCode.setText(product.getProductName());
+                }else{
+                    tvProductCode.setText("");
                 }
-                if(oDetail.getHarmful() != null)
+                if(oDetail.getPrice() != null)
                 {
-                    tvHarmful.setText(oDetail.getHarmful());
+                    tvPrice.setText(oDetail.getPrice().toString());
+                }else{
+                    tvPrice.setText("");
                 }
+                tvNotes.setText(oDetail.getNotes());
             }
         }
     }
