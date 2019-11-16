@@ -29,6 +29,7 @@ import com.mimi.mimigroup.model.SM_OrderStatus;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
 import com.mimi.mimigroup.model.SM_ReportSaleRepDisease;
 import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
+import com.mimi.mimigroup.model.SM_ReportSaleRepSeason;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.model.SM_ReportTechActivity;
 import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
@@ -4453,6 +4454,142 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }
     }
 
+    /* REPORT SALE REP MÙA VỤ */
+    private String getReportSaleRepSeasonID(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_SALEREP_SEASON A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID WHERE B.ReportSaleID=? ", new String[]{ReportSaleID});
+            String DiseaseID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    DiseaseID=cursor.getString(cursor.getColumnIndex("SeasonID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return DiseaseID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportSaleRepSeason(String SeasonID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_SALEREP_SEASON WHERE SeasonID=?", new String[]{SeasonID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportSaleRepSeason(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_SALEREP_SEASON where ReportSaleID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportSaleRepSeason> getAllReportSaleRepDisease(String ReportSaleID) {
+        try {
+            List<SM_ReportSaleRepSeason> lst = new ArrayList<SM_ReportSaleRepSeason>();
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_SEASON A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID"+
+                    " where A.ReportSaleID='%s' order by B.ReportDay desc", ReportSaleID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportSaleRepSeason oRptSaleRepSeason = new SM_ReportSaleRepSeason();
+                    oRptSaleRepSeason.setSeasonId(cursor.getString(cursor.getColumnIndex("SeasonID")));
+                    oRptSaleRepSeason.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRepSeason.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptSaleRepSeason.setSeasonCode(cursor.getString(cursor.getColumnIndex("SeasonCode")));
+                    oRptSaleRepSeason.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptSaleRepSeason.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptSaleRepSeason.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    lst.add(oRptSaleRepSeason);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SALE_SEASON",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportSaleRepSeason getReportSaleRepSeasonById(String SeasonID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_SEASON A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID "+
+                    " where A.SeasonID='%s' order by B.ReportDay desc",SeasonID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportSaleRepSeason oRptSaleRepSeason = new SM_ReportSaleRepSeason();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptSaleRepSeason.setSeasonId(cursor.getString(cursor.getColumnIndex("SeasonID")));
+                    oRptSaleRepSeason.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRepSeason.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptSaleRepSeason.setSeasonCode(cursor.getString(cursor.getColumnIndex("SeasonCode")));
+                    oRptSaleRepSeason.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptSaleRepSeason.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptSaleRepSeason.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptSaleRepSeason;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SALE_SEASON",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportSaleRepSeason(SM_ReportSaleRepSeason oRptTechSeason){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String seasonID=getReportSaleRepSeasonID(oRptTechSeason.getReportSaleId());
+            if(seasonID!=""){
+                if(oRptTechSeason.getSeasonId().isEmpty()|| oRptTechSeason.getSeasonId()==null){
+                    oRptTechSeason.setSeasonId(seasonID);
+                }
+            }
+            iSq=getSizeReportSaleRepSeason(oRptTechSeason.getSeasonId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("SeasonID", oRptTechSeason.getSeasonCode());
+                values.put("ReportSaleID", oRptTechSeason.getReportSaleId());
+                values.put("TreeCode", oRptTechSeason.getTreeCode());
+                values.put("SeasonCode", oRptTechSeason.getSeasonCode());
+                values.put("Title", oRptTechSeason.getTitle());
+                values.put("Acreage", oRptTechSeason.getAcreage());
+                values.put("Notes", oRptTechSeason.getNotes());
+                db.insert("SM_REPORT_SALEREP_SEASON", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportSaleID", oRptTechSeason.getReportSaleId());
+                values.put("TreeCode", oRptTechSeason.getTreeCode());
+                values.put("SeasonCode", oRptTechSeason.getSeasonCode());
+                values.put("Title", oRptTechSeason.getTitle());
+                values.put("Acreage", oRptTechSeason.getAcreage());
+                values.put("Notes", oRptTechSeason.getNotes());
+                db.update("SM_REPORT_SALEREP_SEASON",values,"SeasonID=?" ,new String[] {String.valueOf(oRptTechSeason.getSeasonId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT SALE REP DỊCH BỆNH */
+
     /* REPORT SALE REP DỊCH BỆNH */
     private String getReportSaleRepDiseaseID(String ReportSaleID){
         try {
@@ -4583,7 +4720,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }
     }
 
-    /* END REPORT SALE REP DỊCH BỆNH */
+    /* END REPORT SALE REP MÙA VỤ */
 
     /* END REPORT SALE REP THI TRUONG */
     //<<SYSTEM-FUNCTION>>
