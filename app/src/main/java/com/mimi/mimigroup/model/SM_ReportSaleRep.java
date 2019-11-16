@@ -10,7 +10,7 @@ public class SM_ReportSaleRep {
     String locationAddress;
     String receiverList;
     String notes;
-    Integer isStatus;
+    String isStatus;
     Boolean isPost;
     String postDay;
 
@@ -89,11 +89,11 @@ public class SM_ReportSaleRep {
         this.notes = notes;
     }
 
-    public Integer getIsStatus() {
+    public String getIsStatus() {
         return isStatus;
     }
 
-    public void setIsStatus(Integer isStatus) {
+    public void setIsStatus(String isStatus) {
         this.isStatus = isStatus;
     }
 
@@ -113,7 +113,7 @@ public class SM_ReportSaleRep {
         this.postDay = postDay;
     }
 
-    public SM_ReportSaleRep(String reportSaleId, String reportCode, String reportName, String reportDay, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, Integer isStatus, Boolean isPost, String postDay) {
+    public SM_ReportSaleRep(String reportSaleId, String reportCode, String reportName, String reportDay, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, String isStatus, Boolean isPost, String postDay) {
         this.reportSaleId = reportSaleId;
         this.reportCode = reportCode;
         this.reportName = reportName;
