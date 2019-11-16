@@ -149,7 +149,7 @@ public class ReportTechFormActivity extends BaseActivity {
                 new Runnable() {
                     public void run() {
                         ReportTechFragment = new ReportTechFormItemFragment();
-                        adapter.addFragment(ReportTechFragment, "Báo Cáo Kỹ Thuật");
+                        adapter.addFragment(ReportTechFragment, "BC Kỹ Thuật");
 
                         ReportTechMarketFragment = new ReportTechMarketItemFragment();
                         adapter.addFragment(ReportTechMarketFragment, "Thị Trường");
