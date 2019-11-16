@@ -26,6 +26,8 @@ import com.mimi.mimigroup.model.SM_OrderDelivery;
 import com.mimi.mimigroup.model.SM_OrderDeliveryDetail;
 import com.mimi.mimigroup.model.SM_OrderDetail;
 import com.mimi.mimigroup.model.SM_OrderStatus;
+import com.mimi.mimigroup.model.SM_ReportSaleRep;
+import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.model.SM_ReportTechActivity;
 import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
@@ -4060,31 +4062,397 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
-    public DM_Tree_Disease getTreeDiseaseByCode(String DiseaseCode)
+    public List<DM_Tree_Disease> getTreeDiseasesByCode(String[] DiseaseCode)
     {
         try {
-            String mSql=String.format("Select * from DM_TREE_DISEASE where DiseaseCode='%s' ", DiseaseCode);
+            if(DiseaseCode.length < 0){
+                return null;
+            }
+            String lstCode = "";
+            for(int i = 0; i < DiseaseCode.length; i++){
+                if(i > 0){
+                    lstCode += ",";
+                }
+                lstCode +=  String.format("'%s'",DiseaseCode[i]);
+            }
+            String mSql=String.format("Select * from DM_TREE_DISEASE where DiseaseCode in (%s)", lstCode);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
-            DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
+            List<DM_Tree_Disease> lst = new ArrayList<DM_Tree_Disease>();
             if (cursor.moveToFirst()) {
                 do {
+                    DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
                     oTreeDisease.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
                     oTreeDisease.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
                     oTreeDisease.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
                     oTreeDisease.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+
+                    lst.add(oTreeDisease);
                 }while (cursor.moveToNext());
             }
             cursor.close();
             db.close();
-            return oTreeDisease;
+            return lst;
         }catch (Exception ex){
             Log.d("GET_TREE_DISEASE", ex.getMessage());
         }
         return null;
     }
 
+    /* REPORT SALE REP */
+    private String getReportSaleRepId(String ReportDate){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_SALEREP WHERE (julianday(ReportDay)-julianday('%s')=0) ", new String[]{ReportDate});
+            String ReportSaleRepId="";
+            if (cursor.moveToFirst()) {
+                do {
+                    ReportSaleRepId=cursor.getString(cursor.getColumnIndex("ReportSaleID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return ReportSaleRepId;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizeReportSaleRep(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_SALEREP WHERE ReportSaleID=?", new String[]{ReportSaleID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportSaleRep(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_SALEREP where ReportTechID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+            mSql = String.format("delete from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+
+    public List<SM_ReportSaleRep> getAllReportSaleRep(String fday, String tDay) {
+        try {
+            List<SM_ReportSaleRep> lst = new ArrayList<SM_ReportSaleRep>();
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP A"+
+                    " where (julianday(A.ReportDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.ReportDay)) >=0 order by A.ReportDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportSaleRep oRptSaleRep = new SM_ReportSaleRep();
+                    oRptSaleRep.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRep.setReportCode(cursor.getString(cursor.getColumnIndex("ReportCode")));
+                    oRptSaleRep.setReportName(cursor.getString(cursor.getColumnIndex("ReportName")));
+                    oRptSaleRep.setReportDay(cursor.getString(cursor.getColumnIndex("ReportDay")));
+                    oRptSaleRep.setLongtitude(cursor.getFloat(cursor.getColumnIndex("Longitude")));
+                    oRptSaleRep.setLatitude(cursor.getFloat(cursor.getColumnIndex("Latitude")));
+                    oRptSaleRep.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oRptSaleRep.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
+                    oRptSaleRep.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            oRptSaleRep.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            oRptSaleRep.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            oRptSaleRep.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            oRptSaleRep.setIsStatus("");
+                        }
+
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        oRptSaleRep.setPost(true);
+                    }else{
+                        oRptSaleRep.setPost(false);
+                    }
+                    oRptSaleRep.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                    lst.add(oRptSaleRep);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SALE_REP",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportSaleRep getReportSaleRepById(String reportSaleId)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP A "+
+                    " where A.ReportSaleID='%s' order by ReportDay desc",reportSaleId);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportSaleRep oRptSaleRep = new SM_ReportSaleRep();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptSaleRep.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRep.setReportCode(cursor.getString(cursor.getColumnIndex("ReportCode")));
+                    oRptSaleRep.setReportName(cursor.getString(cursor.getColumnIndex("ReportName")));
+                    oRptSaleRep.setReportDay(cursor.getString(cursor.getColumnIndex("ReportDay")));
+                    oRptSaleRep.setLongtitude(cursor.getFloat(cursor.getColumnIndex("Longitude")));
+                    oRptSaleRep.setLatitude(cursor.getFloat(cursor.getColumnIndex("Latitude")));
+                    oRptSaleRep.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
+                    oRptSaleRep.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
+                    oRptSaleRep.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            oRptSaleRep.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            oRptSaleRep.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            oRptSaleRep.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            oRptSaleRep.setIsStatus("");
+                        }
+
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        oRptSaleRep.setPost(true);
+                    }else{
+                        oRptSaleRep.setPost(false);
+                    }
+                    oRptSaleRep.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptSaleRep;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SALE_REP",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportSaleRep(SM_ReportSaleRep oRptSaleRep){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String ReportID=getReportSaleRepId(oRptSaleRep.getReportDay());
+            if(ReportID!=""){
+                if(oRptSaleRep.getReportSaleId().isEmpty()|| oRptSaleRep.getReportSaleId()==null){
+                    oRptSaleRep.setReportSaleId(ReportID);
+                }
+            }
+            iSq=getSizeReportSaleRep(oRptSaleRep.getReportSaleId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("ReportTechID", oRptSaleRep.getReportSaleId());
+                values.put("ReportCode", oRptSaleRep.getReportCode());
+                values.put("ReportName", oRptSaleRep.getReportName());
+
+                values.put("ReportDay", oRptSaleRep.getReportDay());
+                values.put("Longitude", oRptSaleRep.getLongtitude());
+                values.put("Latitude", oRptSaleRep.getLatitude());
+                values.put("LocationAddress", oRptSaleRep.getLocationAddress());
+                values.put("ReceiverList", oRptSaleRep.getReceiverList());
+                values.put("Notes", oRptSaleRep.getNotes());
+
+                values.put("IsStatus", oRptSaleRep.getIsStatus());
+                values.put("IsPost", oRptSaleRep.getPost());
+                values.put("PostDay", oRptSaleRep.getPostDay());
+
+                db.insert("SM_REPORT_SALEREP", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportCode", oRptSaleRep.getReportCode());
+                values.put("ReportName", oRptSaleRep.getReportName());
+
+                values.put("ReportDay", oRptSaleRep.getReportDay());
+                values.put("Longitude", oRptSaleRep.getLongtitude());
+                values.put("Latitude", oRptSaleRep.getLatitude());
+                values.put("LocationAddress", oRptSaleRep.getLocationAddress());
+                values.put("ReceiverList", oRptSaleRep.getReceiverList());
+                values.put("Notes", oRptSaleRep.getNotes());
+
+                values.put("IsStatus", oRptSaleRep.getIsStatus());
+                values.put("IsPost", oRptSaleRep.getPost());
+                values.put("PostDay", oRptSaleRep.getPostDay());
+                db.update("SM_REPORT_SALEREP",values,"ReportTechID=?" ,new String[] {String.valueOf(oRptSaleRep.getReportSaleId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+    /*END REPORT SALE REP*/
+
+    /* REPORT SALE REP THỊ TRƯỜNG */
+    private String getReportSaleRepMarketID(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_SALEREP_MARKET A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID WHERE B.ReportSaleID=? ", new String[]{ReportTechID});
+            String MarketID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    MarketID=cursor.getString(cursor.getColumnIndex("MarketID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return MarketID;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizeReportSaleRepMarket(String MarketID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_SALEREP_MARKET WHERE MarketID=?", new String[]{MarketID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportSaleRepMarket(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_SALEREP_MARKET where ReportSaleID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+
+    public List<SM_ReportSaleRepMarket> getAllReportSaleRepMarket(String mReportSaleId) {
+        try {
+            List<SM_ReportSaleRepMarket> lst = new ArrayList<SM_ReportSaleRepMarket>();
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_MARKET A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID"+
+                    " where A.ReportSaleID='%s' order by B.ReportDay desc", mReportSaleId);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportSaleRepMarket oRptSaleMarket = new SM_ReportSaleRepMarket();
+                    oRptSaleMarket.setMarketId(cursor.getString(cursor.getColumnIndex("MarketID")));
+                    oRptSaleMarket.setCustomerId(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oRptSaleMarket.setCompanyName(cursor.getString(cursor.getColumnIndex("CompanyName")));
+                    oRptSaleMarket.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    oRptSaleMarket.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptSaleMarket.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
+                    lst.add(oRptSaleMarket);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SALE_MARKET",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportSaleRepMarket getReportSaleRepMarketById(String MarketID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_MARKET A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID "+
+                    " where A.MarketID='%s' order by B.ReportDay desc",MarketID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportSaleRepMarket oRptSalehMarket = new SM_ReportSaleRepMarket();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptSalehMarket.setMarketId(cursor.getString(cursor.getColumnIndex("MarketID")));
+                    oRptSalehMarket.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSalehMarket.setCustomerId(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    oRptSalehMarket.setCompanyName(cursor.getString(cursor.getColumnIndex("CompanyName")));
+                    oRptSalehMarket.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    oRptSalehMarket.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    oRptSalehMarket.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptSalehMarket;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SALE_MARKET",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportSaleRepMarket(SM_ReportSaleRepMarket oRptSaleMarket){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String MarketID=getReportSaleRepMarketID(oRptSaleMarket.getReportSaleId());
+            if(MarketID!=""){
+                if(oRptSaleMarket.getMarketId().isEmpty()|| oRptSaleMarket.getMarketId()==null){
+                    oRptSaleMarket.setMarketId(MarketID);
+                }
+            }
+            iSq=getSizeReportSaleRepMarket(oRptSaleMarket.getMarketId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("MarketID", oRptSaleMarket.getMarketId());
+                values.put("ReportSaleID", oRptSaleMarket.getReportSaleId());
+                values.put("CustomerID", oRptSaleMarket.getCustomerId());
+                values.put("CompanyName", oRptSaleMarket.getCompanyName());
+                values.put("ProductCode", oRptSaleMarket.getProductCode());
+                values.put("Notes", oRptSaleMarket.getNotes());
+                values.put("Price", oRptSaleMarket.getPrice());
+                db.insert("SM_REPORT_SALEREP_MARKET", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportSaleID", oRptSaleMarket.getReportSaleId());
+                values.put("CustomerID", oRptSaleMarket.getCustomerId());
+                values.put("CompanyName", oRptSaleMarket.getCompanyName());
+                values.put("ProductCode", oRptSaleMarket.getProductCode());
+                values.put("Notes", oRptSaleMarket.getNotes());
+                values.put("Price", oRptSaleMarket.getPrice());
+                db.update("SM_REPORT_SALEREP_MARKET",values,"MarketID=?" ,new String[] {String.valueOf(oRptSaleMarket.getMarketId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT SALE REP THI TRUONG */
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
         if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";
