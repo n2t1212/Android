@@ -246,26 +246,27 @@ public class ReportTechFormActivity extends BaseActivity {
                 onReportTechDetailAdd();
 
             }
+            if(ReportTechFragment !=null) {
+                oReportTech = ReportTechFragment.getSMReportTech();
+            }
+            if(ReportTechMarketFragment!=null) {
+                oReportTechMarket = ReportTechMarketFragment.getListReportTechMarket();
+            }
+            if(ReportTechDiseaseFragment != null) {
+                oReportTechDisease = ReportTechDiseaseFragment.getListReportTechDisease();
+            }
+            if(ReportTechCompetitorFragment!=null) {
+                oReportTechCompetitor = ReportTechCompetitorFragment.getListReportTechCompetitor();
+            }
+            if(ReportTechActivityThisWeekFragment != null){
+                oReportTechActivityThisWeek = ReportTechActivityThisWeekFragment.getListReportTechActivityThisWeek();
+            }
+            if(ReportTechActivityNextWeekFragment != null){
+                oReportTechActivityNextWeek = ReportTechActivityNextWeekFragment.getListReportTechActivityNextWeek();
+            }
         }catch (Exception ex){}
 
-        if(ReportTechFragment !=null) {
-            oReportTech = ReportTechFragment.getSMReportTech();
-        }
-        if(ReportTechMarketFragment!=null) {
-            oReportTechMarket = ReportTechMarketFragment.getListReportTechMarket();
-        }
-        if(ReportTechDiseaseFragment != null) {
-            oReportTechDisease = ReportTechDiseaseFragment.getListReportTechDisease();
-        }
-        if(ReportTechCompetitorFragment!=null) {
-            oReportTechCompetitor = ReportTechCompetitorFragment.getListReportTechCompetitor();
-        }
-        if(ReportTechActivityThisWeekFragment != null){
-            oReportTechActivityThisWeek = ReportTechActivityThisWeekFragment.getListReportTechActivityThisWeek();
-        }
-        if(ReportTechActivityNextWeekFragment != null){
-            oReportTechActivityNextWeek = ReportTechActivityNextWeekFragment.getListReportTechActivityNextWeek();
-        }
+
     }
 
     @Override
