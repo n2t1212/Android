@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuAdd"
+        android:icon="@drawable/icon_popup_add"
+        android:title="Mới" />
+    <item android:id="@+id/mnuEdit"
+        android:icon="@drawable/icon_popup_edit"
+        android:title="Sửa" />
+    <item android:id="@+id/mnuDel"
+        android:icon="@drawable/icon_popup_del"
+        android:title="Xóa" />
+    <item android:id="@+id/mnuSynPost"
+        android:icon="@drawable/icon_popup_upload"
+        android:title="Gửi BC SaleRep" />
+    <item android:id="@+id/mnuSearch"
+        android:icon="@drawable/icon_popup_search"
+        android:title="Tìm kiếm" />
+</menu>

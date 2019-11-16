@@ -14,8 +14,7 @@ import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
-import com.mimi.mimigroup.model.SM_ReportTechMarket;
-import com.mimi.mimigroup.ui.adapter.ReportTechMarketAdapter;
+import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -26,10 +25,10 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ReportTechMarketItemFragment extends BaseFragment {
+public class ReportSaleRepMarketItemFragment extends BaseFragment {
 
-    @BindView(R.id.rvReportTechMarketList)
-    RecyclerView rvReportTechMarketList;
+    @BindView(R.id.rvReportSaleRepMarketList)
+    RecyclerView rvReportSaleRepMarketList;
     @BindView(R.id.tvTitle)
     CustomBoldEditText tvTitle;
     @BindView(R.id.tvNotes)
@@ -38,15 +37,15 @@ public class ReportTechMarketItemFragment extends BaseFragment {
     CustomBoldEditText tvUseful;
     @BindView(R.id.tvHarmful)
     CustomBoldEditText tvHarmful;
-    @BindView(R.id.Layout_ReportTechMarketItem)
-    LinearLayout Layout_ReportTechMarketItem;
+    @BindView(R.id.Layout_ReportSaleRepMarketItem)
+    LinearLayout Layout_ReportSaleRepMarketItem;
 
-    ReportTechMarketAdapter adapter;
+    ReportSaleRepMarketAdapter adapter;
     private String mReportTechId = "";
     private String mParSymbol = "";
     private String mAction = "";
 
-    List<SM_ReportTechMarket> lstReportTechMarket;
+    List<SM_ReportSaleRepMarket> lstReportSaleRepMarket;
     String currentMarketId;
 
     @Override
@@ -57,18 +56,18 @@ public class ReportTechMarketItemFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        adapter = new ReportTechMarketAdapter(new ReportTechMarketAdapter.ListItemClickListener() {
+        adapter = new ReportSaleRepMarketAdapter(new ReportSaleRepMarketAdapter.ListItemClickListener() {
             @Override
-            public void onItemClick(List<SM_ReportTechMarket> SelectList) {
+            public void onItemClick(List<SM_ReportSaleRepMarket> SelectList) {
                 if (SelectList.size() > 0) {
-                    for (SM_ReportTechMarket osmDT : SelectList) {
-                        setReportTechMarketRow(osmDT);
+                    for (SM_ReportSaleRepMarket osmDT : SelectList) {
+                        setReportSaleRepMarketRow(osmDT);
                         break;
                     }
                     //Chỉ cho phép sửa khi chọn 1 dòng
                     if (SelectList.size() > 1) {
                         ((ReportTechFormActivity) getActivity()).setButtonEditStatus(false);
-                        Layout_ReportTechMarketItem.setVisibility(View.GONE);
+                        Layout_ReportSaleRepMarketItem.setVisibility(View.GONE);
                         Toast.makeText(getContext(), "Bạn chọn quá nhiều để có thể sửa..", Toast.LENGTH_SHORT).show();
                     } else {
                         ((ReportTechFormActivity) getActivity()).setButtonEditStatus(true);
@@ -80,29 +79,29 @@ public class ReportTechMarketItemFragment extends BaseFragment {
                 }
             }
         });
-        rvReportTechMarketList.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvReportTechMarketList.setAdapter(adapter);
+        rvReportSaleRepMarketList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvReportSaleRepMarketList.setAdapter(adapter);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         //GET PARAMETER FORM ACTIVITY
                         ReportTechFormActivity oActivity = (ReportTechFormActivity) getActivity();
-                        lstReportTechMarket = oActivity.getoReportTechMarket();
+                        lstReportSaleRepMarket = oActivity.getoReportSaleRepMarket();
                         mReportTechId=oActivity.getmReportTechID();
                         mAction=oActivity.getAction();
-                        if (lstReportTechMarket != null) {
-                            adapter.setSmoReportTechMarket(lstReportTechMarket);
+                        if (lstReportSaleRepMarket != null) {
+                            adapter.setSmoReportSaleRepMarket(lstReportSaleRepMarket);
                         }
                         mParSymbol=oActivity.getmPar_Symbol();
                     }} ,300);
 
-        Layout_ReportTechMarketItem.setVisibility(View.GONE);
+        Layout_ReportSaleRepMarketItem.setVisibility(View.GONE);
     }
 
     // CALL FROM ACTIVITY
-    public List<SM_ReportTechMarket> getListReportTechMarket(){
-        return lstReportTechMarket;
+    public List<SM_ReportSaleRepMarket> getListReportSaleRepMarket(){
+        return lstReportSaleRepMarket;
     }
 
     private int setPosSpin(List<String> lstSpin, String mValue) {
@@ -130,7 +129,7 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         return null;
     }
 
-    private void setReportTechMarketRow(SM_ReportTechMarket osmDT) {
+    private void setReportSaleRepMarketRow(SM_ReportSaleRepMarket osmDT) {
         try {
             if (osmDT != null) {
                 if (osmDT.getTitle() != null) {
@@ -157,10 +156,10 @@ public class ReportTechMarketItemFragment extends BaseFragment {
 
     }
 
-    public boolean onAddReportTechMarket(boolean isAddnew) {
+    public boolean onAddReportSaleRepMarket(boolean isAddnew) {
         ((ReportTechFormActivity) getActivity()).setVisibleDetailDelete(false);
-        if (Layout_ReportTechMarketItem.getVisibility() == View.GONE) {
-            Layout_ReportTechMarketItem.setVisibility(View.VISIBLE);
+        if (Layout_ReportSaleRepMarketItem.getVisibility() == View.GONE) {
+            Layout_ReportSaleRepMarketItem.setVisibility(View.VISIBLE);
             //Clear Input
             try {
                 if (isAddnew) {
@@ -176,11 +175,11 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         return true;
     }
 
-    public boolean onSaveReportTechMarket(){
+    public boolean onSaveReportSaleRepMarket(){
         try{
-            if(onSaveAddReportTechMarket()){
-                if(Layout_ReportTechMarketItem.getVisibility()==View.VISIBLE) {
-                    Layout_ReportTechMarketItem.setVisibility(View.GONE);
+            if(onSaveAddReportSaleRepMarket()){
+                if(Layout_ReportSaleRepMarketItem.getVisibility()==View.VISIBLE) {
+                    Layout_ReportSaleRepMarketItem.setVisibility(View.GONE);
                     adapter.clearSelected();
                 }
                 return  true;
@@ -189,8 +188,8 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         return  false;
     }
 
-    private boolean onSaveAddReportTechMarket() {
-        SM_ReportTechMarket oDetail = new SM_ReportTechMarket();
+    private boolean onSaveAddReportSaleRepMarket() {
+        SM_ReportSaleRepMarket oDetail = new SM_ReportSaleRepMarket();
 
         // EDIT
         if(currentMarketId != null && currentMarketId.length() > 0){
@@ -233,28 +232,28 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         }
 
         boolean isExist = false;
-        for (int i = 0; i < lstReportTechMarket.size(); i++) {
-            if (lstReportTechMarket.get(i).getMarketId().equalsIgnoreCase(oDetail.getMarketId())) {
+        for (int i = 0; i < lstReportSaleRepMarket.size(); i++) {
+            if (lstReportSaleRepMarket.get(i).getMarketId().equalsIgnoreCase(oDetail.getMarketId())) {
                 isExist = true;
                 if (oDetail.getTitle() != null) {
-                    lstReportTechMarket.get(i).setTitle(oDetail.getTitle());
+                    lstReportSaleRepMarket.get(i).setTitle(oDetail.getTitle());
                 } else {
-                    lstReportTechMarket.get(i).setTitle("");
+                    lstReportSaleRepMarket.get(i).setTitle("");
                 }
                 if (oDetail.getNotes() != null) {
-                    lstReportTechMarket.get(i).setNotes(oDetail.getNotes());
+                    lstReportSaleRepMarket.get(i).setNotes(oDetail.getNotes());
                 } else {
-                    lstReportTechMarket.get(i).setNotes("");
+                    lstReportSaleRepMarket.get(i).setNotes("");
                 }
                 if (oDetail.getUsefull() != null) {
-                    lstReportTechMarket.get(i).setUsefull(oDetail.getUsefull());
+                    lstReportSaleRepMarket.get(i).setUsefull(oDetail.getUsefull());
                 } else {
-                    lstReportTechMarket.get(i).setUsefull("");
+                    lstReportSaleRepMarket.get(i).setUsefull("");
                 }
                 if (oDetail.getHarmful() != null) {
-                    lstReportTechMarket.get(i).setHarmful(oDetail.getHarmful());
+                    lstReportSaleRepMarket.get(i).setHarmful(oDetail.getHarmful());
                 } else {
-                    lstReportTechMarket.get(i).setHarmful("");
+                    lstReportSaleRepMarket.get(i).setHarmful("");
                 }
 
                 Toast.makeText(getContext(), "Báo cáo thị trường đã được thêm..", Toast.LENGTH_SHORT).show();
@@ -267,11 +266,11 @@ public class ReportTechMarketItemFragment extends BaseFragment {
             String mMarketId = "BCTT" + mParSymbol + Od.format(new Date());
             oDetail.setMarketId(mMarketId);
             oDetail.setReportTechId(mReportTechId);
-            lstReportTechMarket.add(oDetail);
+            lstReportSaleRepMarket.add(oDetail);
         }
 
-        adapter.setSmoReportTechMarket(lstReportTechMarket);
-        Toast.makeText(getContext(), String.valueOf(lstReportTechMarket.size()) + ": Báo cáo thị trường được chọn..", Toast.LENGTH_SHORT).show();
+        adapter.setSmoReportSaleRepMarket(lstReportSaleRepMarket);
+        Toast.makeText(getContext(), String.valueOf(lstReportSaleRepMarket.size()) + ": Báo cáo thị trường được chọn..", Toast.LENGTH_SHORT).show();
 
         tvTitle.setText("");
         tvNotes.setText("");
@@ -280,7 +279,7 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         return true;
     }
 
-    public void onDeletedReportTechMarket(){
+    public void onDeletedReportSaleRepMarket(){
         if(adapter.SelectedList==null || adapter.SelectedList.size()<=0) {
             Toast oToat=Toast.makeText(getContext(),"Bạn chưa chọn báo cáo thị trường để xóa...",Toast.LENGTH_LONG);
             oToat.setGravity(Gravity.CENTER,0,0);
@@ -302,19 +301,19 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(SM_ReportTechMarket oDTSel:adapter.SelectedList){
-                    for(SM_ReportTechMarket oDT:lstReportTechMarket){
+                for(SM_ReportSaleRepMarket oDTSel:adapter.SelectedList){
+                    for(SM_ReportSaleRepMarket oDT:lstReportSaleRepMarket){
                         if(oDTSel.equals(oDT)){
-                            lstReportTechMarket.remove(oDT);
+                            lstReportSaleRepMarket.remove(oDT);
                             break;
                         }
                     }
                 }
                 adapter.SelectedList.clear();
-                adapter.setSmoReportTechMarket(lstReportTechMarket);
+                adapter.setSmoReportSaleRepMarket(lstReportSaleRepMarket);
 
                 // Set view
-                rvReportTechMarketList.setAdapter(adapter);
+                rvReportSaleRepMarketList.setAdapter(adapter);
                 ((ReportTechFormActivity) getActivity()).setVisibleDetailDelete(false);
                 ((ReportTechFormActivity) getActivity()).setButtonEditStatus(false);
                 Toast.makeText(getContext(), "Đã xóa mẫu tin thành công", Toast.LENGTH_SHORT).show();

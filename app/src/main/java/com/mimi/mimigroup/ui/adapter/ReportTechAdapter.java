@@ -83,7 +83,7 @@ public class ReportTechAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @BindView(R.id.tvReportDay)
         CustomTextView tvReportDay;
         @BindView(R.id.tvLongitude)
-        CustomTextView tvLongutude;
+        CustomTextView tvLongitude;
         @BindView(R.id.tvLatitude)
         CustomTextView tvLatitude;
         @BindView(R.id.tvLocationAddress)
@@ -125,7 +125,7 @@ public class ReportTechAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     }
                     if(oReportTech.getLongtitude() != null)
                     {
-                        tvLongutude.setText(oReportTech.getLongtitude().toString());
+                        tvLongitude.setText(oReportTech.getLongtitude().toString());
                     }
                     if(oReportTech.getLatitude() != null)
                     {

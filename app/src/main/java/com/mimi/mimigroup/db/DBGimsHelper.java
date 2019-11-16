@@ -4856,7 +4856,82 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }
     }
 
+    public List<SM_ReportSaleRepActivitie> getAllReportSaleRepActivity(String mReportSaleId, Integer type) {
+        try {
+            List<SM_ReportSaleRepActivitie> lst = new ArrayList<SM_ReportSaleRepActivitie>();
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_ACTIVITIE A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID"+
+                    " where A.ReportSaleID='%s' and A.IsType=%d order by B.ReportDay desc", mReportSaleId, type);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportSaleRepActivitie oRptTechActivity = new SM_ReportSaleRepActivitie();
+                    oRptTechActivity.setActivitieId(cursor.getString(cursor.getColumnIndex("ActivitieID")));
+                    oRptTechActivity.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptTechActivity.setIsType(cursor.getString(cursor.getColumnIndex("IsType")));
+                    oRptTechActivity.setWorkDay(cursor.getString(cursor.getColumnIndex("Workday")));
+                    oRptTechActivity.setPlace(cursor.getString(cursor.getColumnIndex("Place")));
+                    oRptTechActivity.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    lst.add(oRptTechActivity);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SALE_ACTIVITY",ex.getMessage().toString());}
+        return null;
+    }
+
     /* END REPORT SALE REP HOAT DONG */
+
+    public boolean delReportSale(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSqlReport=String.format("delete from SM_REPORT_SALEREP where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlMarket=String.format("delete from SM_REPORT_SALEREP_MARKET where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlDisease=String.format("delete from SM_REPORT_SALEREP_DISEASE where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlCompetitor=String.format("delete from SM_REPORT_SALEREP_SEASON where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlActivity=String.format("delete from SM_REPORT_SALEREP_ACTIVITIE where ReportSaleID ='%s'",ReportSaleID);
+
+            try {
+                db.execSQL(mSqlReport);
+                db.execSQL(mSqlMarket);
+                db.execSQL(mSqlDisease);
+                db.execSQL(mSqlCompetitor);
+                db.execSQL(mSqlActivity);
+
+            }catch (Exception ex){
+                Log.d("DEL_SM_RPTSALE",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
+    public boolean delReportSaleDetail(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSqlMarket=String.format("delete from SM_REPORT_SALEREP_MARKET where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlDisease=String.format("delete from SM_REPORT_SALEREP_DISEASE where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlCompetitor=String.format("delete from SM_REPORT_SALEREP_SEASON where ReportSaleID ='%s'",ReportSaleID);
+            String mSqlActivity=String.format("delete from SM_REPORT_SALEREP_ACTIVITIE where ReportSaleID ='%s'",ReportSaleID);
+
+            try {
+                db.execSQL(mSqlMarket);
+                db.execSQL(mSqlDisease);
+                db.execSQL(mSqlCompetitor);
+                db.execSQL(mSqlActivity);
+
+            }catch (Exception ex){
+                Log.d("DEL_SM_ODT",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
 
     /* END REPORT SALE REP THI TRUONG */
     //<<SYSTEM-FUNCTION>>
