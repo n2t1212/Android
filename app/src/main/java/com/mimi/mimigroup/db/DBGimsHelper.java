@@ -268,6 +268,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
                 "SeqnoCode INTEGER," +
+                "IsSample BIT,"+
                 "IsPost BIT,"+
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
@@ -597,6 +598,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 //onCreate(db);
 
                 db.execSQL("ALTER TABLE SM_ORDER_DETAIL ADD COLUMN Notes2 VARCHAR(255) DEFAULT ''");
+                db.execSQL("ALTER TABLE SM_ORDER ADD COLUMN IsSample  BIT");
+
             }
         }catch (Exception ex){
             //Toast.makeText(mCxt, "Không thể nâng cấp DB lên V12."+ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -2120,6 +2123,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     }else{
                         oOrder.setPost(false);
                     }
+                    if(cursor.getString(cursor.getColumnIndex("IsSample"))!=null && cursor.getString(cursor.getColumnIndex("IsSample")).contains("1")){
+                        oOrder.setSample(true);
+                    }else{
+                        oOrder.setSample(false);
+                    }
                     lstOrder.add(oOrder);
 
                 } while (cursor.moveToNext());
@@ -2189,6 +2197,12 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     }else{
                         oOrder.setPost(false);
                     }
+
+                    if(cursor.getString(cursor.getColumnIndex("IsSample")).contains("1")){
+                        oOrder.setSample(true);
+                    }else{
+                        oOrder.setSample(false);
+                    }
                     break;
                 } while (cursor.moveToNext());
             }
@@ -2232,6 +2246,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("SeqnoCode", oOrder.getSeqnoCode());
                 values.put("IsPost", oOrder.getPost());
                 values.put("PostDay", oOrder.getPostDay());
+                values.put("IsSample", oOrder.getSample());
 
                 db.insert("SM_ORDER", null, values);
             }else{
@@ -2253,6 +2268,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("LocationAddress", oOrder.getLocationAddress());
                 values.put("IsPost", oOrder.getPost());
                 values.put("PostDay", oOrder.getPostDay());
+                values.put("IsSample", oOrder.getSample());
                 db.update("SM_ORDER",values,"OrderID=?" ,new String[] {String.valueOf(oOrder.getOrderID())});
             }
             //Log.d("INS_SM_ORDER_DB","OK");
@@ -2283,6 +2299,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             values.put("SeqnoCode", oOrder.getSeqnoCode());
             values.put("IsPost", oOrder.getPost());
             values.put("PostDay", oOrder.getPostDay());
+            values.put("IsSample", oOrder.getSample());
             db.update("SM_ORDER",values,"OrderID=?" ,new String[] {String.valueOf(oOrder.getOrderID())});
             db.close();
             return true;

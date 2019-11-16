@@ -545,7 +545,7 @@ public class ReportTechFormActivity extends BaseActivity {
                 for (SM_ReportTechMarket oDetail : oReportTechMarket) {
                     mDB.addReportTechMarket(oDetail);
                 }
-                //onPostReportTech(oReportTech, oReportTechMarket);
+               // onPostReportTech(oReportTech, oReportTechMarket, oReportTechDisease, oReportTechCompetitor, oReportTechActivityThisWeek, oReportTechActivityNextWeek);
             }else{
                 Toast.makeText(this, "Không thể ghi báo cáo kỹ thuật..", Toast.LENGTH_SHORT).show();
                 return;
@@ -554,9 +554,10 @@ public class ReportTechFormActivity extends BaseActivity {
         isSaved=true;
     }
 
-    //POST ORDER
-    /*private String getOrderDetailPost(List<SM_OrderDetail> lstOrderDetail){
-        String mOrderDetail="";
+    //POST 
+    /*private String getReportTechDetailPost(final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
+                                           final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
+        String mTechDetail="";
         try{
             if(lstOrderDetail!=null){
                 for (SM_OrderDetail oOdt : lstOrderDetail) {
@@ -608,30 +609,28 @@ public class ReportTechFormActivity extends BaseActivity {
         return  mOrderDetail;
     }
 
-    private void onPostOrder(final SM_Order oOd,final List<SM_OrderDetail> lstOrderDetail){
+    private void onPostOrder(final SM_ReportTech tech ,final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
+                             final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
         try{
-            if (APINet.isNetworkAvailable(OrderFormActivity.this)==false){
-                Toast.makeText(OrderFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
+            if (APINet.isNetworkAvailable(ReportTechFormActivity.this)==false){
+                Toast.makeText(ReportTechFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
                 return;
             }
 
             final String Imei=AppUtils.getImeil(this);
             final String ImeiSim=AppUtils.getImeilsim(this);
-            final String mDataOrderDetail=getOrderDetailPost(lstOrderDetail);
+            final String mDataOrderDetail;//=getOrderDetailPost(lstOrderDetail);
 
             if(ImeiSim.isEmpty()){
                 Toast.makeText(this,"Không đọc được số IMEI từ thiết bị cho việc đồng bộ. Kiểm tra Sim của bạn",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(oOd==null){
-                Toast.makeText(this,"Không tìm thấy dữ liệu đơn hàng.",Toast.LENGTH_LONG).show();
+            if(tech==null){
+                Toast.makeText(this,"Không tìm thấy dữ liệu báo cáo kỹ thuật.",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(oOd.getOrderID()==null || oOd.getOrderCode().isEmpty()){
-                Toast.makeText(this,"Không tìm thấy mã đơn hàng",Toast.LENGTH_SHORT).show();
-                return;
-            }else if(oOd.getCustomerID()==null || oOd.getCustomerID().isEmpty()){
-                Toast.makeText(this,"Bạn chưa chọn khách hàng cho đơn hàng này",Toast.LENGTH_SHORT).show();
+            if(tech.getReportTechId()==null || tech.getReportCode().isEmpty()){
+                Toast.makeText(this,"Không tìm thấy mã báo cáo",Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -666,7 +665,7 @@ public class ReportTechFormActivity extends BaseActivity {
                     oOd.setOrderStatus(1);
                 }
             }catch(Exception ex){
-                Toast.makeText(OrderFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ReportTechFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -697,7 +696,7 @@ public class ReportTechFormActivity extends BaseActivity {
                         dismissProgressDialog();
                         if (ResPonseRs!=null && !ResPonseRs.isEmpty()) {
                             if (ResPonseRs.contains("SYNC_OK")) {
-                                Toast.makeText(OrderFormActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 oOd.setPostDay(sdf.format(new Date()));
                                 oOd.setPost(true);
@@ -706,18 +705,18 @@ public class ReportTechFormActivity extends BaseActivity {
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){
-                                Toast.makeText(OrderFormActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();
                             }else if(ResPonseRs.contains("SYNC_ACTIVE")) {
-                                Toast.makeText(OrderFormActivity.this, "Thiết bị chưa kích hoạt...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Thiết bị chưa kích hoạt...", Toast.LENGTH_LONG).show();
                             }else if(ResPonseRs.contains("SYNC_APPROVE") || ResPonseRs.contains("SYNC_APPROVE")){
-                                Toast.makeText(OrderFormActivity.this, "Đơn hàng đang được xử lý. Bạn không thể gửi điều chỉnh.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Đơn hàng đang được xử lý. Bạn không thể gửi điều chỉnh.", Toast.LENGTH_LONG).show();
                             }else if (ResPonseRs.contains("SYNC_BODY_NULL")) {
-                                Toast.makeText(OrderFormActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
                             } else if (ResPonseRs.contains("SYNC_ORDERID_NULL")) {
-                                Toast.makeText(OrderFormActivity.this, "Mã số ORDERID=NULL", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportTechFormActivity.this, "Mã số ORDERID=NULL", Toast.LENGTH_LONG).show();
                             }
                         }else{
-                            Toast.makeText(OrderFormActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ReportTechFormActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();
                         }
                     }catch (Exception ex){ }
                     // finish();
@@ -726,13 +725,13 @@ public class ReportTechFormActivity extends BaseActivity {
                 @Override
                 public void onHttpFailer(Exception e) {
                     dismissProgressDialog();
-                    Toast.makeText(OrderFormActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(ReportTechFormActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
                 }
             },mUrlPostOrder,"POST_ORDER",DataBody).execute();
 
 
         }catch (Exception ex){
-            Toast.makeText(OrderFormActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(ReportTechFormActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
             dismissProgressDialog();
         }
     }*/

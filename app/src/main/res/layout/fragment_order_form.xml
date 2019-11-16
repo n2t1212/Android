@@ -336,6 +336,20 @@
                     android:layout_marginEnd="30dp"
                     android:gravity="left"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+
+                <CheckBox
+                    android:id="@+id/cbxSample"
+                    android:layout_width="212dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="center_vertical"
+                    android:text="Hàng mẫu" />
+            </LinearLayout>
 
         </LinearLayout>
    </RelativeLayout>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.Toast;
 import com.mimi.mimigroup.R;
@@ -54,6 +55,9 @@ public class OrderFormItemFragment extends BaseFragment {
 
     @BindView(R.id.spCustomerOrder)
     AutoCompleteTextView spCustomerOrder;
+
+    @BindView(R.id.cbxSample)
+    CheckBox cbxSample;
 
     private DBGimsHelper mDB;
     private String mOrderID="";
@@ -110,6 +114,10 @@ public class OrderFormItemFragment extends BaseFragment {
 
                   if(oOrder.getCustomerAddress()!=null){
                       tvCustomerAddress.setText(oOrder.getCustomerAddress());
+                  }
+
+                  if(oOrder.getSample() != null && oOrder.getSample()){
+                      cbxSample.setChecked(true);
                   }
                 }
               initDropdownCustomer();
@@ -220,6 +228,12 @@ public class OrderFormItemFragment extends BaseFragment {
                  oOrder.setCustomerAddress("");
              }else{
                  oOrder.setCustomerAddress(tvCustomerAddress.getText().toString());
+             }
+
+             if(cbxSample.isChecked()){
+                 oOrder.setSample(true);
+             } else {
+                 oOrder.setSample(false);
              }
              //oOrder.setCustomerID(0);
 

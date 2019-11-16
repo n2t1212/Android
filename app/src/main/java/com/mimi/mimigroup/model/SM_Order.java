@@ -22,6 +22,7 @@ public class SM_Order {
     Double Longitude;
     Double Latitude;
     String LocationAddress;
+    Boolean IsSample;
     Boolean IsPost;
     String PostDay;
     String OrderNotes;
@@ -33,7 +34,7 @@ public class SM_Order {
     public SM_Order(String orderId, String orderCode, String customerId, String customerCode,String customerName,String orderDate,
                     String requestDate,Integer maxDebt,Double originMoney,Double vat,Double vatmoney,Double totalMoney, Integer orderStatus,
                     String approveDate,String handleStaff,String deliveryDesc,Double longitude,Double latitude,String locationAddress,
-                    boolean isPost,String postDay) {
+                    boolean isPost,String postDay, Boolean IsSample) {
         this.OrderID=orderId;
         this.OrderCode=orderCode;
         this.CustomerID=customerId;
@@ -55,6 +56,7 @@ public class SM_Order {
         this.LocationAddress=locationAddress;
         this.IsPost=isPost;
         this.PostDay=postDay;
+        this.IsSample = IsSample;
     }
 
 
@@ -240,4 +242,11 @@ public class SM_Order {
         OrderStatusDesc = orderStatusDesc;
     }
 
+    public Boolean getSample() {
+        return IsSample;
+    }
+
+    public void setSample(Boolean sample) {
+        IsSample = sample;
+    }
 }

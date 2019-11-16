@@ -100,6 +100,8 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CustomTextView tvIsPost;
         @BindView(R.id.tvPostDate)
         CustomTextView tvPostDate;
+        @BindView(R.id.tvIsSample)
+        CustomTextView tvIsSample;
 
 
         public OrderHolder(@NonNull View itemView) {
@@ -146,6 +148,14 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                     if(oOrder.getPostDay()!=null ){
                         tvPostDate.setText(oOrder.getPostDay());
+                    }
+
+                    if(oOrder.getSample() != null){
+                        if(oOrder.getSample()==true || oOrder.getSample().equals(true) || oOrder.getSample().equals("1")){
+                            tvIsSample.setText("x");
+                        }else{
+                            tvIsSample.setText("");
+                        }
                     }
                 }
             }catch (Exception e){

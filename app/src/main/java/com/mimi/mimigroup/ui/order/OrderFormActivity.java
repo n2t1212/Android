@@ -102,6 +102,7 @@ public class OrderFormActivity extends BaseActivity {
             oOrder.setRequestDate(mRequestDate);
             oOrder.setOrderStatus(0);
             oOrder.setPost(false);
+            oOrder.setSample(false);
         }
         btnOrderDetailAdd.setVisibility(View.GONE);
         btnOrderDetailDel.setVisibility(View.GONE);
@@ -516,6 +517,14 @@ public class OrderFormActivity extends BaseActivity {
                 return;
             }
 
+            String isSample = "";
+
+            if(oOd.getSample() != null){
+                if(oOd.getSample().equals(true) || oOd.getSample().equals("1") || oOd.getSample()){
+                    isSample = "MAU";
+                }
+            }
+
         RequestBody DataBody = new FormBody.Builder()
                 .add("imei", Imei)
                 .add("imeisim", ImeiSim)
@@ -530,6 +539,7 @@ public class OrderFormActivity extends BaseActivity {
                 .add("latitude", Double.toString(oOd.getLatitude()))
                 .add("locationaddress", oOd.getLocationAddress())
                 .add("notes", oOd.getOrderNotes())
+                .add("ordertype", isSample)
                 .add("orderdetail",mDataOrderDetail)
                 .build();
             new SyncPost(new APINetCallBack() {
