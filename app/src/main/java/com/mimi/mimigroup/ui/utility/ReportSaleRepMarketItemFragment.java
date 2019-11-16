@@ -81,6 +81,8 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mDB = DBGimsHelper.getInstance(view.getContext());
+        lstCustomer=mDB.getAllCustomerSearch();
+        lstProduct=mDB.getAllProduct();
         adapter = new ReportSaleRepMarketAdapter(new ReportSaleRepMarketAdapter.ListItemClickListener() {
             @Override
             public void onItemClick(List<SM_ReportSaleRepMarket> SelectList) {
@@ -228,9 +230,14 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
         try {
             if (osmDT != null) {
                 if (osmDT.getCustomerId() != null) {
-                    DM_Customer customer = mDB.getCustomer(osmDT.getCustomerId());
-                    if(customer != null){
-                        spCustomer.setText(customer.getCustomerName());
+                    for(DM_Customer_Search cus: lstCustomer){
+                        if(cus.getCustomerid().equals(osmDT.getCustomerId())){
+                            oCustomerSel = cus;
+                            break;
+                        }
+                    }
+                    if(oCustomerSel != null && oCustomerSel.getCustomerName() != null){
+                        spCustomer.setText(oCustomerSel.getCustomerName());
                     }else{
                         spCustomer.setText("");
                     }
@@ -239,9 +246,13 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
 
                 if(osmDT.getProductCode() != null)
                 {
-                    DM_Product product = mDB.getProduct(osmDT.getProductCode());
-                    if(product != null){
-                        spProduct.setText(product.getProductName());
+                    for(DM_Product pro: lstProduct){
+                        if(pro.getProductCode().equals(osmDT.getProductCode())){
+                            oProductSel = pro;
+                        }
+                    }
+                    if(oProductSel != null && oProductSel.getProductName() != null){
+                        spProduct.setText(oProductSel.getProductName());
                     }else{
                         spProduct.setText("");
                     }
@@ -253,7 +264,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
                 }
 
                 if(osmDT.getPrice() != null){
-                    tvCompanyName.setText(osmDT.getPrice().toString());
+                    tvPrice.setText(osmDT.getPrice().toString());
                 }
 
                 if (osmDT.getNotes() != null) {
@@ -408,6 +419,9 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
         tvCompanyName.setText("");
         tvNotes.setText("");
         tvPrice.setText("");
+
+        oProductSel = null;
+        oCustomerSel = null;
         return true;
     }
 

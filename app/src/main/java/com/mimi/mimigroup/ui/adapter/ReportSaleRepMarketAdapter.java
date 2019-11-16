@@ -44,13 +44,13 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         mDB = DBGimsHelper.getInstance(viewGroup.getContext());
-        return new ReportSaleRepMarketAdapter.ReportTechMarketHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_sale_rep_market_item,viewGroup,false));
+        return new ReportSaleRepMarketAdapter.ReportSaleRepMarketHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_report_sale_rep_market_item,viewGroup,false));
     }
 
     @Override
     public void onBindViewHolder( final RecyclerView.ViewHolder viewHolder,final int iPos) {
-        if(viewHolder instanceof ReportSaleRepMarketAdapter.ReportTechMarketHolder){
-            ((ReportSaleRepMarketAdapter.ReportTechMarketHolder) viewHolder).bind(smoReportSaleRepMarket.get(iPos));
+        if(viewHolder instanceof ReportSaleRepMarketAdapter.ReportSaleRepMarketHolder){
+            ((ReportSaleRepMarketAdapter.ReportSaleRepMarketHolder) viewHolder).bind(smoReportSaleRepMarket.get(iPos));
         }
 
         setRowSelected(SelectedList.contains(smoReportSaleRepMarket.get(iPos)),viewHolder);
@@ -89,7 +89,7 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
         notifyDataSetChanged();
     }
 
-    class ReportTechMarketHolder  extends RecyclerView.ViewHolder {
+    class ReportSaleRepMarketHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.tvCustomer)
         CustomTextView tvCustomer;
         @BindView(R.id.tvCompanyName)
@@ -101,7 +101,7 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.tvNotes)
         CustomTextView tvNotes;
 
-        public ReportTechMarketHolder(View itemView) {
+        public ReportSaleRepMarketHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

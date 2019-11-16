@@ -85,8 +85,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2" >
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
                 <com.mimi.mimigroup.ui.custom.CustomTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,10 +111,9 @@
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:background="@drawable/spindropdown"
                     android:padding="15dp"
-                    android:textSize="14dp"
+                    android:textSize="15dp"
                     android:textAllCaps="false"
                     android:textStyle="bold"
-                    android:dropDownWidth="match_parent"
                     android:ems="10" />
             </LinearLayout>
 

@@ -4136,7 +4136,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         try {
             SQLiteDatabase db = getWritableDatabase();
 
-            String mSql = String.format("delete from SM_REPORT_SALEREP where ReportTechID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            String mSql = String.format("delete from SM_REPORT_SALEREP where ReportSaleID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
             db.execSQL(mSql);
 
             mSql = String.format("delete from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s", iIntervalDay);
@@ -4312,7 +4312,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("IsStatus", oRptSaleRep.getIsStatus());
                 values.put("IsPost", oRptSaleRep.getPost());
                 values.put("PostDay", oRptSaleRep.getPostDay());
-                db.update("SM_REPORT_SALEREP",values,"ReportTechID=?" ,new String[] {String.valueOf(oRptSaleRep.getReportSaleId())});
+                db.update("SM_REPORT_SALEREP",values,"ReportSaleID=?" ,new String[] {String.valueOf(oRptSaleRep.getReportSaleId())});
             }
             db.close();
             return "";
@@ -4372,6 +4372,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 do {
                     SM_ReportSaleRepMarket oRptSaleMarket = new SM_ReportSaleRepMarket();
                     oRptSaleMarket.setMarketId(cursor.getString(cursor.getColumnIndex("MarketID")));
+                    oRptSaleMarket.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
                     oRptSaleMarket.setCustomerId(cursor.getString(cursor.getColumnIndex("CustomerID")));
                     oRptSaleMarket.setCompanyName(cursor.getString(cursor.getColumnIndex("CompanyName")));
                     oRptSaleMarket.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
