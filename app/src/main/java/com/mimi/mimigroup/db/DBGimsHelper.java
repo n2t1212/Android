@@ -27,6 +27,7 @@ import com.mimi.mimigroup.model.SM_OrderDeliveryDetail;
 import com.mimi.mimigroup.model.SM_OrderDetail;
 import com.mimi.mimigroup.model.SM_OrderStatus;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
+import com.mimi.mimigroup.model.SM_ReportSaleRepDisease;
 import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.model.SM_ReportTechActivity;
@@ -3687,7 +3688,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("Disease", oRptTechDisease.getDisease());
                 values.put("Price", oRptTechDisease.getPrice());
                 values.put("Notes", oRptTechDisease.getNotes());
-                db.update("SM_REPORT_TECH_DISEASE",values,"MarketID=?" ,new String[] {String.valueOf(oRptTechDisease.getDiseaseId())});
+                db.update("SM_REPORT_TECH_DISEASE",values,"DiseaseID=?" ,new String[] {String.valueOf(oRptTechDisease.getDiseaseId())});
             }
             db.close();
             return "";
@@ -4321,7 +4322,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     private String getReportSaleRepMarketID(String ReportSaleID){
         try {
             SQLiteDatabase db = getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_SALEREP_MARKET A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID WHERE B.ReportSaleID=? ", new String[]{ReportTechID});
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_SALEREP_MARKET A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID WHERE B.ReportSaleID=? ", new String[]{ReportSaleID});
             String MarketID="";
             if (cursor.moveToFirst()) {
                 do {
@@ -4451,6 +4452,138 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             return  "ERR:"+e.getMessage();
         }
     }
+
+    /* REPORT SALE REP DỊCH BỆNH */
+    private String getReportSaleRepDiseaseID(String ReportSaleID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_REPORT_SALEREP_DISEASE A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID WHERE B.ReportSaleID=? ", new String[]{ReportSaleID});
+            String DiseaseID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    DiseaseID=cursor.getString(cursor.getColumnIndex("DiseaseID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return DiseaseID;
+        }catch(Exception ex){return  "";}
+    }
+    public int getSizeReportSaleRepDisease(String DiseaseID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_REPORT_SALEREP_DISEASE WHERE DiseaseID=?", new String[]{DiseaseID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanReportSaleRepDisease(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_REPORT_SALEREP_DISEASE where ReportSaleID in(select ReportSaleID from SM_REPORT_SALEREP where julianday('now')-julianday(ReportDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+    public List<SM_ReportSaleRepDisease> getAllReportSaleRepDisease(String ReportSaleID) {
+        try {
+            List<SM_ReportSaleRepDisease> lst = new ArrayList<SM_ReportSaleRepDisease>();
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_DISEASE A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID"+
+                    " where A.ReportSaleID='%s' order by B.ReportDay desc", ReportSaleID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_ReportSaleRepDisease oRptSaleRepDisease = new SM_ReportSaleRepDisease();
+                    oRptSaleRepDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
+                    oRptSaleRepDisease.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRepDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptSaleRepDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptSaleRepDisease.setArceage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptSaleRepDisease.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    lst.add(oRptSaleRepDisease);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SALE_DISEASE",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_ReportSaleRepDisease getReportSaleRepDiseaseById(String DiseaseID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_REPORT_SALEREP_DISEASE A LEFT JOIN SM_REPORT_SALEREP B ON A.ReportSaleID = B.ReportSaleID "+
+                    " where A.DiseaseID='%s' order by B.ReportDay desc",DiseaseID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_ReportSaleRepDisease oRptSaleRepDisease = new SM_ReportSaleRepDisease();
+            if (cursor.moveToFirst()) {
+                do {
+                    oRptSaleRepDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
+                    oRptSaleRepDisease.setReportSaleId(cursor.getString(cursor.getColumnIndex("ReportSaleID")));
+                    oRptSaleRepDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptSaleRepDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
+                    oRptSaleRepDisease.setArceage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
+                    oRptSaleRepDisease.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return oRptSaleRepDisease;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SALE_DISEASE",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addReportSaleRepDisease(SM_ReportSaleRepDisease oRptTechDisease){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String DiseaseID=getReportSaleRepDiseaseID(oRptTechDisease.getReportSaleId());
+            if(DiseaseID!=""){
+                if(oRptTechDisease.getDiseaseId().isEmpty()|| oRptTechDisease.getDiseaseId()==null){
+                    oRptTechDisease.setDiseaseId(DiseaseID);
+                }
+            }
+            iSq=getSizeReportSaleRepDisease(oRptTechDisease.getDiseaseId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("DiseaseID", oRptTechDisease.getDiseaseId());
+                values.put("ReportSaleID", oRptTechDisease.getReportSaleId());
+                values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("Title", oRptTechDisease.getTitle());
+                values.put("Acreage", oRptTechDisease.getArceage());
+                values.put("Notes", oRptTechDisease.getNotes());
+                db.insert("SM_REPORT_SALEREP_DISEASE", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("ReportSaleID", oRptTechDisease.getReportSaleId());
+                values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("Title", oRptTechDisease.getTitle());
+                values.put("Acreage", oRptTechDisease.getArceage());
+                values.put("Notes", oRptTechDisease.getNotes());
+                db.update("SM_REPORT_SALEREP_DISEASE",values,"DiseaseID=?" ,new String[] {String.valueOf(oRptTechDisease.getDiseaseId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    /* END REPORT SALE REP DỊCH BỆNH */
 
     /* END REPORT SALE REP THI TRUONG */
     //<<SYSTEM-FUNCTION>>
