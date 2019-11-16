@@ -36,7 +36,7 @@
             android:layout_height="1dp"
             android:background="@color/SettingMenuLine" />
 
-        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+        <!--<com.mimi.mimigroup.ui.custom.CustomBoldTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_item_ripple"
@@ -47,7 +47,7 @@
             android:paddingBottom="20dp"
             android:text="  Đề nghị hàng mẫu"
             android:textColor="@color/textGreen"
-            android:textSize="18sp" />
+            android:textSize="18sp" />-->
            <!--
             <LinearLayout
                 android:layout_width="match_parent"
