@@ -548,7 +548,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     }
 
     //POST ORDER
-    /*private String getOrderDetailPost(List<SM_OrderDetail> lstOrderDetail){
+    private String getOrderDetailPost(List<SM_OrderDetail> lstOrderDetail){
         String mOrderDetail="";
         try{
             if(lstOrderDetail!=null){
@@ -601,7 +601,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         return  mOrderDetail;
     }
 
-    private void onPostOrder(final SM_Order oOd,final List<SM_OrderDetail> lstOrderDetail){
+    private void onPostReportSaleRep(final SM_ReportSaleRep oOd,final List<SM_OrderDetail> lstOrderDetail){
         try{
             if (APINet.isNetworkAvailable(OrderFormActivity.this)==false){
                 Toast.makeText(OrderFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -728,5 +728,5 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             Toast.makeText(OrderFormActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
             dismissProgressDialog();
         }
-    }*/
+    }
 }

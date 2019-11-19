@@ -221,4 +221,14 @@ public class AppSetting {
     public String URL_PostPay(){
         return URL_SERVER() +"/MIMIAPI/fPostPay";
     }
+
+    public String URL_PostReportTech()
+    {
+        return URL_SERVER() + "/MIMIAPI/fPostReportTech";
+    }
+
+    public String URL_PostReportSale()
+    {
+        return URL_SERVER() + "/MIMIAPI/fPostReportSale";
+    }
 }

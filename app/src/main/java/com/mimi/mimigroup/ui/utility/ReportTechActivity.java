@@ -17,10 +17,18 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
+import com.mimi.mimigroup.api.APINet;
+import com.mimi.mimigroup.api.APINetCallBack;
+import com.mimi.mimigroup.api.SyncPost;
+import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.SM_CustomerPay;
 import com.mimi.mimigroup.model.SM_ReportTech;
+import com.mimi.mimigroup.model.SM_ReportTechActivity;
+import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
+import com.mimi.mimigroup.model.SM_ReportTechDisease;
+import com.mimi.mimigroup.model.SM_ReportTechMarket;
 import com.mimi.mimigroup.ui.adapter.ReportTechAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -34,6 +42,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 public class ReportTechActivity extends BaseActivity {
     @BindView(R.id.rvReportTechList)
@@ -145,7 +155,7 @@ public class ReportTechActivity extends BaseActivity {
                         btnYes.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //onPostReportTech();
+                                onPostReportTech();
                                 oDlg.dismiss();
                             }
                         });
@@ -182,7 +192,7 @@ public class ReportTechActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mReportTechID = "BCKT"+mParSymbol+Od.format(new Date());
         if(!mReportTechID.isEmpty()) {
-            Intent intent = new Intent(ReportTechActivity.this, ReportTechFormActivity.class);
+            Intent intent = new Intent(ReportTechActivity.this, ReportTechActivity.class);
             intent.setAction("ADD");
             intent.putExtra("ReportTechID",mReportTechID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);
@@ -213,7 +223,7 @@ public class ReportTechActivity extends BaseActivity {
             if (oReportTechSel.get(0).getReportTechId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
-                Intent intent = new Intent(ReportTechActivity.this,ReportTechFormActivity.class);
+                Intent intent = new Intent(ReportTechActivity.this,ReportTechActivity.class);
                 intent.setAction("EDIT");
                 intent.putExtra("ReportTechID", oReportTechSel.get(0).getReportTechId());
                 intent.putExtra("PAR_SYMBOL", mParSymbol);
@@ -324,6 +334,361 @@ public class ReportTechActivity extends BaseActivity {
             btnNegetiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor2));
 
         }catch (Exception ex){}
+    }
+
+    public void onPostReportTech(){
+        List<SM_ReportTech> oSel = adapter.SelectedList;
+
+        if (oSel == null || oSel.size() <= 0) {
+            Toast.makeText(ReportTechActivity.this, "Bạn chưa chọn phiếu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (oSel.size() > 1) {
+            Toast.makeText(ReportTechActivity.this, "Bạn chọn quá nhiều phiếu để sửa. Vui lòng chọn lại...", Toast.LENGTH_SHORT).show();
+            adapter.clearSelected();
+            return;
+        }
+
+        SM_ReportTech tech = oSel.get(0);
+
+        if (APINet.isNetworkAvailable(ReportTechActivity.this)==false){
+            Toast.makeText(ReportTechActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(tech==null || tech.getReportTechId().isEmpty()){
+            Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo kỹ thuật..", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<SM_ReportTechMarket> oReportTechMarket = mDB.getAllReportTechMarket(tech.getReportTechId());
+        List<SM_ReportTechDisease> oReportTechDisease = mDB.getAllReportTechDisease(tech.getReportTechId());
+        List<SM_ReportTechCompetitor> oReportTechCompetitor = mDB.getAllReportTechCompetitor(tech.getReportTechId());
+        List<SM_ReportTechActivity> oReportTechActivityThisWeek = mDB.getAllReportTechActivity(tech.getReportTechId(), 0);
+        List<SM_ReportTechActivity> oReportTechActivityNextWeek = mDB.getAllReportTechActivity(tech.getReportTechId(), 1);
+
+        onPostReportTech(tech, oReportTechMarket, oReportTechDisease, oReportTechCompetitor, oReportTechActivityThisWeek, oReportTechActivityNextWeek);
+
+    }
+
+    //POST 
+    private String getReportTechMarketData(final List<SM_ReportTechMarket> markets){
+        String mTechDetail="";
+        try{
+            if(markets!=null){
+                for (SM_ReportTechMarket oOdt : markets) {
+                    String mRow="";
+                    if(oOdt.getMarketId()!=null && !oOdt.getMarketId().isEmpty()){
+                        mRow=oOdt.getMarketId()+"#";
+                        if(oOdt.getReportTechId()!=null && !oOdt.getReportTechId().isEmpty()){
+                            mRow+=oOdt.getReportTechId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
+                            mRow+=oOdt.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
+                            mRow+=oOdt.getNotes()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getUsefull()!=null && !oOdt.getUsefull().isEmpty()){
+                            mRow+=oOdt.getUsefull()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getHarmful()!=null && !oOdt.getHarmful().isEmpty()){
+                            mRow+=oOdt.getHarmful().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mTechDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mTechDetail;
+    }
+
+    private String getReportTechDiseaseData(final List<SM_ReportTechDisease> diseases){
+        String mTechDetail="";
+        try{
+            if(diseases!=null){
+                for (SM_ReportTechDisease oOdt : diseases) {
+                    String mRow="";
+                    if(oOdt.getDiseaseId()!=null && !oOdt.getDiseaseId().isEmpty()){
+                        mRow=oOdt.getDiseaseId()+"#";
+                        if(oOdt.getReportTechId()!=null && !oOdt.getReportTechId().isEmpty()){
+                            mRow+=oOdt.getReportTechId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getTreeCode()!=null && !oOdt.getTreeCode().isEmpty()){
+                            mRow+=oOdt.getTreeCode()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
+                            mRow+=oOdt.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getAcreage()!=null){
+                            mRow+=oOdt.getAcreage()+"#";
+                        }else{
+                            mRow+="0"+"#";
+                        }
+                        if(oOdt.getDisease()!=null && !oOdt.getDisease().isEmpty()){
+                            mRow+=oOdt.getDisease().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getPrice()!=null){
+                            mRow+=oOdt.getPrice()+"#";
+                        }else{
+                            mRow+="0"+"#";
+                        }
+                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
+                            mRow+=oOdt.getNotes().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mTechDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mTechDetail;
+    }
+
+    private String getReportTechCompetitorData(final List<SM_ReportTechCompetitor> competitors){
+        String mTechDetail="";
+        try{
+            if(competitors!=null){
+                for (SM_ReportTechCompetitor oOdt : competitors) {
+                    String mRow="";
+                    if(oOdt.getCompetitorId()!=null && !oOdt.getCompetitorId().isEmpty()){
+                        mRow=oOdt.getCompetitorId()+"#";
+                        if(oOdt.getReportTechId()!=null && !oOdt.getReportTechId().isEmpty()){
+                            mRow+=oOdt.getReportTechId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
+                            mRow+=oOdt.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
+                            mRow+=oOdt.getNotes()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getUseful()!=null && !oOdt.getUseful().isEmpty()){
+                            mRow+=oOdt.getUseful().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getHarmful()!=null && !oOdt.getHarmful().isEmpty()){
+                            mRow+=oOdt.getHarmful().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mTechDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mTechDetail;
+    }
+
+    private String getReportTechActivityData(List<SM_ReportTechActivity> thisWeek, List<SM_ReportTechActivity> nextWeek){
+        String mTechDetail="";
+        try{
+            if(nextWeek != null){
+                for(SM_ReportTechActivity o: nextWeek){
+                    thisWeek.add(o);
+                }
+            }
+
+            if(thisWeek!=null){
+                for (SM_ReportTechActivity oOdt : thisWeek) {
+                    String mRow="";
+                    if(oOdt.getActivitieId()!=null && !oOdt.getActivitieId().isEmpty()){
+                        mRow=oOdt.getActivitieId()+"#";
+                        if(oOdt.getReportTechId()!=null && !oOdt.getReportTechId().isEmpty()){
+                            mRow+=oOdt.getReportTechId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getIsType()!=null){
+                            mRow+=oOdt.getIsType()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
+                            mRow+=oOdt.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
+                            mRow+=oOdt.getNotes().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getAchievement()!=null && !oOdt.getAchievement().isEmpty()){
+                            mRow+=oOdt.getAchievement().toString()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mTechDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mTechDetail;
+    }
+
+    private void onPostReportTech(final SM_ReportTech tech ,final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
+                                  final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
+        try{
+            if (APINet.isNetworkAvailable(ReportTechActivity.this)==false){
+                Toast.makeText(ReportTechActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            final String Imei=AppUtils.getImeil(this);
+            final String ImeiSim=AppUtils.getImeilsim(this);
+            final String mDataReportTechMarket = getReportTechMarketData(markets);
+            final String mDataReportTechDisease = getReportTechDiseaseData(diseases);
+            final String mDataReportTechCompetitor = getReportTechCompetitorData(competitor);
+            final String mDataReportTechActivitie = getReportTechActivityData(thisWeeks, nextWeeks);
+
+            if(ImeiSim.isEmpty()){
+                Toast.makeText(this,"Không đọc được số IMEI từ thiết bị cho việc đồng bộ. Kiểm tra Sim của bạn",Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(tech==null){
+                Toast.makeText(this,"Không tìm thấy dữ liệu báo cáo kỹ thuật.",Toast.LENGTH_LONG).show();
+                return;
+            }
+            if(tech.getReportTechId()==null || tech.getReportCode().isEmpty()){
+                Toast.makeText(this,"Không tìm thấy mã báo cáo",Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            final String mUrlPostReportTech=AppSetting.getInstance().URL_PostReportTech();
+            try {
+                if (tech.getReportCode() == null || tech.getReportCode().isEmpty()) {
+                    tech.setReportCode("");
+                }
+                if (tech.getReportName() == null || tech.getReportName().isEmpty()) {
+                    tech.setReportName("");
+                }
+                if (tech.getReportDate() == null || tech.getReportDate().isEmpty()) {
+                    tech.setReportDate("");
+                }
+
+                if (tech.getLatitude() == null || tech.getLatitude().toString().isEmpty()) {
+                    tech.setLatitude(0.0f);
+                }
+                if (tech.getLongtitude() == null || tech.getLongtitude().toString().isEmpty()) {
+                    tech.setLongtitude(0.0f);
+                }
+                if (tech.getLocationAddress() == null || tech.getLocationAddress().toString().isEmpty()) {
+                    tech.setLocationAddress("N/A");
+                }
+                if(tech.getReceiverList() == null || tech.getReceiverList().toString().isEmpty()){
+                    tech.setReceiverList("");
+                }
+                if(tech.getNotes() == null || tech.getNotes().toString().isEmpty()){
+                    tech.setNotes("");
+                }
+                if(tech.getIsStatus() == null){
+                    tech.setIsStatus("1");
+                }
+            }catch(Exception ex){
+                Toast.makeText(ReportTechActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            RequestBody DataBody = new FormBody.Builder()
+                    .add("imei", Imei)
+                    .add("imeisim", ImeiSim)
+                    .add("reportcode",tech.getReportCode())
+                    .add("reportday", tech.getReportDate())
+                    .add("reportname", tech.getReportName())
+                    .add("customerid", "")
+                    .add("longitude", Float.toString(tech.getLongtitude()))
+                    .add("latitude", Float.toString(tech.getLatitude()))
+                    .add("locationaddress", tech.getLocationAddress())
+                    .add("receiverlist", tech.getReceiverList())
+                    .add("notes",tech.getNotes())
+                    .add("isstatus", tech.getIsStatus())
+                    .add("reporttechmarket", mDataReportTechMarket)
+                    .add("reporttechdisease",mDataReportTechDisease)
+                    .add("reporttechcompetitor",mDataReportTechCompetitor)
+                    .add("reporttechactivitie",mDataReportTechActivitie)
+                    .build();
+            new SyncPost(new APINetCallBack() {
+                @Override
+                public void onHttpStart() {
+                    showProgressDialog("Đang đồng bộ dữ liệu về Server.");
+                }
+                @Override
+                public void onHttpSuccess(String ResPonseRs) {
+                    try {
+                        dismissProgressDialog();
+                        if (ResPonseRs!=null && !ResPonseRs.isEmpty()) {
+                            if (ResPonseRs.contains("SYNC_OK")) {
+                                Toast.makeText(ReportTechActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                tech.setPostDate(sdf.format(new Date()));
+                                tech.setPost(true);
+                                tech.setIsStatus("2");
+                                mDB.editReportTech(tech);
+                                finish();
+                            }
+                            else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){
+                                Toast.makeText(ReportTechActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();
+                            }else if(ResPonseRs.contains("SYNC_ACTIVE")) {
+                                Toast.makeText(ReportTechActivity.this, "Thiết bị chưa kích hoạt...", Toast.LENGTH_LONG).show();
+                            }else if(ResPonseRs.contains("SYNC_APPROVE") || ResPonseRs.contains("SYNC_APPROVE")){
+                                Toast.makeText(ReportTechActivity.this, "Đơn hàng đang được xử lý. Bạn không thể gửi điều chỉnh.", Toast.LENGTH_LONG).show();
+                            }else if (ResPonseRs.contains("SYNC_BODY_NULL")) {
+                                Toast.makeText(ReportTechActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
+                            } else if (ResPonseRs.contains("SYNC_ORDERID_NULL")) {
+                                Toast.makeText(ReportTechActivity.this, "Mã số REPORT_TECH_ID=NULL", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(ReportTechActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception ex){ }
+                    // finish();
+                }
+
+                @Override
+                public void onHttpFailer(Exception e) {
+                    dismissProgressDialog();
+                    Toast.makeText(ReportTechActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            },mUrlPostReportTech,"POST_REPORT_TECH",DataBody).execute();
+
+
+        }catch (Exception ex){
+            Toast.makeText(ReportTechActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
+            dismissProgressDialog();
+        }
     }
 
 }

@@ -3393,6 +3393,29 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
+    public boolean editReportTech(SM_ReportTech oRptTech){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("ReportCode", oRptTech.getReportCode());
+            values.put("ReportName", oRptTech.getReportName());
+
+            values.put("ReportDay", oRptTech.getReportDate());
+            values.put("Longitude", oRptTech.getLongtitude());
+            values.put("Latitude", oRptTech.getLatitude());
+            values.put("LocationAddress", oRptTech.getLocationAddress());
+            values.put("ReceiverList", oRptTech.getReceiverList());
+            values.put("Notes", oRptTech.getNotes());
+
+            values.put("IsStatus", oRptTech.getIsStatus());
+            values.put("IsPost", oRptTech.isPost());
+            values.put("PostDay", oRptTech.getPostDate());
+            db.update("SM_REPORT_TECH",values,"ReportTechID=?" ,new String[] {String.valueOf(oRptTech.getReportTechId())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_RPT_TECH_ERR",e.getMessage()); return  false;}
+    }
+
     public String addReportTech(SM_ReportTech oRptTech){
         try {
             SQLiteDatabase db = this.getWritableDatabase();
