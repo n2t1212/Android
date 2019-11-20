@@ -7,20 +7,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.mimi.mimigroup.ui.custom.CustomTextView
-        android:layout_width="180dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:id="@+id/tvReportCode"
-        android:textSize="17sp"
-        android:layout_marginRight="0.5dp"
-        android:background="@drawable/border_cell_grid"
-        android:paddingBottom="40dp"
-        android:paddingTop="40dp"
-        android:gravity="center_horizontal"/>
-
-    <com.mimi.mimigroup.ui.custom.CustomTextView
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="10dp"
@@ -61,7 +48,7 @@
         android:gravity="center_horizontal"/>
 
     <com.mimi.mimigroup.ui.custom.CustomTextView
-        android:layout_width="150dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="10dp"

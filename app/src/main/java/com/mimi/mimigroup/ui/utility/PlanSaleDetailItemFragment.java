@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,24 +21,28 @@ import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.SM_PlanSaleDetail;
 import com.mimi.mimigroup.ui.adapter.PlanSaleDetailAdapter;
+import com.mimi.mimigroup.ui.adapter.SearchCustomerAdapter;
+import com.mimi.mimigroup.ui.adapter.SearchProductAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnTextChanged;
 
 public class PlanSaleDetailItemFragment extends BaseFragment {
 
     @BindView(R.id.rvPlanSaleDetailList)
     RecyclerView rvPlanSaleDetailList;
-    @BindView(R.id.tvCustomer)
-    CustomBoldEditText tvCustomer;
-    @BindView(R.id.tvProduct)
-    CustomBoldEditText tvProduct;
+    @BindView(R.id.spCustomer)
+    AutoCompleteTextView spCustomer;
+    @BindView(R.id.spProduct)
+    AutoCompleteTextView spProduct;
     @BindView(R.id.tvAmountBox)
     CustomBoldEditText tvAmountBox;
     @BindView(R.id.tvAmount)
@@ -60,6 +66,9 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
     List<DM_Product> lstProduct;
 
     DBGimsHelper mDB = null;
+    private DM_Product oProductSel;
+    private Float mConvertBox;
+    private DM_Customer_Search oCustomerSel;
 
     @Override
     protected int getLayoutResourceId() {
@@ -110,11 +119,77 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
                             adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
                         }
                         mParSymbol = oActivity.getmPar_Symbol();
+                        initDropDownSP();
+                        initDropdownCustomer();
                     }
                 }, 300);
 
         Layout_PlanSaleDetailItem.setVisibility(View.GONE);
     }
+
+    private void initDropDownSP(){
+        try{
+            ArrayList<DM_Product> oListSP=new ArrayList<DM_Product>();
+            for(int i=0;i<lstProduct.size();++i){
+                oListSP.add(new DM_Product(lstProduct.get(i).getProductCode(),lstProduct.get(i).getProductName(),lstProduct.get(i).getUnit(),lstProduct.get(i).getSpecification(),lstProduct.get(i).getConvertBox(),false));
+            }
+
+            SearchProductAdapter adapter = new SearchProductAdapter(getContext(), R.layout.search_product,oListSP);
+            spProduct.setDropDownBackgroundResource(R.drawable.liner_dropdownlist);
+            spProduct.setThreshold(1);
+            spProduct.setAdapter(adapter);
+            spProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int iPosition, long l) {
+                    try {
+                        oProductSel = (DM_Product) adapterView.getItemAtPosition(iPosition);
+                        if(oProductSel!=null){
+                            if(oProductSel.getConvertBox()!=null){
+                                mConvertBox=oProductSel.getConvertBox();
+                            }else{
+                                mConvertBox=Float.valueOf(0);
+                            }
+                        }
+                    }catch (Exception ex){}
+                }
+            });
+            spProduct.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        spProduct.selectAll();
+                    }
+                }
+            });
+
+        }catch (Exception ex){}
+    }
+
+    private void initDropdownCustomer(){
+        try{
+            ArrayList<DM_Customer_Search> oListCus=new ArrayList<DM_Customer_Search>();
+            for(int i=0;i<lstCustomer.size();++i){
+                oListCus.add(new DM_Customer_Search(lstCustomer.get(i).getCustomerid(),lstCustomer.get(i).getCustomerCode(),
+                        lstCustomer.get(i).getCustomerName(),lstCustomer.get(i).getShortName(),lstCustomer.get(i).getProvinceName(),
+                        lstCustomer.get(i).getLongititude(),lstCustomer.get(i).getLatitude()));
+            }
+            SearchCustomerAdapter adapter = new SearchCustomerAdapter(getContext(), R.layout.search_customer,oListCus);
+            spCustomer.setDropDownBackgroundResource(R.drawable.liner_dropdownlist);
+            spCustomer.setThreshold(1);
+            spCustomer.setAdapter(adapter);
+            spCustomer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int iPosition, long l) {
+                    try {
+                        oCustomerSel = (DM_Customer_Search) adapterView.getItemAtPosition(iPosition);
+                    }catch (Exception ex){}
+                }
+            });
+
+        }catch (Exception ex){}
+    }
+
+
 
     // CALL FROM ACTIVITY
     public List<SM_PlanSaleDetail> getListPlanSaleDetail() {
@@ -149,28 +224,37 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
     private void setPlanSaleDetailRow(SM_PlanSaleDetail osmDT) {
         try {
             if (osmDT != null) {
-                if (osmDT.getCustomerId() != null) {
-                    for (DM_Customer_Search cus : lstCustomer) {
-                        if (cus.getCustomerid() != null && cus.getCustomerid().equals(osmDT.getCustomerId())) {
-                            tvCustomer.setText(cus.getCustomerName());
-                            tvCustomer.setTag(cus.getCustomerid());
+                if(lstCustomer != null && lstCustomer.size() > 0 && osmDT.getCustomerId()!= null && !osmDT.getCustomerId().isEmpty()){
+                    for(DM_Customer_Search cus: lstCustomer){
+                        if(cus.getCustomerid().equals(osmDT.getCustomerId())){
+                            oCustomerSel = cus;
+                            break;
                         }
                     }
-                } else {
-                    tvCustomer.setText("");
-                    tvCustomer.setTag("");
+                    if(oCustomerSel != null && oCustomerSel.getCustomerid() != null && !oCustomerSel.getCustomerid().isEmpty()){
+                        spCustomer.setText(oCustomerSel.getCustomerName());
+                    }
                 }
 
-                if (osmDT.getProductCode() != null) {
-                    for (DM_Product pro : lstProduct) {
-                        if (pro.getProductCode() != null && pro.getProductCode().equals(osmDT.getProductCode())) {
-                            tvProduct.setText(pro.getProductName());
-                            tvProduct.setTag(pro.getProductCode());
+                if(lstProduct != null && lstProduct.size() > 0 && osmDT.getProductCode() != null && !osmDT.getProductCode().isEmpty()){
+                    for(DM_Product pro: lstProduct){
+                        if(pro.getProductCode().equals(osmDT.getProductCode())){
+                            oProductSel = pro;
+                            break;
                         }
                     }
-                } else {
-                    tvProduct.setText("");
-                    tvProduct.setTag("");
+
+                    if(oProductSel != null){
+                        if(oProductSel.getProductName()!= null){
+                            spProduct.setText(oProductSel.getProductName());
+                        }
+                        if(oProductSel.getConvertBox() != null){
+                            mConvertBox = oProductSel.getConvertBox();
+                        }else{
+                            mConvertBox = Float.valueOf(0);
+                        }
+                    }
+
                 }
 
                 if (osmDT.getAmountBox() != null) {
@@ -179,6 +263,7 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
                 if (osmDT.getAmount() != null) {
                     tvAmount.setText(osmDT.getAmount().toString());
                 }
+
                 if (osmDT.getNotes() != null) {
                     tvNotes.setText(osmDT.getNotes());
                 }
@@ -204,10 +289,10 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
             //Clear Input
             try {
                 if (isAddnew) {
-                    tvCustomer.setText("");
-                    tvCustomer.setTag("");
-                    tvProduct.setText("");
-                    tvProduct.setTag("");
+                    spCustomer.setText("");
+                    spCustomer.requestFocus();
+                    spProduct.setText("");
+                    spProduct.requestFocus();
                     tvAmountBox.setText("");
                     tvAmount.setText("");
                     tvNotes.setText("");
@@ -244,27 +329,29 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
             currentPlanSaleDetailId = "";
         }
 
-        if (tvCustomer.getText() == null || tvCustomer.getText().toString().isEmpty()) {
+        if (spCustomer.getText() == null || spCustomer.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập khách hàng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             return false;
         } else {
-            oDetail.setCustomerId(tvCustomer.getTag().toString());
+            oDetail.setCustomerId(oCustomerSel.getCustomerid());
         }
 
-        if (tvProduct.getText() == null || tvProduct.getText().toString().isEmpty()) {
+        if (spProduct.getText() == null || spProduct.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập sản phẩm...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            spProduct.requestFocus();
             return false;
         } else {
-            oDetail.setProductCode(tvProduct.getTag().toString());
+            oDetail.setProductCode(oProductSel.getProductCode());
         }
         if (tvAmountBox.getText() == null || tvAmountBox.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng thùng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvAmountBox.requestFocus();
             return false;
         } else {
             oDetail.setAmountBox(Double.valueOf(tvAmountBox.getText().toString()));
@@ -273,6 +360,7 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvAmount.requestFocus();
             return false;
         } else {
             oDetail.setAmount(Double.valueOf(tvAmount.getText().toString()));
@@ -332,10 +420,10 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
         adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
         Toast.makeText(getContext(), String.valueOf(lstPlanSaleDetail.size()) + ": kế hoạch bán hàng chi tiết được chọn..", Toast.LENGTH_SHORT).show();
 
-       tvCustomer.setText("");
-       tvCustomer.setTag("");
-       tvProduct.setText("");
-       tvProduct.setTag("");
+       spCustomer.setText("");
+       spCustomer.requestFocus();
+       spProduct.setText("");
+       spProduct.requestFocus();
        tvAmountBox.setText("");
        tvAmount.setText("");
        tvNotes.setText("");
@@ -393,5 +481,27 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
             }
         });
         oDlg.show();
+    }
+
+    @OnTextChanged(R.id.tvAmountBox)
+    public void onAmountBoxChanged(){
+        try{
+            if(!spProduct.getText().toString().isEmpty()){
+                if(mConvertBox>0){
+                    Double iAmount=0.0;
+                    iAmount=Double.valueOf(tvAmountBox.getText().toString())*mConvertBox;
+                    tvAmount.setText(String.valueOf(iAmount.intValue()));
+                }else{
+                    Toast oT= Toast.makeText(getContext(),"Không đọc được quy đổi thùng...",Toast.LENGTH_SHORT);
+                    oT.setGravity(Gravity.CENTER,0,0);
+                    oT.show();
+                }
+            }else{
+                Toast oT= Toast.makeText(getContext(),"Vui lòng chọn sản phẩm trước...",Toast.LENGTH_SHORT);
+                oT.setGravity(Gravity.CENTER,0,0);
+                oT.show();
+            }
+
+        }catch (Exception ex){}
     }
 }

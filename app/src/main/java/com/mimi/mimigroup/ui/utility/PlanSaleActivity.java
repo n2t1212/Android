@@ -24,6 +24,7 @@ import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.SM_PlanSale;
+import com.mimi.mimigroup.model.SM_PlanSaleDetail;
 import com.mimi.mimigroup.ui.adapter.PlanSaleAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -150,7 +151,7 @@ public class PlanSaleActivity extends BaseActivity {
                         btnYes.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //onPostPlanSale();
+                                onPostPlanSale();
                                 oDlg.dismiss();
                             }
                         });
@@ -187,7 +188,7 @@ public class PlanSaleActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mPlanSaleID = "KHBH"+mParSymbol+Od.format(new Date());
         if(!mPlanSaleID.isEmpty()) {
-            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleFormActivity.class);
+            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleActivity.class);
             intent.setAction("ADD");
             intent.putExtra("PlanID",mPlanSaleID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);
@@ -218,7 +219,7 @@ public class PlanSaleActivity extends BaseActivity {
             if (oPlanSaleSel.get(0).getPlanId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
-                Intent intent = new Intent(PlanSaleActivity.this,PlanSaleFormActivity.class);
+                Intent intent = new Intent(PlanSaleActivity.this,PlanSaleActivity.class);
                 intent.setAction("EDIT");
                 intent.putExtra("PlanID", oPlanSaleSel.get(0).getPlanId());
                 intent.putExtra("PAR_SYMBOL", mParSymbol);
@@ -331,7 +332,7 @@ public class PlanSaleActivity extends BaseActivity {
         }catch (Exception ex){}
     }
 
-    /*public void onPostPlanSale(){
+    public void onPostPlanSale(){
         List<SM_PlanSale> oSel = adapter.SelectedList;
 
         if (oSel == null || oSel.size() <= 0) {
@@ -344,215 +345,78 @@ public class PlanSaleActivity extends BaseActivity {
             return;
         }
 
-        SM_PlanSale tech = oSel.get(0);
+        SM_PlanSale planSale = oSel.get(0);
 
         if (APINet.isNetworkAvailable(PlanSaleActivity.this)==false){
             Toast.makeText(PlanSaleActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
             return;
         }
-        if(tech==null || tech.getPlanSaleId().isEmpty()){
+        if(planSale==null || planSale.getPlanId().isEmpty()){
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập kế hoạch bán hàng..", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        List<SM_PlanSaleMarket> oPlanSaleMarket = mDB.getAllPlanSaleMarket(tech.getPlanSaleId());
-        List<SM_PlanSaleDisease> oPlanSaleDisease = mDB.getAllPlanSaleDisease(tech.getPlanSaleId());
+        List<SM_PlanSaleDetail> oPlanSaleDetail = mDB.getAllPlanSaleDetail(planSale.getPlanId());
 
-        onPostPlanSale(tech, oPlanSaleMarket, oPlanSaleDisease, oPlanSaleCompetitor, oPlanSaleActivityThisWeek, oPlanSaleActivityNextWeek);
+        onPostPlanSale(planSale, oPlanSaleDetail);
 
     }
 
     //POST 
-    private String getPlanSaleMarketData(final List<SM_PlanSaleMarket> markets){
-        String mTechDetail="";
+    private String getPlanSaleDetailData(final List<SM_PlanSaleDetail> detail){
+        String mDetail="";
         try{
-            if(markets!=null){
-                for (SM_PlanSaleMarket oOdt : markets) {
+            if(detail!=null){
+                for (SM_PlanSaleDetail oOdt : detail) {
                     String mRow="";
-                    if(oOdt.getMarketId()!=null && !oOdt.getMarketId().isEmpty()){
-                        mRow=oOdt.getMarketId()+"#";
-                        if(oOdt.getPlanSaleId()!=null && !oOdt.getPlanSaleId().isEmpty()){
-                            mRow+=oOdt.getPlanSaleId()+"#";
+                    if(oOdt.getPlanDetailId()!=null && !oOdt.getPlanDetailId().isEmpty()){
+                        mRow=oOdt.getPlanDetailId()+"#";
+                        if(oOdt.getPlanId()!=null && !oOdt.getPlanId().isEmpty()){
+                            mRow+=oOdt.getPlanId()+"#";
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
-                            mRow+=oOdt.getTitle()+"#";
+                        if(oOdt.getCustomerId()!=null && !oOdt.getCustomerId().isEmpty()){
+                            mRow+=oOdt.getCustomerId()+"#";
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
-                            mRow+=oOdt.getNotes()+"#";
+                        if(oOdt.getProductCode()!=null && !oOdt.getProductCode().isEmpty()){
+                            mRow+=oOdt.getProductCode()+"#";
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getUsefull()!=null && !oOdt.getUsefull().isEmpty()){
-                            mRow+=oOdt.getUsefull()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getHarmful()!=null && !oOdt.getHarmful().isEmpty()){
-                            mRow+=oOdt.getHarmful().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        mRow+="|";
-                        mTechDetail+=mRow;
-                    }
-                }
-            }
-
-        }catch (Exception ex){}
-        return  mTechDetail;
-    }
-
-    private String getPlanSaleDiseaseData(final List<SM_PlanSaleDisease> diseases){
-        String mTechDetail="";
-        try{
-            if(diseases!=null){
-                for (SM_PlanSaleDisease oOdt : diseases) {
-                    String mRow="";
-                    if(oOdt.getDiseaseId()!=null && !oOdt.getDiseaseId().isEmpty()){
-                        mRow=oOdt.getDiseaseId()+"#";
-                        if(oOdt.getPlanSaleId()!=null && !oOdt.getPlanSaleId().isEmpty()){
-                            mRow+=oOdt.getPlanSaleId()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getTreeCode()!=null && !oOdt.getTreeCode().isEmpty()){
-                            mRow+=oOdt.getTreeCode()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
-                            mRow+=oOdt.getTitle()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getAcreage()!=null){
-                            mRow+=oOdt.getAcreage()+"#";
+                        if(oOdt.getAmountBox()!=null){
+                            mRow+=oOdt.getAmountBox()+"#";
                         }else{
                             mRow+="0"+"#";
                         }
-                        if(oOdt.getDisease()!=null && !oOdt.getDisease().isEmpty()){
-                            mRow+=oOdt.getDisease().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getPrice()!=null){
-                            mRow+=oOdt.getPrice()+"#";
+                        if(oOdt.getAmount()!=null){
+                            mRow+=oOdt.getAmount().toString()+"#";
                         }else{
                             mRow+="0"+"#";
                         }
-                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
+                        if(oOdt.getNotes()!=null){
                             mRow+=oOdt.getNotes().toString()+"#";
                         }else{
                             mRow+=""+"#";
                         }
+                        if(oOdt.getNotes2()!=null){
+                            mRow+=oOdt.getNotes2().toString()+"#";
+                        }else{
+                            mRow+="0"+"#";
+                        }
                         mRow+="|";
-                        mTechDetail+=mRow;
+                        mDetail+=mRow;
                     }
                 }
             }
 
         }catch (Exception ex){}
-        return  mTechDetail;
+        return  mDetail;
     }
 
-    private String getPlanSaleCompetitorData(final List<SM_PlanSaleCompetitor> competitors){
-        String mTechDetail="";
-        try{
-            if(competitors!=null){
-                for (SM_PlanSaleCompetitor oOdt : competitors) {
-                    String mRow="";
-                    if(oOdt.getCompetitorId()!=null && !oOdt.getCompetitorId().isEmpty()){
-                        mRow=oOdt.getCompetitorId()+"#";
-                        if(oOdt.getPlanSaleId()!=null && !oOdt.getPlanSaleId().isEmpty()){
-                            mRow+=oOdt.getPlanSaleId()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
-                            mRow+=oOdt.getTitle()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
-                            mRow+=oOdt.getNotes()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getUseful()!=null && !oOdt.getUseful().isEmpty()){
-                            mRow+=oOdt.getUseful().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getHarmful()!=null && !oOdt.getHarmful().isEmpty()){
-                            mRow+=oOdt.getHarmful().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        mRow+="|";
-                        mTechDetail+=mRow;
-                    }
-                }
-            }
-
-        }catch (Exception ex){}
-        return  mTechDetail;
-    }
-
-    private String getPlanSaleActivityData(List<SM_PlanSaleActivity> thisWeek, List<SM_PlanSaleActivity> nextWeek){
-        String mTechDetail="";
-        try{
-            if(nextWeek != null){
-                for(SM_PlanSaleActivity o: nextWeek){
-                    thisWeek.add(o);
-                }
-            }
-
-            if(thisWeek!=null){
-                for (SM_PlanSaleActivity oOdt : thisWeek) {
-                    String mRow="";
-                    if(oOdt.getActivitieId()!=null && !oOdt.getActivitieId().isEmpty()){
-                        mRow=oOdt.getActivitieId()+"#";
-                        if(oOdt.getPlanSaleId()!=null && !oOdt.getPlanSaleId().isEmpty()){
-                            mRow+=oOdt.getPlanSaleId()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getIsType()!=null){
-                            mRow+=oOdt.getIsType()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
-                            mRow+=oOdt.getTitle()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getNotes()!=null && !oOdt.getNotes().isEmpty()){
-                            mRow+=oOdt.getNotes().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        if(oOdt.getAchievement()!=null && !oOdt.getAchievement().isEmpty()){
-                            mRow+=oOdt.getAchievement().toString()+"#";
-                        }else{
-                            mRow+=""+"#";
-                        }
-                        mRow+="|";
-                        mTechDetail+=mRow;
-                    }
-                }
-            }
-
-        }catch (Exception ex){}
-        return  mTechDetail;
-    }
-
-    private void onPostPlanSale(final SM_PlanSale tech ,final List<SM_PlanSaleMarket> markets, final List<SM_PlanSaleDisease> diseases,
-                                  final List<SM_PlanSaleCompetitor> competitor, final List<SM_PlanSaleActivity> thisWeeks, final List<SM_PlanSaleActivity> nextWeeks){
+    private void onPostPlanSale(final SM_PlanSale planSale ,final List<SM_PlanSaleDetail> detail){
         try{
             if (APINet.isNetworkAvailable(PlanSaleActivity.this)==false){
                 Toast.makeText(PlanSaleActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -561,53 +425,46 @@ public class PlanSaleActivity extends BaseActivity {
 
             final String Imei=AppUtils.getImeil(this);
             final String ImeiSim=AppUtils.getImeilsim(this);
-            final String mDataPlanSaleMarket = getPlanSaleMarketData(markets);
-            final String mDataPlanSaleDisease = getPlanSaleDiseaseData(diseases);
-            final String mDataPlanSaleCompetitor = getPlanSaleCompetitorData(competitor);
-            final String mDataPlanSaleActivitie = getPlanSaleActivityData(thisWeeks, nextWeeks);
+            final String mDataPlanSaleDetail = getPlanSaleDetailData(detail);
 
             if(ImeiSim.isEmpty()){
                 Toast.makeText(this,"Không đọc được số IMEI từ thiết bị cho việc đồng bộ. Kiểm tra Sim của bạn",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(tech==null){
+            if(planSale==null){
                 Toast.makeText(this,"Không tìm thấy dữ liệu kế hoạch bán hàng.",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(tech.getPlanSaleId()==null || tech.getReportCode().isEmpty()){
+            if(planSale.getPlanId()==null || planSale.getPlanCode().isEmpty()){
                 Toast.makeText(this,"Không tìm thấy mã báo cáo",Toast.LENGTH_SHORT).show();
                 return;
             }
 
             final String mUrlPostPlanSale=AppSetting.getInstance().URL_PostPlanSale();
             try {
-                if (tech.getReportCode() == null || tech.getReportCode().isEmpty()) {
-                    tech.setReportCode("");
+                if (planSale.getPlanId() == null || planSale.getPlanId().isEmpty()) {
+                    planSale.setPlanId("");
                 }
-                if (tech.getReportName() == null || tech.getReportName().isEmpty()) {
-                    tech.setReportName("");
+                if (planSale.getPlanCode() == null || planSale.getPlanCode().isEmpty()) {
+                    planSale.setPlanCode("");
                 }
-                if (tech.getReportDate() == null || tech.getReportDate().isEmpty()) {
-                    tech.setReportDate("");
+                if (planSale.getPlanDay() == null || planSale.getPlanDay().isEmpty()) {
+                    planSale.setPlanDay("");
                 }
-
-                if (tech.getLatitude() == null || tech.getLatitude().toString().isEmpty()) {
-                    tech.setLatitude(0.0f);
+                if (planSale.getStartDay() == null || planSale.getStartDay().isEmpty()) {
+                    planSale.setStartDay("");
                 }
-                if (tech.getLongtitude() == null || tech.getLongtitude().toString().isEmpty()) {
-                    tech.setLongtitude(0.0f);
+                if (planSale.getEndDay() == null || planSale.getEndDay().isEmpty()) {
+                    planSale.setEndDay("");
                 }
-                if (tech.getLocationAddress() == null || tech.getLocationAddress().toString().isEmpty()) {
-                    tech.setLocationAddress("N/A");
+                if (planSale.getPlanName() == null || planSale.getPlanName().isEmpty()) {
+                    planSale.setPlanName("");
                 }
-                if(tech.getReceiverList() == null || tech.getReceiverList().toString().isEmpty()){
-                    tech.setReceiverList("");
+                if (planSale.getNotes() == null || planSale.getNotes().isEmpty()) {
+                    planSale.setNotes("");
                 }
-                if(tech.getNotes() == null || tech.getNotes().toString().isEmpty()){
-                    tech.setNotes("");
-                }
-                if(tech.getIsStatus() == null){
-                    tech.setIsStatus("1");
+                if(planSale.getIsStatus() == null){
+                    planSale.setIsStatus("1");
                 }
             }catch(Exception ex){
                 Toast.makeText(PlanSaleActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -617,20 +474,14 @@ public class PlanSaleActivity extends BaseActivity {
             RequestBody DataBody = new FormBody.Builder()
                     .add("imei", Imei)
                     .add("imeisim", ImeiSim)
-                    .add("reportcode",tech.getReportCode())
-                    .add("reportday", tech.getReportDate())
-                    .add("reportname", tech.getReportName())
+                    .add("plancode",planSale.getPlanCode())
+                    .add("startday", planSale.getStartDay())
+                    .add("endday", planSale.getEndDay())
                     .add("customerid", "")
-                    .add("longitude", Float.toString(tech.getLongtitude()))
-                    .add("latitude", Float.toString(tech.getLatitude()))
-                    .add("locationaddress", tech.getLocationAddress())
-                    .add("receiverlist", tech.getReceiverList())
-                    .add("notes",tech.getNotes())
-                    .add("isstatus", tech.getIsStatus())
-                    .add("PlanSalemarket", mDataPlanSaleMarket)
-                    .add("PlanSaledisease",mDataPlanSaleDisease)
-                    .add("PlanSalecompetitor",mDataPlanSaleCompetitor)
-                    .add("PlanSaleactivitie",mDataPlanSaleActivitie)
+                    .add("planname", planSale.getPlanName())
+                    .add("isstatus", planSale.getIsStatus())
+                    .add("notes", planSale.getNotes())
+                    .add("plansaledetail", mDataPlanSaleDetail)
                     .build();
             new SyncPost(new APINetCallBack() {
                 @Override
@@ -645,10 +496,10 @@ public class PlanSaleActivity extends BaseActivity {
                             if (ResPonseRs.contains("SYNC_OK")) {
                                 Toast.makeText(PlanSaleActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                tech.setPostDate(sdf.format(new Date()));
-                                tech.setPost(true);
-                                tech.setIsStatus("2");
-                                mDB.editPlanSale(tech);
+                                planSale.setPostDay(sdf.format(new Date()));
+                                planSale.setPost(true);
+                                planSale.setIsStatus("2");
+                                mDB.editPlanSale(planSale);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){
@@ -674,14 +525,14 @@ public class PlanSaleActivity extends BaseActivity {
                     dismissProgressDialog();
                     Toast.makeText(PlanSaleActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
                 }
-            },mUrlPostPlanSale,"POST_REPORT_TECH",DataBody).execute();
+            },mUrlPostPlanSale,"POST_PLAN_SALE",DataBody).execute();
 
 
         }catch (Exception ex){
             Toast.makeText(PlanSaleActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
             dismissProgressDialog();
         }
-    }*/
+    }
 
 }
 

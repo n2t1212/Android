@@ -326,7 +326,7 @@ public class PlanSaleFormActivity extends BaseActivity {
             }
         }
 
-        Toast.makeText(this, "Ghi báo cáo kĩ thuật thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ghi kế hoạch bán hàng thành công", Toast.LENGTH_SHORT).show();
         finish();
         isSaved=true;
     }
