@@ -5518,6 +5518,23 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }
     }
 
+    public boolean delPlanSale(String PlanID){
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            String mSqlPlanSale=String.format("delete from SM_PLAN_SALE where PlanID ='%s'",PlanID);
+            String mSqlDetail=String.format("delete from SM_PLAN_SALE_DETAIL where PlanID ='%s'",PlanID);
+            try {
+                db.execSQL(mSqlPlanSale);
+                db.execSQL(mSqlDetail);
+
+            }catch (Exception ex){
+                Log.d("DEL_SM_PLAN_SALE",ex.getMessage());
+                return  false;
+            }
+            return  true;
+        }catch (Exception ex){return false;}
+    }
+
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
         if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";
