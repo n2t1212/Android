@@ -9,13 +9,13 @@ public class SM_PlanSale {
     String PlanName;
     String PostDay;
     Boolean IsPost;
-    Integer IsStatus;
+    String IsStatus;
     String Notes;
 
     public SM_PlanSale() {
     }
 
-    public SM_PlanSale(String planId, String planCode, String planDay, String startDay, String endDay, String planName, String postDay, Boolean isPost, Integer isStatus, String notes) {
+    public SM_PlanSale(String planId, String planCode, String planDay, String startDay, String endDay, String planName, String postDay, Boolean isPost, String isStatus, String notes) {
         PlanId = planId;
         PlanCode = planCode;
         PlanDay = planDay;
@@ -92,11 +92,11 @@ public class SM_PlanSale {
         IsPost = post;
     }
 
-    public Integer getIsStatus() {
+    public String getIsStatus() {
         return IsStatus;
     }
 
-    public void setIsStatus(Integer isStatus) {
+    public void setIsStatus(String isStatus) {
         IsStatus = isStatus;
     }
 

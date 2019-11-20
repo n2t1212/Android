@@ -27,6 +27,8 @@ import com.mimi.mimigroup.model.SM_OrderDelivery;
 import com.mimi.mimigroup.model.SM_OrderDeliveryDetail;
 import com.mimi.mimigroup.model.SM_OrderDetail;
 import com.mimi.mimigroup.model.SM_OrderStatus;
+import com.mimi.mimigroup.model.SM_PlanSale;
+import com.mimi.mimigroup.model.SM_PlanSaleDetail;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
 import com.mimi.mimigroup.model.SM_ReportSaleRepActivitie;
 import com.mimi.mimigroup.model.SM_ReportSaleRepDisease;
@@ -5143,6 +5145,378 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     }
 
     // KE HOACH BAN HANG
+    public boolean getIsStatusPlanSale(String mToday){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_PLAN_SALE WHERE IsStatus<=3",null);
+            int iSq= cursor.getCount();
+            cursor.close();
+            if (iSq>0){return  true;}else{return  false;}
+        }catch(Exception ex){return false;}
+    }
+
+    private String getPlanSaleId(String PlanDay){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_PLAN_SALE WHERE (julianday(PlanDay)-julianday('%s')=0) ", new String[]{PlanDay});
+            String PlanSaleId="";
+            if (cursor.moveToFirst()) {
+                do {
+                    PlanSaleId=cursor.getString(cursor.getColumnIndex("PlanDay"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return PlanSaleId;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizePlanSale(String PlanID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_PLAN_SALE WHERE PlanID=?", new String[]{PlanID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanPlanSale(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_PLAN_SALE where PlanID in(select PlanID from SM_PLAN_SALE where julianday('now')-julianday(PlanDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+            mSql = String.format("delete from SM_PLAN_SALE where julianday('now')-julianday(PlanDay)>%s", iIntervalDay);
+            db.execSQL(mSql);
+        } catch (Exception ex) {
+        }
+    }
+
+    public List<SM_PlanSale> getAllPlanSale(String fday, String tDay) {
+        try {
+            List<SM_PlanSale> lst = new ArrayList<SM_PlanSale>();
+            String mSql=String.format("Select A.* from SM_PLAN_SALE A"+
+                    " where (julianday(A.PlanDay)-julianday('%s')) >=0 and (julianday('%s')-julianday(A.PlanDay)) >=0 order by A.PlanDay desc",fday,tDay);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_PlanSale planSale = new SM_PlanSale();
+                    planSale.setPlanId(cursor.getString(cursor.getColumnIndex("PlanID")));
+                    planSale.setPlanCode(cursor.getString(cursor.getColumnIndex("PlanCode")));
+                    planSale.setPlanDay(cursor.getString(cursor.getColumnIndex("PlanDay")));
+                    planSale.setStartDay(cursor.getString(cursor.getColumnIndex("StartDay")));
+                    planSale.setEndDay(cursor.getString(cursor.getColumnIndex("EndDay")));
+                    planSale.setPlanName(cursor.getString(cursor.getColumnIndex("PlanName")));
+                    planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    planSale.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            planSale.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            planSale.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            planSale.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            planSale.setIsStatus("");
+                        }
+
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        planSale.setPost(true);
+                    }else{
+                        planSale.setPost(false);
+                    }
+                    planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                    lst.add(planSale);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_SM_PLANSALE",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_PlanSale getPlanSaleById(String PlanID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_PLAN_SALE A "+
+                    " where A.PlanID='%s' order by PlanDay desc",PlanID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_PlanSale planSale = new SM_PlanSale();
+            if (cursor.moveToFirst()) {
+                do {
+                    planSale.setPlanId(cursor.getString(cursor.getColumnIndex("PlanID")));
+                    planSale.setPlanCode(cursor.getString(cursor.getColumnIndex("PlanCode")));
+                    planSale.setPlanDay(cursor.getString(cursor.getColumnIndex("PlanDay")));
+                    planSale.setStartDay(cursor.getString(cursor.getColumnIndex("StartDay")));
+                    planSale.setEndDay(cursor.getString(cursor.getColumnIndex("EndDay")));
+                    planSale.setPlanName(cursor.getString(cursor.getColumnIndex("PlanName")));
+                    planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+                    planSale.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
+                    if(isStatus != null)
+                    {
+                        if(isStatus.equalsIgnoreCase("0"))
+                        {
+                            planSale.setIsStatus("Phiếu mới");
+                        }
+                        else if(isStatus.equalsIgnoreCase("1"))
+                        {
+                            planSale.setIsStatus("Đã điều chỉnh");
+                        }
+                        else if(isStatus.equalsIgnoreCase("3"))
+                        {
+                            planSale.setIsStatus("Đã hủy");
+                        }
+                        else
+                        {
+                            planSale.setIsStatus("");
+                        }
+
+                    }
+                    String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
+                    if(isPost.equalsIgnoreCase("1"))
+                    {
+                        planSale.setPost(true);
+                    }else{
+                        planSale.setPost(false);
+                    }
+                    planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return planSale;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_SM_PAY",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public boolean editPlanSale(SM_PlanSale salePlan){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("PlanCode", salePlan.getPlanCode());
+            values.put("PlanDay", salePlan.getPlanDay());
+            values.put("StartDay", salePlan.getStartDay());
+            values.put("EndDay", salePlan.getEndDay());
+            values.put("PlanName", salePlan.getPlanName());
+            values.put("PostDay", salePlan.getPostDay());
+            values.put("IsPost", salePlan.getPost());
+            values.put("IsStatus", salePlan.getIsStatus());
+            values.put("Notes", salePlan.getNotes());
+            db.update("SM_PLAN_SALE",values,"PlanID=?" ,new String[] {String.valueOf(salePlan.getPlanId())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_SALE_PLAN_ERR",e.getMessage()); return  false;}
+    }
+
+    public String addPlanSale(SM_PlanSale salePlan){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String PlanID=getPlanSaleId(salePlan.getPlanId());
+            if(PlanID!=""){
+                if(salePlan.getPlanId().isEmpty()|| salePlan.getPlanId()==null){
+                    salePlan.setPlanId(PlanID);
+                }
+            }
+            iSq=getSizePlanSale(salePlan.getPlanId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("PlanID", salePlan.getPlanId());
+                values.put("PlanCode", salePlan.getPlanCode());
+                values.put("PlanDay", salePlan.getPlanDay());
+                values.put("StartDay", salePlan.getStartDay());
+                values.put("EndDay", salePlan.getEndDay());
+                values.put("PlanName", salePlan.getPlanName());
+                values.put("PostDay", salePlan.getPostDay());
+                values.put("IsPost", salePlan.getPost());
+                values.put("IsStatus", salePlan.getIsStatus());
+                values.put("Notes", salePlan.getNotes());
+
+                db.insert("SM_PLAN_SALE", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("PlanCode", salePlan.getPlanCode());
+                values.put("PlanDay", salePlan.getPlanDay());
+                values.put("StartDay", salePlan.getStartDay());
+                values.put("EndDay", salePlan.getEndDay());
+                values.put("PlanName", salePlan.getPlanName());
+                values.put("PostDay", salePlan.getPostDay());
+                values.put("IsPost", salePlan.getPost());
+                values.put("IsStatus", salePlan.getIsStatus());
+                values.put("Notes", salePlan.getNotes());
+                db.update("SM_PLAN_SALE",values,"PlanID=?" ,new String[] {String.valueOf(salePlan.getPlanId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
+
+    private String getPlanSaleDetailID(String PlanID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT A.* FROM SM_PLAN_SALE_DETAIL A LEFT JOIN SM_PLAN_SALE B ON A.PlanID = B.PlanID WHERE B.PlanID=? ", new String[]{PlanID});
+            String PlanDetailID="";
+            if (cursor.moveToFirst()) {
+                do {
+                    PlanDetailID=cursor.getString(cursor.getColumnIndex("PlanDetailID"));
+                    break;
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            return PlanDetailID;
+        }catch(Exception ex){return  "";}
+    }
+
+    public int getSizePlanSaleDetail(String PlanDetailID){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM SM_PLAN_SALE_DETAIL WHERE PlanDetailID=?", new String[]{PlanDetailID});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public void CleanPlanSaleDetail(int iIntervalDay) {
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+
+            String mSql = String.format("delete from SM_PLAN_SALE_DETAIL where PlanID in(select PlanID from SM_PLAN_SALE where julianday('now')-julianday(PlanDay)>%s)", iIntervalDay);
+            db.execSQL(mSql);
+
+        } catch (Exception ex) {
+        }
+    }
+
+    public List<SM_PlanSaleDetail> getAllPlanSaleDetail(String PlanID) {
+        try {
+            List<SM_PlanSaleDetail> lst = new ArrayList<SM_PlanSaleDetail>();
+            String mSql=String.format("Select A.* from SM_PLAN_SALE_DETAIL A LEFT JOIN SM_PLAN_SALE B ON A.PlanID = B.PlanID"+
+                    " where A.PlanID='%s' order by B.PlanDay desc", PlanID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    SM_PlanSaleDetail detail = new SM_PlanSaleDetail();
+                    detail.setPlanDetailId(cursor.getString(cursor.getColumnIndex("PlanDetailID")));
+                    detail.setPlanId(cursor.getString(cursor.getColumnIndex("PlanID")));
+                    detail.setCustomerId(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    detail.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    detail.setAmountBox(cursor.getDouble(cursor.getColumnIndex("AmountBox")));
+                    detail.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    detail.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    detail.setNotes2(cursor.getString(cursor.getColumnIndex("Notes2")));
+                    lst.add(detail);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_PLAN_SALE_DTL",ex.getMessage().toString());}
+        return null;
+    }
+
+    public SM_PlanSaleDetail getPlanSaleDetailById(String PlanDetailID)
+    {
+        try {
+            String mSql=String.format("Select A.* from SM_PLAN_SALE_DETAIL A LEFT JOIN SM_PLAN_SALE B ON A.PlanID = B.PlanID "+
+                    " where A.PlanDetailID='%s' order by B.PlanDay desc",PlanDetailID);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            SM_PlanSaleDetail detail = new SM_PlanSaleDetail();
+            if (cursor.moveToFirst()) {
+                do {
+                    detail.setPlanDetailId(cursor.getString(cursor.getColumnIndex("PlanDetailID")));
+                    detail.setPlanId(cursor.getString(cursor.getColumnIndex("PlanID")));
+                    detail.setCustomerId(cursor.getString(cursor.getColumnIndex("CustomerID")));
+                    detail.setProductCode(cursor.getString(cursor.getColumnIndex("ProductCode")));
+                    detail.setAmountBox(cursor.getDouble(cursor.getColumnIndex("AmountBox")));
+                    detail.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    detail.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
+                    detail.setNotes2(cursor.getString(cursor.getColumnIndex("Notes2")));
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return detail;
+        }catch (Exception ex){
+            Log.d("ERR_LOAD_PLAN_SALE_DTL",ex.getMessage().toString());
+        }
+        return null;
+    }
+
+    public String addSalePlanDetail(SM_PlanSaleDetail salePlan){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+
+            String PlanDetailID=getPlanSaleDetailID(salePlan.getPlanDetailId());
+            if(PlanDetailID!=""){
+                if(salePlan.getPlanDetailId()==null || (salePlan.getPlanDetailId().isEmpty())){
+                    salePlan.setPlanDetailId(PlanDetailID);
+                }
+            }
+            iSq=getSizePlanSaleDetail(salePlan.getPlanDetailId());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("PlanDetailID", salePlan.getPlanDetailId());
+                values.put("PlanID", salePlan.getPlanId());
+                values.put("CustomerID", salePlan.getCustomerId());
+                values.put("ProductCode", salePlan.getProductCode());
+                values.put("AmountBox", salePlan.getAmountBox());
+                values.put("Amount", salePlan.getAmount());
+                values.put("Notes", salePlan.getNotes());
+                values.put("Notes2", salePlan.getNotes2());
+                db.insert("SM_PLAN_SALE_DETAIL", null, values);
+            }else{
+                ContentValues values = new ContentValues();
+                values.put("PlanID", salePlan.getPlanId());
+                values.put("CustomerID", salePlan.getCustomerId());
+                values.put("ProductCode", salePlan.getProductCode());
+                values.put("AmountBox", salePlan.getAmountBox());
+                values.put("Amount", salePlan.getAmount());
+                values.put("Notes", salePlan.getNotes());
+                values.put("Notes2", salePlan.getNotes2());
+                db.update("SM_PLAN_SALE_DETAIL",values,"PlanDetailID=?" ,new String[] {String.valueOf(salePlan.getPlanDetailId())});
+            }
+            db.close();
+            return "";
+        }catch (Exception e){
+            return  "ERR:"+e.getMessage();
+        }
+    }
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){

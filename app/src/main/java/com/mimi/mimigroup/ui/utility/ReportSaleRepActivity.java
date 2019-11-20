@@ -223,7 +223,7 @@ public class ReportSaleRepActivity extends BaseActivity {
             if (oReportSaleRepSel.get(0).getReportSaleId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
-                Intent intent = new Intent(ReportSaleRepActivity.this,ReportSaleRepActivity.class);
+                Intent intent = new Intent(ReportSaleRepActivity.this,ReportSaleRepFormActivity.class);
                 intent.setAction("EDIT");
                 intent.putExtra("ReportSaleRepID", oReportSaleRepSel.get(0).getReportSaleId());
                 intent.putExtra("PAR_SYMBOL", mParSymbol);

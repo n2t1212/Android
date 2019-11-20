@@ -4,6 +4,7 @@ public class SM_PlanSaleDetail {
     String PlanDetailId;
     String PlanId;
     String CustomerId;
+    String ProductCode;
     Double AmountBox;
     Double Amount;
     String Notes;
@@ -12,14 +13,23 @@ public class SM_PlanSaleDetail {
     public SM_PlanSaleDetail() {
     }
 
-    public SM_PlanSaleDetail(String planDetailId, String planId, String customerId, Double amountBox, Double amount, String notes, String notes2) {
+    public SM_PlanSaleDetail(String planDetailId, String planId, String customerId, String productCode, Double amountBox, Double amount, String notes, String notes2) {
         PlanDetailId = planDetailId;
         PlanId = planId;
         CustomerId = customerId;
+        ProductCode = productCode;
         AmountBox = amountBox;
         Amount = amount;
         Notes = notes;
         Notes2 = notes2;
+    }
+
+    public String getProductCode() {
+        return ProductCode;
+    }
+
+    public void setProductCode(String productCode) {
+        ProductCode = productCode;
     }
 
     public String getPlanDetailId() {

@@ -166,5 +166,23 @@
             android:text="  Báo cáo kỹ thuật"
             android:textColor="@color/textGreen"
             android:textSize="18sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/SettingMenuLine" />
+
+        <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_item_ripple"
+            android:drawableLeft="@drawable/tiva_setting_help"
+            android:clickable="true"
+            android:id="@+id/tvPlanSale"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="  Lập kế hoạch bán hàng tháng"
+            android:textColor="@color/textGreen"
+            android:textSize="18sp" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

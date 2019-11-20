@@ -223,7 +223,7 @@ public class ReportTechActivity extends BaseActivity {
             if (oReportTechSel.get(0).getReportTechId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
-                Intent intent = new Intent(ReportTechActivity.this,ReportTechActivity.class);
+                Intent intent = new Intent(ReportTechActivity.this,ReportTechFormActivity.class);
                 intent.setAction("EDIT");
                 intent.putExtra("ReportTechID", oReportTechSel.get(0).getReportTechId());
                 intent.putExtra("PAR_SYMBOL", mParSymbol);
