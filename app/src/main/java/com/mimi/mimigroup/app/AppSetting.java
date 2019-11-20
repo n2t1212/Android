@@ -231,4 +231,6 @@ public class AppSetting {
     {
         return URL_SERVER() + "/MIMIAPI/fPostReportSale";
     }
+
+    public String URL_PostPlanSale(){ return URL_SERVER() + "/MIMIAPI/fPostPlanSale";}
 }

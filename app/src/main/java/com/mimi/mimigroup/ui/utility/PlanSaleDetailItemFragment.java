@@ -1,0 +1,397 @@
+package com.mimi.mimigroup.ui.utility;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.mimi.mimigroup.R;
+import com.mimi.mimigroup.base.BaseFragment;
+import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Customer_Search;
+import com.mimi.mimigroup.model.DM_Product;
+import com.mimi.mimigroup.model.SM_PlanSaleDetail;
+import com.mimi.mimigroup.ui.adapter.PlanSaleDetailAdapter;
+import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
+import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
+import com.mimi.mimigroup.ui.custom.CustomTextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import butterknife.BindView;
+
+public class PlanSaleDetailItemFragment extends BaseFragment {
+
+    @BindView(R.id.rvPlanSaleDetailList)
+    RecyclerView rvPlanSaleDetailList;
+    @BindView(R.id.tvCustomer)
+    CustomBoldEditText tvCustomer;
+    @BindView(R.id.tvProduct)
+    CustomBoldEditText tvProduct;
+    @BindView(R.id.tvAmountBox)
+    CustomBoldEditText tvAmountBox;
+    @BindView(R.id.tvAmount)
+    CustomBoldEditText tvAmount;
+    @BindView(R.id.tvNotes)
+    CustomBoldEditText tvNotes;
+    @BindView(R.id.tvNotes2)
+    CustomBoldEditText tvNotes2;
+    @BindView(R.id.Layout_PlanSaleDetailItem)
+    LinearLayout Layout_PlanSaleDetailItem;
+
+    PlanSaleDetailAdapter adapter;
+    private String mPlanSaleId = "";
+    private String mParSymbol = "";
+    private String mAction = "";
+
+    List<SM_PlanSaleDetail> lstPlanSaleDetail;
+    String currentPlanSaleDetailId;
+
+    List<DM_Customer_Search> lstCustomer;
+    List<DM_Product> lstProduct;
+
+    DBGimsHelper mDB = null;
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.fragment_sale_plan_detail_form;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mDB = DBGimsHelper.getInstance(view.getContext());
+        lstCustomer = mDB.getAllCustomerSearch();
+        lstProduct = mDB.getAllProduct();
+        adapter = new PlanSaleDetailAdapter(new PlanSaleDetailAdapter.ListItemClickListener() {
+            @Override
+            public void onItemClick(List<SM_PlanSaleDetail> SelectList) {
+                if (SelectList.size() > 0) {
+                    for (SM_PlanSaleDetail osmDT : SelectList) {
+                        setPlanSaleDetailRow(osmDT);
+                        break;
+                    }
+                    //Chỉ cho phép sửa khi chọn 1 dòng
+                    if (SelectList.size() > 1) {
+                        ((PlanSaleFormActivity) getActivity()).setButtonEditStatus(false);
+                        Layout_PlanSaleDetailItem.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), "Bạn chọn quá nhiều để có thể sửa..", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ((PlanSaleFormActivity) getActivity()).setButtonEditStatus(true);
+                    }
+                    ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(true);
+                } else {
+                    ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(false);
+                    ((PlanSaleFormActivity) getActivity()).setButtonEditStatus(false);
+                }
+            }
+        });
+        rvPlanSaleDetailList.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPlanSaleDetailList.setAdapter(adapter);
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        //GET PARAMETER FORM ACTIVITY
+                        PlanSaleFormActivity oActivity = (PlanSaleFormActivity) getActivity();
+                        lstPlanSaleDetail = oActivity.getoPlanSaleDetail();
+                        mPlanSaleId = oActivity.getmPlanSaleID();
+                        mAction = oActivity.getAction();
+                        if (lstPlanSaleDetail != null) {
+                            adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
+                        }
+                        mParSymbol = oActivity.getmPar_Symbol();
+                    }
+                }, 300);
+
+        Layout_PlanSaleDetailItem.setVisibility(View.GONE);
+    }
+
+    // CALL FROM ACTIVITY
+    public List<SM_PlanSaleDetail> getListPlanSaleDetail() {
+        return lstPlanSaleDetail;
+    }
+
+    private int setPosSpin(List<String> lstSpin, String mValue) {
+        try {
+            for (int i = 0; i < lstSpin.size(); ++i) {
+                if (lstSpin.get(i).toString().equals(mValue)) {
+                    return i;
+                }
+            }
+            return -1;
+        } catch (Exception ex) {
+            return -1;
+        }
+    }
+
+    private String getSpin(final Spinner oSpin) {
+        try {
+            int iPos = oSpin.getSelectedItemPosition();
+            if (iPos <= 0) {
+                return "";
+            }
+            return oSpin.getItemAtPosition(iPos).toString();
+        } catch (Exception ex) {
+        }
+        return null;
+    }
+
+    private void setPlanSaleDetailRow(SM_PlanSaleDetail osmDT) {
+        try {
+            if (osmDT != null) {
+                if (osmDT.getCustomerId() != null) {
+                    for (DM_Customer_Search cus : lstCustomer) {
+                        if (cus.getCustomerid() != null && cus.getCustomerid().equals(osmDT.getCustomerId())) {
+                            tvCustomer.setText(cus.getCustomerName());
+                            tvCustomer.setTag(cus.getCustomerid());
+                        }
+                    }
+                } else {
+                    tvCustomer.setText("");
+                    tvCustomer.setTag("");
+                }
+
+                if (osmDT.getProductCode() != null) {
+                    for (DM_Product pro : lstProduct) {
+                        if (pro.getProductCode() != null && pro.getProductCode().equals(osmDT.getProductCode())) {
+                            tvProduct.setText(pro.getProductName());
+                            tvProduct.setTag(pro.getProductCode());
+                        }
+                    }
+                } else {
+                    tvProduct.setText("");
+                    tvProduct.setTag("");
+                }
+
+                if (osmDT.getAmountBox() != null) {
+                    tvAmountBox.setText(osmDT.getAmountBox().toString());
+                }
+                if (osmDT.getAmount() != null) {
+                    tvAmount.setText(osmDT.getAmount().toString());
+                }
+                if (osmDT.getNotes() != null) {
+                    tvNotes.setText(osmDT.getNotes());
+                }
+                if (osmDT.getNotes2() != null) {
+                    tvNotes2.setText(osmDT.getNotes2());
+                }
+
+                currentPlanSaleDetailId = osmDT.getPlanDetailId();
+            } else {
+                Toast.makeText(getContext(), "Không tồn tại kế hoạch bán hàng chi tiết..", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception ex) {
+            Toast.makeText(getContext(), "Không thể khởi tạo thông tin để sửa..", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public boolean onAddPlanSaleDetail(boolean isAddnew) {
+        ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(false);
+        if (Layout_PlanSaleDetailItem.getVisibility() == View.GONE) {
+            Layout_PlanSaleDetailItem.setVisibility(View.VISIBLE);
+            //Clear Input
+            try {
+                if (isAddnew) {
+                    tvCustomer.setText("");
+                    tvCustomer.setTag("");
+                    tvProduct.setText("");
+                    tvProduct.setTag("");
+                    tvAmountBox.setText("");
+                    tvAmount.setText("");
+                    tvNotes.setText("");
+                    tvNotes2.setText("");
+                }
+            } catch (Exception ex) {
+            }
+            return true;
+        }
+        return true;
+    }
+
+    public boolean onSavePlanSaleDetail() {
+        try {
+            if (onSaveAddPlanSaleDetail()) {
+                if (Layout_PlanSaleDetailItem.getVisibility() == View.VISIBLE) {
+                    Layout_PlanSaleDetailItem.setVisibility(View.GONE);
+                    adapter.clearSelected();
+                }
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+        return false;
+    }
+
+    private boolean onSaveAddPlanSaleDetail() {
+        SM_PlanSaleDetail oDetail = new SM_PlanSaleDetail();
+
+        // EDIT
+        if (currentPlanSaleDetailId != null && currentPlanSaleDetailId.length() > 0) {
+            oDetail.setPlanDetailId(currentPlanSaleDetailId);
+            currentPlanSaleDetailId = "";
+        }
+
+        if (tvCustomer.getText() == null || tvCustomer.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập khách hàng...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setCustomerId(tvCustomer.getTag().toString());
+        }
+
+        if (tvProduct.getText() == null || tvProduct.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập sản phẩm...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setProductCode(tvProduct.getTag().toString());
+        }
+        if (tvAmountBox.getText() == null || tvAmountBox.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng thùng...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setAmountBox(Double.valueOf(tvAmountBox.getText().toString()));
+        }
+        if (tvAmount.getText() == null || tvAmount.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            return false;
+        } else {
+            oDetail.setAmount(Double.valueOf(tvAmount.getText().toString()));
+        }
+
+        oDetail.setNotes(tvNotes.getText().toString());
+        oDetail.setNotes2(tvNotes2.getText().toString());
+
+        boolean isExist = false;
+        for (int i = 0; i < lstPlanSaleDetail.size(); i++) {
+            if (lstPlanSaleDetail.get(i).getPlanDetailId().equalsIgnoreCase(oDetail.getPlanDetailId())) {
+                isExist = true;
+                if (oDetail.getCustomerId() != null) {
+                    lstPlanSaleDetail.get(i).setCustomerId(oDetail.getCustomerId());
+                } else {
+                    lstPlanSaleDetail.get(i).setCustomerId("");
+                }
+                if (oDetail.getProductCode() != null) {
+                    lstPlanSaleDetail.get(i).setProductCode(oDetail.getProductCode());
+                } else {
+                    lstPlanSaleDetail.get(i).setProductCode("");
+                }
+                if (oDetail.getAmountBox() != null) {
+                    lstPlanSaleDetail.get(i).setAmountBox(oDetail.getAmountBox());
+                } else {
+                    lstPlanSaleDetail.get(i).setAmountBox(0d);
+                }
+                if (oDetail.getAmount() != null) {
+                    lstPlanSaleDetail.get(i).setAmount(oDetail.getAmount());
+                } else {
+                    lstPlanSaleDetail.get(i).setAmount(0d);
+                }
+                if (oDetail.getNotes() != null) {
+                    lstPlanSaleDetail.get(i).setNotes(oDetail.getNotes());
+                } else {
+                    lstPlanSaleDetail.get(i).setNotes("");
+                }
+                if (oDetail.getNotes2() != null) {
+                    lstPlanSaleDetail.get(i).setNotes2(oDetail.getNotes2());
+                } else {
+                    lstPlanSaleDetail.get(i).setNotes2("");
+                }
+
+                Toast.makeText(getContext(), "kế hoạch bán hàng chi tiết đã được thêm..", Toast.LENGTH_SHORT).show();
+                break;
+            }
+        }
+
+        if (!isExist) {
+            SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+            String mMarketId = "KHBHCT" + mParSymbol + Od.format(new Date());
+            oDetail.setPlanDetailId(mMarketId);
+            oDetail.setPlanId(mPlanSaleId);
+            lstPlanSaleDetail.add(oDetail);
+        }
+
+        adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
+        Toast.makeText(getContext(), String.valueOf(lstPlanSaleDetail.size()) + ": kế hoạch bán hàng chi tiết được chọn..", Toast.LENGTH_SHORT).show();
+
+       tvCustomer.setText("");
+       tvCustomer.setTag("");
+       tvProduct.setText("");
+       tvProduct.setTag("");
+       tvAmountBox.setText("");
+       tvAmount.setText("");
+       tvNotes.setText("");
+       tvNotes2.setText("");
+        return true;
+    }
+
+    public void onDeletedPlanSaleDetail() {
+        if (adapter.SelectedList == null || adapter.SelectedList.size() <= 0) {
+            Toast oToat = Toast.makeText(getContext(), "Bạn chưa chọn kế hoạch bán hàng chi tiết để xóa...", Toast.LENGTH_LONG);
+            oToat.setGravity(Gravity.CENTER, 0, 0);
+            oToat.show();
+            return;
+        }
+
+        final Dialog oDlg = new Dialog(getContext());
+        oDlg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        oDlg.setContentView(R.layout.dialog_yesno);
+        oDlg.setTitle("");
+        CustomTextView dlgTitle = (CustomTextView) oDlg.findViewById(R.id.dlgTitle);
+        dlgTitle.setText("Xác nhận");
+        CustomTextView dlgContent = (CustomTextView) oDlg.findViewById(R.id.dlgContent);
+        dlgContent.setText("Bạn có chắc muốn xóa ?");
+        CustomBoldTextView btnYes = (CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
+        CustomBoldTextView btnNo = (CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (SM_PlanSaleDetail oDTSel : adapter.SelectedList) {
+                    for (SM_PlanSaleDetail oDT : lstPlanSaleDetail) {
+                        if (oDTSel.equals(oDT)) {
+                            lstPlanSaleDetail.remove(oDT);
+                            break;
+                        }
+                    }
+                }
+                adapter.SelectedList.clear();
+                adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
+
+                // Set view
+                rvPlanSaleDetailList.setAdapter(adapter);
+                ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(false);
+                ((PlanSaleFormActivity) getActivity()).setButtonEditStatus(false);
+                Toast.makeText(getContext(), "Đã xóa mẫu tin thành công", Toast.LENGTH_SHORT).show();
+
+                oDlg.dismiss();
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oDlg.dismiss();
+                return;
+            }
+        });
+        oDlg.show();
+    }
+}

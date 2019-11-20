@@ -143,7 +143,7 @@ public class ReportTechFormItemFragment extends BaseFragment {
             if(tvIsStatus.getText().toString().isEmpty()){
                 oReportTech.setIsStatus("");
             }else{
-                oReportTech.setIsStatus("");
+                oReportTech.setIsStatus(tvIsStatus.getText().toString());
             }
 
         }catch (Exception ex){}
