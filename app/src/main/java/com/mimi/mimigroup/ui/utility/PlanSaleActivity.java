@@ -187,7 +187,7 @@ public class PlanSaleActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mPlanSaleID = "KHBH"+mParSymbol+Od.format(new Date());
         if(!mPlanSaleID.isEmpty()) {
-            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleActivity.class);
+            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleFormActivity.class);
             intent.setAction("ADD");
             intent.putExtra("PlanID",mPlanSaleID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);

@@ -192,7 +192,7 @@ public class ReportSaleRepActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mReportSaleRepID = "BCSALE"+mParSymbol+Od.format(new Date());
         if(!mReportSaleRepID.isEmpty()) {
-            Intent intent = new Intent(ReportSaleRepActivity.this, ReportSaleRepActivity.class);
+            Intent intent = new Intent(ReportSaleRepActivity.this, ReportSaleRepFormActivity.class);
             intent.setAction("ADD");
             intent.putExtra("ReportSaleRepID",mReportSaleRepID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);

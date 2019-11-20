@@ -192,7 +192,7 @@ public class ReportTechActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mReportTechID = "BCKT"+mParSymbol+Od.format(new Date());
         if(!mReportTechID.isEmpty()) {
-            Intent intent = new Intent(ReportTechActivity.this, ReportTechActivity.class);
+            Intent intent = new Intent(ReportTechActivity.this, ReportTechFormActivity.class);
             intent.setAction("ADD");
             intent.putExtra("ReportTechID",mReportTechID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);

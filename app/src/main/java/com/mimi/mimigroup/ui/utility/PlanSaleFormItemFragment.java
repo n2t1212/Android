@@ -26,7 +26,7 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
     @BindView(R.id.tvPlanCode)
     CustomTextView tvPlanCode;
     @BindView(R.id.tvPlanDay)
-    CustomBoldTextView tvPlanDay;
+    CustomBoldEditText tvPlanDay;
 
     @BindView(R.id.tvStartDay)
     CustomBoldEditText tvStartDay;

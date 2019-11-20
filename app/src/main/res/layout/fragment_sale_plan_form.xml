@@ -87,7 +87,7 @@
                         android:gravity="right"
                         android:padding="5dp"
                         android:text="Ngày bắt đầu" />
-                    <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    <com.mimi.mimigroup.ui.custom.CustomBoldEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
