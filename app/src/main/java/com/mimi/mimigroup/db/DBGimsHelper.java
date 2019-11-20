@@ -83,151 +83,151 @@ public class DBGimsHelper extends SQLiteOpenHelper{
          */
 
         //<<THAM SỐ HỆ THỐNG>>// INTEGER PRIMARY KEY
-        String sqlCMM="CREATE TABLE HT_PARA(" +
-                "PARA_NAME VARCHAR(50),"+
+        String sqlCMM = "CREATE TABLE HT_PARA(" +
+                "PARA_NAME VARCHAR(50)," +
                 "PARA_VAL VARCHAR(50))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_PROVINCE(Provinceid INTEGER PRIMARY KEY,"+
-                "ProvinceCode VARCHAR(10),"+
-                "Province VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE DM_PROVINCE(Provinceid INTEGER PRIMARY KEY," +
+                "ProvinceCode VARCHAR(10)," +
+                "Province VARCHAR(50)," +
                 "ZoneCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_DISTRICT(Districtid INTEGER PRIMARY KEY,"+
-                "Provinceid INTEGER,"+
-                "District VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE DM_DISTRICT(Districtid INTEGER PRIMARY KEY," +
+                "Provinceid INTEGER," +
+                "District VARCHAR(50)," +
                 "DistrictCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_WARD(Wardid INTEGER PRIMARY KEY,"+
-                "Districtid INTEGER,"+
-                "Ward VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE DM_WARD(Wardid INTEGER PRIMARY KEY," +
+                "Districtid INTEGER," +
+                "Ward VARCHAR(50)," +
                 "WardCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_PRODUCT_GROUP(ProductGroupid VARCHAR(15) PRIMARY KEY,"+
-                "ProductGroup VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE DM_PRODUCT_GROUP(ProductGroupid VARCHAR(15) PRIMARY KEY," +
+                "ProductGroup VARCHAR(50)," +
                 "ProductGroupCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_PRODUCT(ProductCode VARCHAR(15) PRIMARY KEY,"+
-                "ProductGroupID VARCHAR(15),"+
-                "ProductName VARCHAR(50),"+
-                "Unit VARCHAR(30),"+
-                "Spec VARCHAR(30),"+
-                "ConvertKgl FLOAT,"+
-                "ConvertBox FLOAT,"+
+        sqlCMM = "CREATE TABLE DM_PRODUCT(ProductCode VARCHAR(15) PRIMARY KEY," +
+                "ProductGroupID VARCHAR(15)," +
+                "ProductName VARCHAR(50)," +
+                "Unit VARCHAR(30)," +
+                "Spec VARCHAR(30)," +
+                "ConvertKgl FLOAT," +
+                "ConvertBox FLOAT," +
                 "isMain BIT)";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_CUSTOMER(Customerid VARCHAR(50)PRIMARY KEY,"+
-                "Employeeid VARCHAR(50),"+
-                "CustomerCode VARCHAR(15),"+
-                "CustomerName VARCHAR(150),"+
-                "ShortName VARCHAR(50),"+
-                "Represent VARCHAR(70),"+
-                "Provinceid INTEGER,"+
-                "Districtid INTEGER,"+
-                "Wardid INTEGER,"+
-                "Street VARCHAR(250),"+
-                "Address VARCHAR(250),"+
-                "Tax VARCHAR(15),"+
-                "Tel VARCHAR(15),"+
-                "Fax VARCHAR(15),"+
-                "Email VARCHAR(50),"+
-                "IsLevel INTEGER,"+
-                "VisitSchedule VARCHAR(10),"+
-                "Ranked VARCHAR(10),"+
-                "ExtCustomer BIT,"+
-                "Longitude FLOAT,"+
-                "Latitude FLOAT,"+
-                "LongitudeTemp FLOAT,"+
-                "LatitudeTemp FLOAT,"+
-                "Scope FLOAT,"+
-                "LocationAddress VARCHAR(255),"+
-                "LocationAddressTemp VARCHAR(255),"+
-                "Notes VARCHAR(200),"+
-                "IsSupport BIT,"+
+        sqlCMM = "CREATE TABLE DM_CUSTOMER(Customerid VARCHAR(50)PRIMARY KEY," +
+                "Employeeid VARCHAR(50)," +
+                "CustomerCode VARCHAR(15)," +
+                "CustomerName VARCHAR(150)," +
+                "ShortName VARCHAR(50)," +
+                "Represent VARCHAR(70)," +
+                "Provinceid INTEGER," +
+                "Districtid INTEGER," +
+                "Wardid INTEGER," +
+                "Street VARCHAR(250)," +
+                "Address VARCHAR(250)," +
+                "Tax VARCHAR(15)," +
+                "Tel VARCHAR(15)," +
+                "Fax VARCHAR(15)," +
+                "Email VARCHAR(50)," +
+                "IsLevel INTEGER," +
+                "VisitSchedule VARCHAR(10)," +
+                "Ranked VARCHAR(10)," +
+                "ExtCustomer BIT," +
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LongitudeTemp FLOAT," +
+                "LatitudeTemp FLOAT," +
+                "Scope FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "LocationAddressTemp VARCHAR(255)," +
+                "Notes VARCHAR(200)," +
+                "IsSupport BIT," +
                 "EditStatus INTEGER)";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_CUSTOMER_SUPPLIER(Supplierid VARCHAR(50),"+
-                "Customerid VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE DM_CUSTOMER_SUPPLIER(Supplierid VARCHAR(50)," +
+                "Customerid VARCHAR(50)," +
                 "Notes VARCHAR(50))";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM="CREATE TABLE QR_QRSCAN(Qrscanid VARCHAR(50),"+
-                "Customerid VARCHAR(50),"+
-                "CommandNo VARCHAR(15),"+
-                "Qrid VARCHAR(50),"+
-                "ProductCode VARCHAR(15),"+
-                "ProductName VARCHAR(70),"+
-                "Unit VARCHAR(30),"+
-                "Specification VARCHAR(50),"+
-                "ScanNo INTEGER,"+
-                "ScanDay DATETIME,"+
-                "Longitude FLOAT,"+
-                "Latitude FLOAT,"+
-                "LocationAddress VARCHAR(255),"+
-                "ScanSupportID VARCHAR(50),"+
-                "Imei VARCHAR(50),"+
-                "ImeiSim VARCHAR(50),"+
-                "ScanType VARCHAR(5),"+
-                "SyncDay DATETIME,"+
+        sqlCMM = "CREATE TABLE QR_QRSCAN(Qrscanid VARCHAR(50)," +
+                "Customerid VARCHAR(50)," +
+                "CommandNo VARCHAR(15)," +
+                "Qrid VARCHAR(50)," +
+                "ProductCode VARCHAR(15)," +
+                "ProductName VARCHAR(70)," +
+                "Unit VARCHAR(30)," +
+                "Specification VARCHAR(50)," +
+                "ScanNo INTEGER," +
+                "ScanDay DATETIME," +
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
+                "ScanSupportID VARCHAR(50)," +
+                "Imei VARCHAR(50)," +
+                "ImeiSim VARCHAR(50)," +
+                "ScanType VARCHAR(5)," +
+                "SyncDay DATETIME," +
                 "IsSync BIT)";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM="CREATE TABLE QR_QRSCAN_HIS(Scanhisid VARCHAR(50),"+
-                "Customerid VARCHAR(50),"+
-                "CommandNo VARCHAR(15),"+
-                "Qrid VARCHAR(50),"+
-                "ProductCode VARCHAR(15),"+
-                "ProductName VARCHAR(70),"+
-                "Unit VARCHAR(30),"+
-                "Specification VARCHAR(50),"+
-                "ScanNo INTEGER,"+
-                "ScanDay DATETIME,"+
-                "Longitude FLOAT,"+
-                "Latitude FLOAT,"+
-                "LocationAddress VARCHAR(255),"+
+        sqlCMM = "CREATE TABLE QR_QRSCAN_HIS(Scanhisid VARCHAR(50)," +
+                "Customerid VARCHAR(50)," +
+                "CommandNo VARCHAR(15)," +
+                "Qrid VARCHAR(50)," +
+                "ProductCode VARCHAR(15)," +
+                "ProductName VARCHAR(70)," +
+                "Unit VARCHAR(30)," +
+                "Specification VARCHAR(50)," +
+                "ScanNo INTEGER," +
+                "ScanDay DATETIME," +
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
+                "LocationAddress VARCHAR(255)," +
                 "Employee VARCHAR(100))";
 
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_CUSTOMER_LOCATION("+
-                "Customerid VARCHAR(50),"+
-                "CustomerCode VARCHAR(15),"+
-                "CustomerName VARCHAR(150),"+
-                "LongitudeScan FLOAT,"+
-                "LatitudeScan FLOAT,"+
+        sqlCMM = "CREATE TABLE DM_CUSTOMER_LOCATION(" +
+                "Customerid VARCHAR(50)," +
+                "CustomerCode VARCHAR(15)," +
+                "CustomerName VARCHAR(150)," +
+                "LongitudeScan FLOAT," +
+                "LatitudeScan FLOAT," +
                 "LocationAddressScan VARCHAR(255)," +
                 "Distince FLOAT)";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM="CREATE TABLE SM_VISITCARD("+
-                "VisitCardID VARCHAR(50),"+
-                "VisitDay DATETIME,"+
-                "CustomerID VARCHAR(50),"+
-                "VisitType VARCHAR(5),"+
-                "VisitTime DATETIME,"+
-                "Longitude FLOAT,"+
-                "Latitude FLOAT,"+
+        sqlCMM = "CREATE TABLE SM_VISITCARD(" +
+                "VisitCardID VARCHAR(50)," +
+                "VisitDay DATETIME," +
+                "CustomerID VARCHAR(50)," +
+                "VisitType VARCHAR(5)," +
+                "VisitTime DATETIME," +
+                "Longitude FLOAT," +
+                "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
-                "VisitNotes VARCHAR(255),"+
-                "IsSync BIT,"+
+                "VisitNotes VARCHAR(255)," +
+                "IsSync BIT," +
                 "SyncDay DATETIME)";
 
         db.execSQL(sqlCMM);
         // addTrace(db);
 
-        sqlCMM="CREATE TABLE DM_EMPLOYEE("+
-                "Employeeid VARCHAR(50),"+
-                "EmployeeCode VARCHAR(15),"+
-                "EmployeeName VARCHAR(120),"+
+        sqlCMM = "CREATE TABLE DM_EMPLOYEE(" +
+                "Employeeid VARCHAR(50)," +
+                "EmployeeCode VARCHAR(15)," +
+                "EmployeeName VARCHAR(120)," +
                 "Notes VARCHAR(255))";
         db.execSQL(sqlCMM);
 
@@ -252,7 +252,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "OrderID VARCHAR(50) PRIMARY KEY," +
                 "OrderCode VARCHAR(50)," +
                 "CustomerID VARCHAR(50), " +
-                "OrderDate DATETIME,"+
+                "OrderDate DATETIME," +
                 "RequestDate DATETIME," +
                 "MaxDebt INTEGER," +
                 "OriginMoney FLOAT," +
@@ -268,8 +268,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
                 "SeqnoCode INTEGER," +
-                "IsSample BIT,"+
-                "IsPost BIT,"+
+                "IsSample BIT," +
+                "IsPost BIT," +
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
 
@@ -281,12 +281,12 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "ProductCode VARCHAR(50)," +
                 "ProductName VARCHAR(100)," +
                 "Unit VARCHAR(30)," +
-                "Spec VARCHAR(50),"+
-                "ConvertBox FLOAT,"+
+                "Spec VARCHAR(50)," +
+                "ConvertBox FLOAT," +
                 "Amount INTEGER," +
-                "AmountBox FLOAT,"+
+                "AmountBox FLOAT," +
                 "Price FLOAT," +
-                "OriginMoney FLOAT,"+
+                "OriginMoney FLOAT," +
                 "Notes VARCHAR(255)," +
                 "Notes2 VARCHAR(255))";
         db.execSQL(sqlCMM);
@@ -303,7 +303,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "DeliveryDate DATETIME," +
                 "HandlingStaff VARCHAR(100)," +
                 "HandlingDate DATETIME," +
-                "TotalMoney FLOAT,"+
+                "TotalMoney FLOAT," +
                 "DeliveryDesc VARCHAR(1500))";
         db.execSQL(sqlCMM);
         //DELIVERYDETAIL
@@ -313,145 +313,168 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "ProductCode VARCHAR(50)," +
                 "ProductName VARCHAR(100)," +
                 "Unit VARCHAR(30)," +
-                "Spec VARCHAR(50),"+
+                "Spec VARCHAR(50)," +
                 "Amount INTEGER," +
-                "AmountBox FLOAT,"+
+                "AmountBox FLOAT," +
                 "Price FLOAT," +
-                "OriginMoney FLOAT,"+
+                "OriginMoney FLOAT," +
                 "Notes VARCHAR(255))";
         db.execSQL(sqlCMM);
         /////////////////////////////////////////END TIVA ///////////////////////////////////
         ////////////GIAI DOAN 2//////////
-        sqlCMM="CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY,"+
-                "PayCode VARCHAR(20),"+
-                "PayDate DATETIME,"+
-                "PayName VARCHAR(100),"+
-                "CustomerID VARCHAR(50),"+
-                "PayMoney FLOAT,"+
-                "PayPic VARCHAR(255),"+
+        sqlCMM = "CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY," +
+                "PayCode VARCHAR(20)," +
+                "PayDate DATETIME," +
+                "PayName VARCHAR(100)," +
+                "CustomerID VARCHAR(50)," +
+                "PayMoney FLOAT," +
+                "PayPic VARCHAR(255)," +
                 "Longitude FLOAT," +
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
                 "PayStatus INTEGER," +
                 "PayNotes VARCHAR(255)," +
-                "IsPost BIT,"+
+                "IsPost BIT," +
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY,"+
-                "TreeCode VARCHAR(15),"+
-                "TreeGroupCode VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY," +
+                "TreeCode VARCHAR(15)," +
+                "TreeGroupCode VARCHAR(15)," +
                 "TreeName VARCHAR(50))";
         db.execSQL(sqlCMM);
-        sqlCMM="CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY,"+
-                "TreeID INTEGER,"+
-                "DiseaseCode VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY," +
+                "TreeID INTEGER," +
+                "DiseaseCode VARCHAR(15)," +
                 "DiseaseName VARCHAR(50))";
         db.execSQL(sqlCMM);
 
-        sqlCMM="CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY,"+
-                "SeasonCode VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY," +
+                "SeasonCode VARCHAR(15)," +
                 "SeasonName VARCHAR(50))";
         db.execSQL(sqlCMM);
 
         //[[[[REPORT-TECH:BÁO CÁO KỸ THUẬT]]]]
-        sqlCMM="CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY,"+
-                "ReportCode VARCHAR(20),"+
-                "ReportName VARCHAR(50),"+
-                "ReportDay DATETIME,"+
+        sqlCMM = "CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY," +
+                "ReportCode VARCHAR(20)," +
+                "ReportName VARCHAR(50)," +
+                "ReportDay DATETIME," +
                 "Longitude FLOAT," +
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
-                "ReceiverList VARCHAR(255),"+
-                "Notes VARCHAR(50),"+
-                "IsStatus INTEGER,"+
-                "IsPost BIT,"+
+                "ReceiverList VARCHAR(255)," +
+                "Notes VARCHAR(50)," +
+                "IsStatus INTEGER," +
+                "IsPost BIT," +
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
         //THỊ TRƯỜNG
-        sqlCMM="CREATE TABLE SM_REPORT_TECH_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
-                "ReportTechID VARCHAR(50),"+
-                "Title VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_TECH_MARKET(MarketID VARCHAR(50) PRIMARY KEY," +
+                "ReportTechID VARCHAR(50)," +
+                "Title VARCHAR(50)," +
                 "Notes VARCHAR(200)," +
-                "Useful VARCHAR(200),"+
+                "Useful VARCHAR(200)," +
                 "Harmful VARCHAR(200))";
         db.execSQL(sqlCMM);
         //DỊCH BỆNH
-        sqlCMM="CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
-                "ReportTechID VARCHAR(50),"+
-                "TreeCode VARCHAR(15),"+
-                "Title VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY," +
+                "ReportTechID VARCHAR(50)," +
+                "TreeCode VARCHAR(15)," +
+                "Title VARCHAR(50)," +
                 "Acreage FLOAT," +
-                "Disease VARCHAR(200),"+
-                "Price FLOAT,"+
+                "Disease VARCHAR(200)," +
+                "Price FLOAT," +
                 "Notes VARCHAR(200))";
         db.execSQL(sqlCMM);
         //ĐỐI THỦ
-        sqlCMM="CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY,"+
-                "ReportTechID VARCHAR(50),"+
-                "Title VARCHAR(50),"+
-                "Notes VARCHAR(200),"+
-                "Useful VARCHAR(200),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY," +
+                "ReportTechID VARCHAR(50)," +
+                "Title VARCHAR(50)," +
+                "Notes VARCHAR(200)," +
+                "Useful VARCHAR(200)," +
                 "Harmful VARCHAR(200))";
         db.execSQL(sqlCMM);
         //HOẠT ĐỘNG [ISTYPE=0:TRONG TUAN, 1: KẾ HOẠCH TUẦN TỚI]
-        sqlCMM="CREATE TABLE SM_REPORT_TECH_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
-                "ReportTechID VARCHAR(50),"+
-                "IsType INTEGER,"+
-                "Title VARCHAR(50),"+
-                "Notes VARCHAR(200),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_TECH_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY," +
+                "ReportTechID VARCHAR(50)," +
+                "IsType INTEGER," +
+                "Title VARCHAR(50)," +
+                "Notes VARCHAR(200)," +
                 "Achievement VARCHAR(200))";
         db.execSQL(sqlCMM);
 
 
         //[[[[REPORT-SALEREP:BÁO CÁO SALES-REP]]]]
-        sqlCMM="CREATE TABLE SM_REPORT_SALEREP(ReportSaleID VARCHAR(50) PRIMARY KEY,"+
-                "ReportCode VARCHAR(20),"+
-                "ReportName VARCHAR(50),"+
-                "ReportDay DATETIME,"+
+        sqlCMM = "CREATE TABLE SM_REPORT_SALEREP(ReportSaleID VARCHAR(50) PRIMARY KEY," +
+                "ReportCode VARCHAR(20)," +
+                "ReportName VARCHAR(50)," +
+                "ReportDay DATETIME," +
                 "Longitude FLOAT," +
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
-                "ReceiverList VARCHAR(255),"+
-                "Notes VARCHAR(50),"+
-                "IsStatus INTEGER,"+
-                "IsPost BIT,"+
+                "ReceiverList VARCHAR(255)," +
+                "Notes VARCHAR(50)," +
+                "IsStatus INTEGER," +
+                "IsPost BIT," +
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
         //THỊ TRƯỜNG
-        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_MARKET(MarketID VARCHAR(50) PRIMARY KEY,"+
-                "ReportSaleID VARCHAR(50),"+
-                "CustomerID VARCHAR(50),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_SALEREP_MARKET(MarketID VARCHAR(50) PRIMARY KEY," +
+                "ReportSaleID VARCHAR(50)," +
+                "CustomerID VARCHAR(50)," +
                 "CompanyName VARCHAR(100)," +
-                "ProductCode VARCHAR(20),"+
-                "Notes VARCHAR(200),"+
+                "ProductCode VARCHAR(20)," +
+                "Notes VARCHAR(200)," +
                 "Price FLOAT)";
         db.execSQL(sqlCMM);
         //DỊCH BỆNH
-        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
-                "ReportSaleID VARCHAR(50),"+
-                "TreeCode VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_SALEREP_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY," +
+                "ReportSaleID VARCHAR(50)," +
+                "TreeCode VARCHAR(15)," +
                 "Title VARCHAR(50)," +
-                "Acreage FLOAT,"+
+                "Acreage FLOAT," +
                 "Notes VARCHAR(200))";
         db.execSQL(sqlCMM);
         //MÙA VỤ
-        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY,"+
-                "ReportSaleID VARCHAR(50),"+
-                "TreeCode VARCHAR(15),"+
-                "SeasonCode VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_SALEREP_SEASON(SeasonID VARCHAR(50) PRIMARY KEY," +
+                "ReportSaleID VARCHAR(50)," +
+                "TreeCode VARCHAR(15)," +
+                "SeasonCode VARCHAR(15)," +
                 "Title VARCHAR(50)," +
-                "Acreage FLOAT,"+
+                "Acreage FLOAT," +
                 "Notes VARCHAR(200))";
         db.execSQL(sqlCMM);
         //HOAT ĐỘNG - CÔNG VIỆC - LỊCH CÔNG TÁC: iStYPE: 0 : Công việc, 1: Lịch công tác
-        sqlCMM="CREATE TABLE SM_REPORT_SALEREP_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY,"+
-                "ReportSaleID VARCHAR(50),"+
-                "IsType VARCHAR(15),"+
-                "Workday VARCHAR(15),"+
+        sqlCMM = "CREATE TABLE SM_REPORT_SALEREP_ACTIVITIE(ActivitieID VARCHAR(50) PRIMARY KEY," +
+                "ReportSaleID VARCHAR(50)," +
+                "IsType VARCHAR(15)," +
+                "Workday VARCHAR(15)," +
                 "Title VARCHAR(50)," +
                 "Place VARCHAR(100)," +
                 "Notes VARCHAR(200))";
+        db.execSQL(sqlCMM);
+
+        // KE HOACH BAN HANG
+        sqlCMM = "CREATE TABLE SM_PLAN_SALE(PlanID VARCHAR(50) PRIMARY KEY," +
+                "PlanCode NVARCHAR(20)," +
+                "PlanDay DATETIME," +
+                "StartDay DATETIME," +
+                "EndDay DATETIME," +
+                "PlanName NVARCHAR(50)," +
+                "PostDay DATETIME," +
+                "IsPost BIT," +
+                "IsStatus INTEGER," +
+                "Notes NVARCHAR(50))";
+        db.execSQL(sqlCMM);
+
+        sqlCMM = "CREATE TABLE SM_PLAN_SALE_DETAIL(PlanDetailID VARCHAR(50) PRIMARY KEY," +
+                "PlanID NVARCHAR(50)," +
+                "CustomerID NVARCHAR(50)," +
+                "ProductCode NVARCHAR(20)," +
+                "AmountBox FLOAT," +
+                "Amount FLOAT," +
+                "Notes NVARCHAR(255)," +
+                "Notes2 NVARCHAR(255))";
         db.execSQL(sqlCMM);
     }
 
@@ -599,6 +622,29 @@ public class DBGimsHelper extends SQLiteOpenHelper{
 
                 db.execSQL("ALTER TABLE SM_ORDER_DETAIL ADD COLUMN Notes2 VARCHAR(255) DEFAULT ''");
                 db.execSQL("ALTER TABLE SM_ORDER ADD COLUMN IsSample  BIT");
+
+                // KE HOACH BAN HANG
+                sqlCMM = "CREATE TABLE SM_PLAN_SALE(PlanID VARCHAR(50) PRIMARY KEY," +
+                        "PlanCode NVARCHAR(20)," +
+                        "PlanDay DATETIME," +
+                        "StartDay DATETIME," +
+                        "EndDay DATETIME," +
+                        "PlanName NVARCHAR(50)," +
+                        "PostDay DATETIME," +
+                        "IsPost BIT," +
+                        "IsStatus INTEGER," +
+                        "Notes NVARCHAR(50))";
+                db.execSQL(sqlCMM);
+
+                sqlCMM = "CREATE TABLE SM_PLAN_SALE_DETAIL(PlanDetailID VARCHAR(50) PRIMARY KEY," +
+                        "PlanID NVARCHAR(50)," +
+                        "CustomerID NVARCHAR(50)," +
+                        "ProductCode NVARCHAR(20)," +
+                        "AmountBox FLOAT," +
+                        "Amount FLOAT," +
+                        "Notes NVARCHAR(255)," +
+                        "Notes2 NVARCHAR(255))";
+                db.execSQL(sqlCMM);
 
             }
         }catch (Exception ex){
@@ -3410,6 +3456,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             values.put("IsStatus", oRptTech.getIsStatus());
             values.put("IsPost", oRptTech.isPost());
             values.put("PostDay", oRptTech.getPostDate());
+            //db.update("SM_REPORT_TECH",values,"ReportCode=?" ,new String[] {String.valueOf(oRptTech.getReportCode())});
             db.update("SM_REPORT_TECH",values,"ReportTechID=?" ,new String[] {String.valueOf(oRptTech.getReportTechId())});
             db.close();
             return true;
@@ -4308,6 +4355,29 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
+    public boolean editReportSale(SM_ReportSaleRep oRptSaleRep){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("ReportCode", oRptSaleRep.getReportCode());
+            values.put("ReportName", oRptSaleRep.getReportName());
+
+            values.put("ReportDay", oRptSaleRep.getReportDay());
+            values.put("Longitude", oRptSaleRep.getLongtitude());
+            values.put("Latitude", oRptSaleRep.getLatitude());
+            values.put("LocationAddress", oRptSaleRep.getLocationAddress());
+            values.put("ReceiverList", oRptSaleRep.getReceiverList());
+            values.put("Notes", oRptSaleRep.getNotes());
+
+            values.put("IsStatus", oRptSaleRep.getIsStatus());
+            values.put("IsPost", oRptSaleRep.getPost());
+            values.put("PostDay", oRptSaleRep.getPostDay());
+            db.update("SM_REPORT_SALEREP",values,"ReportSaleID=?" ,new String[] {String.valueOf(oRptSaleRep.getReportSaleId())});
+            db.close();
+            return true;
+        }catch (Exception e){Log.v("UDP_SM_RPT_SALE_ERR",e.getMessage()); return  false;}
+    }
+
     public String addReportSaleRep(SM_ReportSaleRep oRptSaleRep){
         try {
             SQLiteDatabase db = this.getWritableDatabase();
@@ -5071,6 +5141,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             return true;
         }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
     }
+
+    // KE HOACH BAN HANG
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){

@@ -728,7 +728,10 @@ public class ReportTechFormActivity extends BaseActivity {
     private String getReportTechActivityData(List<SM_ReportTechActivity> thisWeek, List<SM_ReportTechActivity> nextWeek){
         String mTechDetail="";
         try{
-            if(nextWeek != null){
+            if(thisWeek != null){
+                thisWeek = new ArrayList<>();
+            }
+            if(nextWeek != null && nextWeek.size()>0){
                 for(SM_ReportTechActivity o: nextWeek){
                     thisWeek.add(o);
                 }

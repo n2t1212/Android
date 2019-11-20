@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.api.APINet;
+import com.mimi.mimigroup.api.APINetCallBack;
+import com.mimi.mimigroup.api.SyncPost;
+import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Customer_Search;
@@ -32,6 +35,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 public class ReportSaleRepFormActivity extends BaseActivity {
 
@@ -538,7 +543,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 for (SM_ReportSaleRepMarket oDetail : oReportSaleRepMarket) {
                     mDB.addReportSaleRepMarket(oDetail);
                 }
-                //onPostReportSaleRep(oReportSaleRep, oReportSaleRepMarket);
+                onPostReportSaleRep(oReportSaleRep, oReportSaleRepMarket, oReportSaleRepDisease, oReportSaleRepSeason, oReportSaleRepTask,oReportSaleRepActivity);
             }else{
                 Toast.makeText(this, "Không thể ghi báo cáo sale..", Toast.LENGTH_SHORT).show();
                 return;
@@ -548,136 +553,285 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     }
 
     //POST ORDER
-    private String getOrderDetailPost(List<SM_OrderDetail> lstOrderDetail){
-        String mOrderDetail="";
+    private String getSaleMarketData(List<SM_ReportSaleRepMarket> markets){
+        String mSaleDetail="";
         try{
-            if(lstOrderDetail!=null){
-                for (SM_OrderDetail oOdt : lstOrderDetail) {
+            if(markets!=null){
+                for (SM_ReportSaleRepMarket market : markets) {
                     String mRow="";
-                    if(oOdt.getProductID()!=null && !oOdt.getProductID().isEmpty()){
-                        mRow=oOdt.getProductID()+"#";
-                        if(oOdt.getProductCode()!=null && !oOdt.getProductCode().isEmpty()){
-                            mRow+=oOdt.getProductCode()+"#";
+                    if(market.getMarketId()!=null && !market.getMarketId().isEmpty()){
+                        mRow=market.getMarketId()+"#";
+                        if(market.getReportSaleId()!=null && !market.getReportSaleId().isEmpty()){
+                            mRow+=market.getReportSaleId()+"#";
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getUnit()!=null && !oOdt.getUnit().isEmpty()){
-                            mRow+=oOdt.getUnit()+"#";
+                        if(market.getCustomerId()!=null && !market.getCustomerId().isEmpty()){
+                            mRow+=market.getCustomerId()+"#";
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getAmount()!=null){
-                            mRow+=oOdt.getAmount().toString()+"#";
+                        if(market.getCompanyName()!=null && !market.getCompanyName().isEmpty()){
+                            mRow+=market.getCompanyName()+"#";
                         }else{
                             mRow+="0"+"#";
                         }
-                        if(oOdt.getAmountBox()!=null){
-                            mRow+=oOdt.getAmountBox().toString()+"#";
+                        if(market.getProductCode()!=null && !market.getProductCode().isEmpty()){
+                            mRow+=market.getProductCode().toString()+"#";
                         }else{
-                            mRow+="0"+"#";
+                            mRow+=""+"#";
                         }
-                        if(oOdt.getPrice()!=null){
-                            mRow+=oOdt.getPrice().toString()+"#";
+                        if(market.getNotes()!=null && !market.getNotes().isEmpty()){
+                            mRow+=market.getNotes()+"#";
                         }else{
-                            mRow+="0"+"#";
+                            mRow+=""+"#";
                         }
-                        if(oOdt.getNotes()!=null){
-                            mRow+=oOdt.getNotes().toString()+"#";
+                        if(market.getPrice()!=null){
+                            mRow+=market.getPrice().toString()+"#";
                         }else{
-                            mRow+="#";
-                        }
-                        if(oOdt.getNotes2()!=null){
-                            mRow+=oOdt.getNotes2().toString()+"#";
-                        }else{
-                            mRow+="#";
+                            mRow+="0"+ "#";
                         }
                         mRow+="|";
-                        mOrderDetail+=mRow;
+                        mSaleDetail+=mRow;
                     }
                 }
             }
 
         }catch (Exception ex){}
-        return  mOrderDetail;
+        return  mSaleDetail;
     }
 
-    private void onPostReportSaleRep(final SM_ReportSaleRep oOd,final List<SM_OrderDetail> lstOrderDetail){
+    private String getSaleDiseaseData(List<SM_ReportSaleRepDisease> diseases){
+        String mSaleDetail="";
         try{
-            if (APINet.isNetworkAvailable(OrderFormActivity.this)==false){
-                Toast.makeText(OrderFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
+            if(diseases!=null){
+                for (SM_ReportSaleRepDisease disease : diseases) {
+                    String mRow="";
+                    if(disease.getDiseaseId()!=null && !disease.getDiseaseId().isEmpty()){
+                        mRow=disease.getDiseaseId()+"#";
+                        if(disease.getReportSaleId()!=null && !disease.getReportSaleId().isEmpty()){
+                            mRow+=disease.getReportSaleId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(disease.getTreeCode()!=null && !disease.getTreeCode().isEmpty()){
+                            mRow+=disease.getTreeCode()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(disease.getTitle()!=null && !disease.getTitle().isEmpty()){
+                            mRow+=disease.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(disease.getArceage()!=null){
+                            mRow+=disease.getArceage().toString()+"#";
+                        }else{
+                            mRow+="0"+"#";
+                        }
+                        if(disease.getNotes()!=null && !disease.getNotes().isEmpty()){
+                            mRow+=disease.getNotes()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mSaleDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mSaleDetail;
+    }
+
+    private String getSaleSeasonData(List<SM_ReportSaleRepSeason> seasons){
+        String mSaleDetail="";
+        try{
+            if(seasons!=null){
+                for (SM_ReportSaleRepSeason season : seasons) {
+                    String mRow="";
+                    if(season.getSeasonId()!=null && !season.getSeasonId().isEmpty()){
+                        mRow=season.getSeasonId()+"#";
+                        if(season.getReportSaleId()!=null && !season.getReportSaleId().isEmpty()){
+                            mRow+=season.getReportSaleId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(season.getTreeCode()!=null && !season.getTreeCode().isEmpty()){
+                            mRow+=season.getTreeCode()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(season.getSeasonCode()!=null && !season.getSeasonCode().isEmpty()){
+                            mRow+=season.getSeasonCode()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(season.getTitle()!=null && !season.getTitle().isEmpty()){
+                            mRow+=season.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(season.getAcreage()!=null){
+                            mRow+=season.getAcreage().toString()+"#";
+                        }else{
+                            mRow+="0"+"#";
+                        }
+                        if(season.getNotes()!=null && !season.getNotes().isEmpty()){
+                            mRow+=season.getNotes()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mSaleDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mSaleDetail;
+    }
+
+    private String getSaleActivityData(List<SM_ReportSaleRepActivitie> tasks, List<SM_ReportSaleRepActivitie> activities){
+        String mSaleDetail="";
+        try{
+            if(tasks != null){
+                tasks = new ArrayList<>();
+            }
+            if(activities != null && activities.size() > 0){
+                for(SM_ReportSaleRepActivitie o: activities){
+                    tasks.add(o);
+                }
+            }
+            if(tasks!=null){
+                for (SM_ReportSaleRepActivitie activitie : tasks) {
+                    String mRow="";
+                    if(activitie.getActivitieId()!=null && !activitie.getActivitieId().isEmpty()){
+                        mRow=activitie.getActivitieId()+"#";
+                        if(activitie.getReportSaleId()!=null && !activitie.getReportSaleId().isEmpty()){
+                            mRow+=activitie.getReportSaleId()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(activitie.getIsType()!=null && !activitie.getIsType().isEmpty()){
+                            mRow+=activitie.getIsType()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(activitie.getWorkDay()!=null && !activitie.getWorkDay().isEmpty()){
+                            mRow+=activitie.getWorkDay()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(activitie.getTitle()!=null && !activitie.getTitle().isEmpty()){
+                            mRow+=activitie.getTitle()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(activitie.getPlace()!=null && !activitie.getPlace().isEmpty()){
+                            mRow+=activitie.getPlace()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(activitie.getNotes()!=null && !activitie.getNotes().isEmpty()){
+                            mRow+=activitie.getNotes()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        mRow+="|";
+                        mSaleDetail+=mRow;
+                    }
+                }
+            }
+
+        }catch (Exception ex){}
+        return  mSaleDetail;
+    }
+
+    private void onPostReportSaleRep(final SM_ReportSaleRep sale,List<SM_ReportSaleRepMarket> markets, List<SM_ReportSaleRepDisease> diseases,
+                                     List<SM_ReportSaleRepSeason> seasons, List<SM_ReportSaleRepActivitie> tasks, List<SM_ReportSaleRepActivitie> activities){
+        try{
+            if (APINet.isNetworkAvailable(ReportSaleRepFormActivity.this)==false){
+                Toast.makeText(ReportSaleRepFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
                 return;
             }
 
             final String Imei=AppUtils.getImeil(this);
             final String ImeiSim=AppUtils.getImeilsim(this);
-            final String mDataOrderDetail=getOrderDetailPost(lstOrderDetail);
+            final String mDataReportSaleMarket=getSaleMarketData(markets);
+            final String mDataReportSaleDisease=getSaleDiseaseData(diseases);
+            final String mDataReportSaleSeason=getSaleSeasonData(seasons);
+            final String mDataReportSaleActivity=getSaleActivityData(tasks,activities);
+
 
             if(ImeiSim.isEmpty()){
                 Toast.makeText(this,"Không đọc được số IMEI từ thiết bị cho việc đồng bộ. Kiểm tra Sim của bạn",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(oOd==null){
-                Toast.makeText(this,"Không tìm thấy dữ liệu đơn hàng.",Toast.LENGTH_LONG).show();
+            if(sale==null){
+                Toast.makeText(this,"Không tìm thấy dữ liệu báo cáo sale.",Toast.LENGTH_LONG).show();
                 return;
             }
-            if(oOd.getOrderID()==null || oOd.getOrderCode().isEmpty()){
-                Toast.makeText(this,"Không tìm thấy mã đơn hàng",Toast.LENGTH_SHORT).show();
-                return;
-            }else if(oOd.getCustomerID()==null || oOd.getCustomerID().isEmpty()){
-                Toast.makeText(this,"Bạn chưa chọn khách hàng cho đơn hàng này",Toast.LENGTH_SHORT).show();
+            if(sale.getReportSaleId()==null || sale.getReportSaleId().isEmpty()){
+                Toast.makeText(this,"Không tìm thấy mã báo cáo",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            final String mUrlPostOrder=AppSetting.getInstance().URL_PostOrder();
+            final String mUrlPostSale=AppSetting.getInstance().URL_PostReportSale();
             try {
-                if (oOd.getOrderCode() == null || oOd.getOrderCode().isEmpty()) {
-                    oOd.setOrderCode("");
+                if (sale.getReportSaleId() == null || sale.getReportSaleId().isEmpty()) {
+                    sale.setReportSaleId("");
                 }
-                if (oOd.getRequestDate() == null || oOd.getRequestDate().isEmpty()) {
-                    oOd.setRequestDate("");
+                if (sale.getReportCode() == null || sale.getReportCode().isEmpty()) {
+                    sale.setReportCode("");
                 }
-                if (oOd.getOrderDate() == null || oOd.getOrderDate().isEmpty()) {
-                    oOd.setOrderDate("");
+                if (sale.getReportName() == null || sale.getReportName().isEmpty()) {
+                    sale.setReportName("");
                 }
-                if (oOd.getMaxDebt() == null ) {
-                    oOd.setMaxDebt(0);
+                if (sale.getReportDay() == null && sale.getReportDay().isEmpty()) {
+                    sale.setReportDay("");
                 }
-                if (oOd.getOrderNotes() == null || oOd.getOrderNotes().isEmpty()) {
-                    oOd.setOrderNotes("");
+                if (sale.getLongtitude() == null) {
+                    sale.setLongtitude(0f);
                 }
 
-                if (oOd.getLatitude() == null || oOd.getLatitude().toString().isEmpty()) {
-                    oOd.setLatitude(0.0);
+                if (sale.getLatitude() == null || sale.getLatitude().toString().isEmpty()) {
+                    sale.setLatitude(0f);
                 }
-                if (oOd.getLongitude() == null || oOd.getLongitude().toString().isEmpty()) {
-                    oOd.setLongitude(0.0);
+                if (sale.getLocationAddress() == null || sale.getLocationAddress().toString().isEmpty()) {
+                    sale.setLocationAddress("N/A");
                 }
-                if (oOd.getLocationAddress() == null || oOd.getLocationAddress().toString().isEmpty()) {
-                    oOd.setLocationAddress("N/A");
+                if(sale.getReceiverList()==null && sale.getReceiverList().isEmpty()){
+                    sale.setReceiverList("");
                 }
-                if(oOd.getOrderStatus()==null){
-                    oOd.setOrderStatus(1);
+                if(sale.getNotes()==null && sale.getNotes().isEmpty()){
+                    sale.setNotes("");
+                }
+                if(sale.getIsStatus()==null && sale.getIsStatus().isEmpty()){
+                    sale.setIsStatus("1");
                 }
             }catch(Exception ex){
-                Toast.makeText(OrderFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(ReportSaleRepFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
 
             RequestBody DataBody = new FormBody.Builder()
                     .add("imei", Imei)
                     .add("imeisim", ImeiSim)
-                    .add("customerid",oOd.getCustomerID())
-                    .add("orderid", oOd.getOrderID())
-                    .add("ordercode", oOd.getOrderCode())
-                    .add("orderdate", oOd.getOrderDate())
-                    .add("requestdate", oOd.getRequestDate())
-                    .add("orderstatus", Integer.toString(oOd.getOrderStatus()))
-                    .add("maxdebit", Integer.toString( oOd.getMaxDebt()))
-                    .add("longitude", Double.toString(oOd.getLongitude()))
-                    .add("latitude", Double.toString(oOd.getLatitude()))
-                    .add("locationaddress", oOd.getLocationAddress())
-                    .add("notes", oOd.getOrderNotes())
-                    .add("orderdetail",mDataOrderDetail)
+                    .add("reportcode",sale.getReportCode())
+                    .add("reportday", sale.getReportDay())
+                    .add("reportname", sale.getReportName())
+                    .add("customerid", "")
+                    .add("longitude", Float.toString(sale.getLongtitude()))
+                    .add("latitude", Float.toString(sale.getLatitude()))
+                    .add("locationaddress", sale.getLocationAddress())
+                    .add("receiverlist", sale.getReceiverList())
+                    .add("notes",sale.getNotes())
+                    .add("isstatus", sale.getIsStatus())
+                    .add("reportsalerepmarket", mDataReportSaleMarket)
+                    .add("reportsalerepdisease",mDataReportSaleDisease)
+                    .add("reportsalerepseason",mDataReportSaleSeason)
+                    .add("reportsalerepactivity",mDataReportSaleActivity)
                     .build();
             new SyncPost(new APINetCallBack() {
                 @Override
@@ -690,27 +844,27 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                         dismissProgressDialog();
                         if (ResPonseRs!=null && !ResPonseRs.isEmpty()) {
                             if (ResPonseRs.contains("SYNC_OK")) {
-                                Toast.makeText(OrderFormActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Đồng  bộ thành công.", Toast.LENGTH_LONG).show();
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                oOd.setPostDay(sdf.format(new Date()));
-                                oOd.setPost(true);
-                                oOd.setOrderStatus(2);
-                                mDB.editSMOrder(oOd);
+                                sale.setPostDay(sdf.format(new Date()));
+                                sale.setPost(true);
+                                sale.setIsStatus("2");
+                                mDB.editReportSale(sale);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){
-                                Toast.makeText(OrderFormActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();
                             }else if(ResPonseRs.contains("SYNC_ACTIVE")) {
-                                Toast.makeText(OrderFormActivity.this, "Thiết bị chưa kích hoạt...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Thiết bị chưa kích hoạt...", Toast.LENGTH_LONG).show();
                             }else if(ResPonseRs.contains("SYNC_APPROVE") || ResPonseRs.contains("SYNC_APPROVE")){
-                                Toast.makeText(OrderFormActivity.this, "Đơn hàng đang được xử lý. Bạn không thể gửi điều chỉnh.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Đơn hàng đang được xử lý. Bạn không thể gửi điều chỉnh.", Toast.LENGTH_LONG).show();
                             }else if (ResPonseRs.contains("SYNC_BODY_NULL")) {
-                                Toast.makeText(OrderFormActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
                             } else if (ResPonseRs.contains("SYNC_ORDERID_NULL")) {
-                                Toast.makeText(OrderFormActivity.this, "Mã số ORDERID=NULL", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Mã số ORDERID=NULL", Toast.LENGTH_LONG).show();
                             }
                         }else{
-                            Toast.makeText(OrderFormActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ReportSaleRepFormActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();
                         }
                     }catch (Exception ex){ }
                     // finish();
@@ -719,13 +873,13 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 @Override
                 public void onHttpFailer(Exception e) {
                     dismissProgressDialog();
-                    Toast.makeText(OrderFormActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(ReportSaleRepFormActivity.this,"Không thể đồng bộ:"+e.getMessage(),Toast.LENGTH_LONG).show();
                 }
-            },mUrlPostOrder,"POST_ORDER",DataBody).execute();
+            },mUrlPostSale,"POST_REPORT_SALE",DataBody).execute();
 
 
         }catch (Exception ex){
-            Toast.makeText(OrderFormActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(ReportSaleRepFormActivity.this,"Không thể đồng bộ:"+ex.getMessage(),Toast.LENGTH_LONG).show();
             dismissProgressDialog();
         }
     }
