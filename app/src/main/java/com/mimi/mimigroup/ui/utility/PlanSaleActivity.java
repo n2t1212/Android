@@ -188,7 +188,7 @@ public class PlanSaleActivity extends BaseActivity {
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
         String mPlanSaleID = "KHBH"+mParSymbol+Od.format(new Date());
         if(!mPlanSaleID.isEmpty()) {
-            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleActivity.class);
+            Intent intent = new Intent(PlanSaleActivity.this, PlanSaleFormActivity.class);
             intent.setAction("ADD");
             intent.putExtra("PlanID",mPlanSaleID);
             intent.putExtra("PAR_SYMBOL", mParSymbol);
@@ -219,7 +219,7 @@ public class PlanSaleActivity extends BaseActivity {
             if (oPlanSaleSel.get(0).getPlanId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
-                Intent intent = new Intent(PlanSaleActivity.this,PlanSaleActivity.class);
+                Intent intent = new Intent(PlanSaleActivity.this,PlanSaleFormActivity.class);
                 intent.setAction("EDIT");
                 intent.putExtra("PlanID", oPlanSaleSel.get(0).getPlanId());
                 intent.putExtra("PAR_SYMBOL", mParSymbol);

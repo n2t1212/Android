@@ -63,7 +63,7 @@
                         android:gravity="right"
                         android:padding="10dp"
                         android:text="Ngày tạo" />
-                    <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    <com.mimi.mimigroup.ui.custom.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -87,7 +87,7 @@
                         android:gravity="right"
                         android:padding="5dp"
                         android:text="Ngày bắt đầu" />
-                    <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    <com.mimi.mimigroup.ui.custom.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -111,7 +111,7 @@
                         android:gravity="right"
                         android:padding="5dp"
                         android:text="Ngày kết thúc" />
-                    <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    <com.mimi.mimigroup.ui.custom.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
