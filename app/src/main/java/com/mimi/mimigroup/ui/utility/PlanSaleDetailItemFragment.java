@@ -333,6 +333,7 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập khách hàng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            spCustomer.requestFocus();
             return false;
         } else {
             oDetail.setCustomerId(oCustomerSel.getCustomerid());

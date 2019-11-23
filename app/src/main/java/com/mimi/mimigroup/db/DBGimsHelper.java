@@ -5550,6 +5550,42 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){return false;}
     }
 
+    public List<DM_Employee> getEmpByListId(String[] id) {
+        try {
+            String mId = "";
+            if(id != null && id.length > 0){
+                for(int i = 0;i < id.length; i++){
+                    if(i > 0){
+                        mId += ",";
+                    }
+                    mId +=  String.format("'%s'", id[i]) ;
+                }
+            } else {
+                return new ArrayList<DM_Employee>();
+            }
+            List<DM_Employee> lst = new ArrayList<DM_Employee>();
+            String mSql=String.format("Select A.* from DM_EMPLOYEE A "+
+                    " where A.Employeeid in (%s)", mId);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_Employee emp = new DM_Employee();
+                    emp.setEmployeeid(cursor.getString(cursor.getColumnIndex("Employeeid")));
+                    emp.setEmployeeCode(cursor.getString(cursor.getColumnIndex("EmployeeCode")));
+                    emp.setEmployeeName(cursor.getString(cursor.getColumnIndex("EmployeeName")));
+                    lst.add(emp);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_EMP",ex.getMessage().toString());}
+        return null;
+    }
+
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){
         if (ngay==null || ngay.contains("null") || ngay.equals("")) return  sFormatFrom=="yyyy-MM-dd"?"01/01/1900":"1900-01-01";

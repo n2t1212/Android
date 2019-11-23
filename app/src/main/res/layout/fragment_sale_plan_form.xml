@@ -62,7 +62,7 @@
                         android:layout_weight="0"
                         android:gravity="right"
                         android:padding="10dp"
-                        android:text="Ngày K.hoạch" />
+                        android:text="Ngày tạo" />
                     <com.mimi.mimigroup.ui.custom.CustomBoldEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -168,6 +168,7 @@
                         android:id="@+id/tvNotes"
                         android:background="@drawable/edittext"
                         android:layout_marginEnd="30dp"
+                        android:inputType="textMultiLine"
                         android:gravity="left"/>
                 </LinearLayout>
 

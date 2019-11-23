@@ -200,16 +200,14 @@ public class ReportTechActivityNextWeekItemFragment  extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tiêu đề...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvTitle.requestFocus();
             return false;
         } else {
             oDetail.setTitle(tvTitle.getText().toString());
         }
 
         if (tvNotes.getText() == null || tvNotes.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ghi chú...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            return false;
+            oDetail.setNotes("");
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
@@ -217,6 +215,7 @@ public class ReportTechActivityNextWeekItemFragment  extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập kết quả đạt được...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvAchievement.requestFocus();
             return false;
         } else {
             oDetail.setAchievement(tvAchievement.getText().toString());

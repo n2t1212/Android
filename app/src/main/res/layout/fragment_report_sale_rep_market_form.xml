@@ -61,30 +61,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2" >
-                <com.mimi.mimigroup.ui.custom.CustomTextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:text="Công ty" />
-                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:padding="10dp"
-                    android:layout_weight="0"
-                    android:id="@+id/tvCompanyName"
-                    android:background="@drawable/edittext"
-                    android:layout_marginEnd="30dp"
-                    android:inputType="text"
-                    android:gravity="left"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:orientation="vertical">
                 <com.mimi.mimigroup.ui.custom.CustomTextView
@@ -115,6 +91,31 @@
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     android:ems="10" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Công ty" />
+                <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvCompanyName"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
             </LinearLayout>
 
             <LinearLayout
@@ -162,7 +163,7 @@
                     android:id="@+id/tvNotes"
                     android:background="@drawable/edittext_readonly"
                     android:layout_marginEnd="30dp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:gravity="left"/>
             </LinearLayout>
             <View

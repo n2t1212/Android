@@ -11,34 +11,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
-import com.mimi.mimigroup.model.DM_Customer_Search;
+import com.mimi.mimigroup.model.DM_Tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> implements  Filterable {
+public class SearchTreeAdapter extends ArrayAdapter<DM_Tree> implements Filterable {
 
     int resource;
-    List<DM_Customer_Search>oCustomer, tempCustomer, suggestions;
+    List<DM_Tree> oTree, tempTree, suggestions;
     Context ctx;
 
-    public SearchCustomerAdapter(Context context, int resource, ArrayList<DM_Customer_Search> mCustomer) {
-        super(context, resource, mCustomer);
+    public SearchTreeAdapter(Context context, int resource, ArrayList<DM_Tree> mTree) {
+        super(context, resource, mTree);
         this.ctx=context;
         this.resource=resource;
-        this.oCustomer=mCustomer;
-        this.tempCustomer=new ArrayList<DM_Customer_Search>(this.oCustomer);
-        this.suggestions=new ArrayList<DM_Customer_Search>();
+        this.oTree=mTree;
+        this.tempTree=new ArrayList<DM_Tree>(this.oTree);
+        this.suggestions=new ArrayList<DM_Tree>();
     }
 
     @Override
     public int getCount() {
-        return this.oCustomer.size();
+        return this.oTree.size();
     }
 
     @Override
-    public DM_Customer_Search getItem(int position) {
-        return this.oCustomer.get(position);
+    public DM_Tree getItem(int position) {
+        return this.oTree.get(position);
     }
 
     @Override
@@ -47,19 +47,17 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         try {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.search_customer, parent, false);
+                view = inflater.inflate(R.layout.search_tree, parent, false);
             }
-            DM_Customer_Search itemCus = this.oCustomer.get(position);
+            DM_Tree itemCus = this.oTree.get(position);
             if (itemCus  != null) {
-                TextView txtCustomerCode = (TextView) view.findViewById(R.id.txtcb_customercode);
-                if (txtCustomerCode != null) txtCustomerCode.setText(itemCus.getCustomerCode());
-                TextView txtCustomerName = (TextView) view.findViewById(R.id.txtcb_customername);
-                if (txtCustomerName!= null) txtCustomerName.setText(itemCus.getCustomerName());
-                TextView txtShortName = (TextView) view.findViewById(R.id.txtcb_shortname);
-                if (txtShortName!= null) txtShortName.setText(itemCus.getShortName());
+                TextView txtTreeCode = (TextView) view.findViewById(R.id.txtcb_treecode);
+                if (txtTreeCode != null) txtTreeCode.setText(itemCus.getTreeCode());
+                TextView txtTreeName = (TextView) view.findViewById(R.id.txtcb_treename);
+                if (txtTreeName!= null) txtTreeName.setText(itemCus.getTreeName());
             }
         }catch (Exception ex) {
-            Toast.makeText(ctx, "Không thể tìm khách hàng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "Không thể tìm cây trồng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return view;
     }
@@ -69,7 +67,7 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         try {
             return nameFilter;
         }catch (Exception ex){
-            Toast.makeText(ctx, "Không thể tìm khách hàng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "Không thể tìm cây trồng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -77,15 +75,15 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
     Filter  nameFilter = new Filter() {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            String str = ((DM_Customer_Search) resultValue).getCustomerName();
+            String str = ((DM_Tree) resultValue).getTreeName();
             return str;
         }
         @Override
         protected synchronized FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
                 suggestions.clear();
-                for (DM_Customer_Search itemCus : tempCustomer) {
-                    if (itemCus.getCustomerCode().toLowerCase().contains(constraint.toString().toLowerCase()) || itemCus.getCustomerName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                for (DM_Tree itemCus : tempTree) {
+                    if (itemCus.getTreeCode().toLowerCase().contains(constraint.toString().toLowerCase()) || itemCus.getTreeName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(itemCus);
                     }
                 }
@@ -101,9 +99,9 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                oCustomer= (ArrayList<DM_Customer_Search>) results.values;
+                oTree= (ArrayList<DM_Tree>) results.values;
             } else {
-                oCustomer = new ArrayList<DM_Customer_Search>();
+                oTree = new ArrayList<DM_Tree>();
             }
             if (results.count > 0) {
                 notifyDataSetChanged();
@@ -114,4 +112,5 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
     };
 
 }
+
 

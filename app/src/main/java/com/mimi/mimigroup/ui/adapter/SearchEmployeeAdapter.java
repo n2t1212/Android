@@ -11,34 +11,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
-import com.mimi.mimigroup.model.DM_Customer_Search;
+import com.mimi.mimigroup.model.DM_Employee;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> implements  Filterable {
+public class SearchEmployeeAdapter extends ArrayAdapter<DM_Employee> implements Filterable {
 
     int resource;
-    List<DM_Customer_Search>oCustomer, tempCustomer, suggestions;
+    List<DM_Employee> oEmployee, tempEmployee, suggestions;
     Context ctx;
 
-    public SearchCustomerAdapter(Context context, int resource, ArrayList<DM_Customer_Search> mCustomer) {
-        super(context, resource, mCustomer);
+    public SearchEmployeeAdapter(Context context, int resource, List<DM_Employee> mEmployee) {
+        super(context, resource, mEmployee);
         this.ctx=context;
         this.resource=resource;
-        this.oCustomer=mCustomer;
-        this.tempCustomer=new ArrayList<DM_Customer_Search>(this.oCustomer);
-        this.suggestions=new ArrayList<DM_Customer_Search>();
+        this.oEmployee=mEmployee;
+        this.tempEmployee=new ArrayList<DM_Employee>(this.oEmployee);
+        this.suggestions=new ArrayList<DM_Employee>();
     }
 
     @Override
     public int getCount() {
-        return this.oCustomer.size();
+        return this.oEmployee.size();
     }
 
     @Override
-    public DM_Customer_Search getItem(int position) {
-        return this.oCustomer.get(position);
+    public DM_Employee getItem(int position) {
+        return this.oEmployee.get(position);
     }
 
     @Override
@@ -47,19 +47,18 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         try {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(R.layout.search_customer, parent, false);
+                view = inflater.inflate(R.layout.search_employee, parent, false);
             }
-            DM_Customer_Search itemCus = this.oCustomer.get(position);
+            DM_Employee itemCus = this.oEmployee.get(position);
             if (itemCus  != null) {
-                TextView txtCustomerCode = (TextView) view.findViewById(R.id.txtcb_customercode);
-                if (txtCustomerCode != null) txtCustomerCode.setText(itemCus.getCustomerCode());
-                TextView txtCustomerName = (TextView) view.findViewById(R.id.txtcb_customername);
-                if (txtCustomerName!= null) txtCustomerName.setText(itemCus.getCustomerName());
+                TextView txtEmployeeCode = (TextView) view.findViewById(R.id.txtcb_employeecode);
+                if (txtEmployeeCode != null) txtEmployeeCode.setText(itemCus.getEmployeeCode());
+                TextView txtEmployeeName = (TextView) view.findViewById(R.id.txtcb_employeename);
+                if (txtEmployeeName!= null) txtEmployeeName.setText(itemCus.getEmployeeName());
                 TextView txtShortName = (TextView) view.findViewById(R.id.txtcb_shortname);
-                if (txtShortName!= null) txtShortName.setText(itemCus.getShortName());
             }
         }catch (Exception ex) {
-            Toast.makeText(ctx, "Không thể tìm khách hàng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "Không thể tìm nhân viên:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return view;
     }
@@ -69,7 +68,7 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         try {
             return nameFilter;
         }catch (Exception ex){
-            Toast.makeText(ctx, "Không thể tìm khách hàng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "Không thể tìm nhân viên:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             return null;
         }
     }
@@ -77,15 +76,15 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
     Filter  nameFilter = new Filter() {
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            String str = ((DM_Customer_Search) resultValue).getCustomerName();
+            String str = ((DM_Employee) resultValue).getEmployeeName();
             return str;
         }
         @Override
         protected synchronized FilterResults performFiltering(CharSequence constraint) {
             if (constraint != null) {
                 suggestions.clear();
-                for (DM_Customer_Search itemCus : tempCustomer) {
-                    if (itemCus.getCustomerCode().toLowerCase().contains(constraint.toString().toLowerCase()) || itemCus.getCustomerName().toLowerCase().contains(constraint.toString().toLowerCase())) {
+                for (DM_Employee itemCus : tempEmployee) {
+                    if (itemCus.getEmployeeCode().toLowerCase().contains(constraint.toString().toLowerCase()) || itemCus.getEmployeeName().toLowerCase().contains(constraint.toString().toLowerCase())) {
                         suggestions.add(itemCus);
                     }
                 }
@@ -101,9 +100,9 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results.values != null) {
-                oCustomer= (ArrayList<DM_Customer_Search>) results.values;
+                oEmployee= (ArrayList<DM_Employee>) results.values;
             } else {
-                oCustomer = new ArrayList<DM_Customer_Search>();
+                oEmployee = new ArrayList<DM_Employee>();
             }
             if (results.count > 0) {
                 notifyDataSetChanged();
@@ -114,4 +113,5 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
     };
 
 }
+
 

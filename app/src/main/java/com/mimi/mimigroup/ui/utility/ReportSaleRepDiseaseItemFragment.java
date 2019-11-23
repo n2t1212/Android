@@ -340,16 +340,14 @@ public class ReportSaleRepDiseaseItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn cây trồng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvTree.requestFocus();
             return false;
         } else {
             oDetail.setTreeCode(tvTree.getTag().toString());
         }
 
         if (tvNotes.getText() == null || tvNotes.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ghi chú...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            return false;
+            oDetail.setNotes("");
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
@@ -357,6 +355,7 @@ public class ReportSaleRepDiseaseItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tiêu dề...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvTitle.requestFocus();
             return false;
         } else {
             oDetail.setTitle(tvTitle.getText().toString());
@@ -365,6 +364,7 @@ public class ReportSaleRepDiseaseItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập diện tích...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvAcreage.requestFocus();
             return false;
         } else {
             oDetail.setArceage(Float.parseFloat(tvAcreage.getText().toString()));

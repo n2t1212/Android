@@ -861,7 +861,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                             }else if (ResPonseRs.contains("SYNC_BODY_NULL")) {
                                 Toast.makeText(ReportSaleRepFormActivity.this, "Tham số gửi lên BODY=NULL", Toast.LENGTH_LONG).show();
                             } else if (ResPonseRs.contains("SYNC_ORDERID_NULL")) {
-                                Toast.makeText(ReportSaleRepFormActivity.this, "Mã số ORDERID=NULL", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ReportSaleRepFormActivity.this, "Mã số SALEID=NULL", Toast.LENGTH_LONG).show();
                             }
                         }else{
                             Toast.makeText(ReportSaleRepFormActivity.this  , "Không nhận được trang thải trả về.", Toast.LENGTH_LONG).show();

@@ -322,6 +322,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập khách hàng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            spCustomer.requestFocus();
             return false;
         } else {
             oDetail.setCustomerId(oCustomerSel.getCustomerid());
@@ -331,6 +332,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập sản phẩm...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            spProduct.requestFocus();
             return false;
         } else {
             oDetail.setProductCode(oProductSel.getProductCode());
@@ -342,10 +344,11 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
         }
 
         if (tvCompanyName.getText() == null || tvCompanyName.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tên công ty...", Toast.LENGTH_LONG);
+            /*Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập tên công ty...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
-            return false;
+            return false;*/
+            oDetail.setCompanyName("");
         } else {
             oDetail.setCompanyName(tvCompanyName.getText().toString());
         }
@@ -354,6 +357,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập giá...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvPrice.requestFocus();
             return false;
         } else {
             oDetail.setPrice(Float.parseFloat(tvPrice.getText().toString()));
@@ -363,6 +367,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ghi chú...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
+            tvNotes.requestFocus();
             return false;
         } else {
             oDetail.setNotes(tvNotes.getText().toString());

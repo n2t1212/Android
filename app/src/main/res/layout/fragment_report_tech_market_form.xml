@@ -67,7 +67,7 @@
                     android:id="@+id/tvNotes"
                     android:background="@drawable/edittext"
                     android:layout_marginEnd="30dp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:gravity="left"/>
             </LinearLayout>
 
@@ -92,7 +92,7 @@
                     android:id="@+id/tvUseful"
                     android:background="@drawable/edittext"
                     android:layout_marginEnd="30dp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:gravity="left"/>
             </LinearLayout>
             <LinearLayout
@@ -114,9 +114,9 @@
                     android:padding="10dp"
                     android:layout_weight="0"
                     android:id="@+id/tvHarmful"
-                    android:background="@drawable/edittext_readonly"
+                    android:background="@drawable/edittext"
                     android:layout_marginEnd="30dp"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     android:gravity="left"/>
             </LinearLayout>
             <View
