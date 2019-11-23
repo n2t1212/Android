@@ -136,7 +136,7 @@
                         android:gravity="right"
                         android:padding="10dp"
                         android:text="Người nhận" />
-                    <com.mimi.mimigroup.ui.custom.CustomBoldEditText
+                    <com.mimi.mimigroup.ui.custom.CustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""

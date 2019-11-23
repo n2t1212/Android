@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,6 +24,7 @@ import com.mimi.mimigroup.model.DM_Season;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.SM_ReportSaleRepSeason;
 import com.mimi.mimigroup.ui.adapter.ReportSaleRepSeasonAdapter;
+import com.mimi.mimigroup.ui.adapter.SearchTreeAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -39,8 +42,8 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
 
     @BindView(R.id.rvReportSaleRepSeasonList)
     RecyclerView rvReportSaleRepSeasonList;
-    @BindView(R.id.tvTree)
-    CustomTextView tvTree;
+    @BindView(R.id.spTree)
+    AutoCompleteTextView spTree;
     @BindView(R.id.tvSeason)
     CustomTextView tvSeason;
     @BindView(R.id.tvTitle)
@@ -61,6 +64,7 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
     String currentSeasonId;
     List<DM_Tree> lstTree;
     List<DM_Season> lstSeason;
+    DM_Tree oTreeSel;
 
     DBGimsHelper mDB = null;
 
@@ -113,7 +117,7 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
                         mParSymbol=oActivity.getmPar_Symbol();
                         lstTree=oActivity.getListTree();
                         lstSeason = mDB.getAllSeason();
-                        initDropdownCT();
+                        initDropdownTree();
                         initDropdownSeason();
                     }} ,300);
 
@@ -133,17 +137,26 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
     private boolean[] lstSeasonSelectChecked;
     private ArrayList<Integer> lstSeasonSelectPos = new ArrayList<>();
 
-    private void initDropdownCT(){
+    private void initDropdownTree(){
         try{
-            if(lstTree==null){lstTree=new ArrayList<DM_Tree>();}
-
-            lstTreeSelect=new String[lstTree.size()];
-            lstTreeSelectChecked=new boolean[lstTree.size()];
-
-            for(int i=0;i<lstTree.size();i++){
-                lstTreeSelect[i]=lstTree.get(i).getTreeName();
-                lstTreeSelectChecked[i]=false;
+            ArrayList<DM_Tree> oListTree=new ArrayList<DM_Tree>();
+            for(int i=0;i<lstTree.size();++i){
+                oListTree.add(lstTree.get(i));
             }
+            SearchTreeAdapter adapter = new SearchTreeAdapter(getContext(), R.layout.search_tree,oListTree);
+            spTree.setDropDownBackgroundResource(R.drawable.liner_dropdownlist);
+            spTree.setThreshold(1);
+            spTree.setAdapter(adapter);
+            spTree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int iPosition, long l) {
+                    try {
+                        oTreeSel = (DM_Tree) adapterView.getItemAtPosition(iPosition);
+
+                    }catch (Exception ex){}
+                }
+            });
+
         }catch (Exception ex){}
     }
 
@@ -207,78 +220,6 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
     }
 
 
-    @OnClick(R.id.tvTree)
-    public void onClickTree(){
-        try{
-            Arrays.fill(lstTreeSelectChecked,false);
-            for(int i=0;i<lstTreeSelectPos.size();i++){
-                lstTreeSelectChecked[lstTreeSelectPos.get(i)]=true;
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setCancelable(false);
-            builder.setTitle("Chọn cây trồng");
-            builder.setMultiChoiceItems(lstTreeSelect,lstTreeSelectChecked, new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
-                    if(isChecked){
-                        lstTreeSelectPos.add(position);
-                    }else{
-                        lstTreeSelectPos.remove(Integer.valueOf(position));
-                    }
-                }
-            });
-
-            builder.setPositiveButton("Chấp nhận", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    tvTree.setText("");
-                    String mTreeSelectCode="",mTreeSelectName="";
-                    for (int i = 0; i<lstTreeSelectPos.size(); i++){
-                        mTreeSelectCode=mTreeSelectCode+ lstTree.get(lstTreeSelectPos.get(i)).getTreeCode();
-                        mTreeSelectName=mTreeSelectName+ lstTree.get(lstTreeSelectPos.get(i)).getTreeName();
-                        if(i!=lstTreeSelectPos.size()-1){
-                            mTreeSelectCode=mTreeSelectCode+",";
-                            mTreeSelectName=mTreeSelectName+",";
-                        }
-                        tvTree.setText(mTreeSelectName);
-                        tvTree.setTag(mTreeSelectCode);
-                    }
-                }
-            });
-            builder.setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-
-            builder.setNeutralButton("Bỏ chọn", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int which) {
-                    for (int i = 0; i < lstTreeSelectChecked.length; i++) {
-                        lstTreeSelectChecked[i] = false;
-                        lstTreeSelectPos.clear();
-                        tvTree.setText("");
-                    }
-                }
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            dialog.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialog_2);
-            Button btnPositiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-            Button btnNegetiveButton=((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
-
-            btnPositiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor));
-            btnPositiveButton.setBackgroundColor(getResources().getColor(R.color.ButtonDialogBackground));
-            btnPositiveButton.setPaddingRelative(20,2,20,2);
-            btnNegetiveButton.setTextColor(getResources().getColor(R.color.ButtonDialogColor2));
-
-        }
-        catch(Exception ex) { }
-
-    }
 
     @OnClick(R.id.tvSeason)
     public void onClickSeason(){
@@ -381,12 +322,22 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
     private void setReportSaleRepSeasonRow(SM_ReportSaleRepSeason osmDT) {
         try {
             if (osmDT != null) {
-                if (osmDT.getTreeCode() != null) {
-                    tvTree.setText(getListTreeName(osmDT.getTreeCode()));
-                    tvTree.setTag(osmDT.getTreeCode());
+                if (osmDT.getTreeCode() != null && lstTree != null && lstTree.size() > 0) {
+                    for(DM_Tree tree: lstTree){
+                        if(tree.getTreeCode().equals(osmDT.getTreeCode())){
+                            oTreeSel = tree;
+                            break;
+                        }
+                    }
+
+                    if(oTreeSel != null && oTreeSel.getTreeCode() != null){
+                        spTree.setText(oTreeSel.getTreeName());
+                        spTree.setTag(oTreeSel.getTreeCode());
+                    }
+
                 }else {
-                    tvTree.setText("");
-                    tvTree.setTag("");
+                    spTree.setText("");
+                    spTree.setTag("");
                 }
 
                 if (osmDT.getSeasonCode() != null) {
@@ -425,8 +376,8 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
             //Clear Input
             try {
                 if (isAddnew) {
-                    tvTree.setText("");
-                    tvTree.setTag("");
+                    spTree.setText("");
+                    spTree.setTag("");
                     tvTitle.setText("");
                     tvAcreage.setText("");
                     tvNotes.setText("");
@@ -461,14 +412,14 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
             currentSeasonId = "";
         }
 
-        if (tvTree.getTag().toString().isEmpty()) {
+        if (oTreeSel == null || oTreeSel.getTreeCode() == null) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn cây trồng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
-            tvTree.requestFocus();
+            spTree.requestFocus();
             return false;
         } else {
-            oDetail.setTreeCode(tvTree.getTag().toString());
+            oDetail.setTreeCode(oTreeSel.getTreeCode());
         }
 
         if (tvSeason.getTag().toString().isEmpty()) {
@@ -554,8 +505,8 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
 
         tvTitle.setText("");
         tvNotes.setText("");
-        tvTree.setText("");
-        tvTree.setTag("");
+        spTree.setText("");
+        spTree.setTag("");
         tvAcreage.setText("");
         tvSeason.setText("");
         tvSeason.setTag("");

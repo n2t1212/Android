@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mimi.mimigroup.R;
+import com.mimi.mimigroup.db.DBGimsHelper;
+import com.mimi.mimigroup.model.DM_Employee;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 public class ReportSaleRepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     List<SM_ReportSaleRep> smReportSaleRepList;
     public List<SM_ReportSaleRep> SelectedList = new ArrayList<>();
+    private DBGimsHelper mDB;
 
     public ReportSaleRepAdapter() {
         smReportSaleRepList = new ArrayList<>();
@@ -29,6 +32,7 @@ public class ReportSaleRepAdapter extends RecyclerView.Adapter<RecyclerView.View
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        mDB = DBGimsHelper.getInstance(viewGroup.getContext());
         return new ReportSaleRepAdapter.ReportTechHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.activity_report_sale_item, viewGroup, false));
     }
 
@@ -135,9 +139,24 @@ public class ReportSaleRepAdapter extends RecyclerView.Adapter<RecyclerView.View
                     {
                         tvLocationAddress.setText(oReportTech.getLocationAddress());
                     }
-                    if(oReportTech.getReceiverList() != null)
+                    if(oReportTech.getReceiverList() != null && oReportTech.getReceiverList().length() > 0)
                     {
-                        tvReceiverList.setText(oReportTech.getReceiverList());
+                        String[] empId = oReportTech.getReceiverList().split(",");
+                        if(empId.length > 0){
+                            List<DM_Employee> lstEmp = mDB.getEmpByListId(empId);
+                            String lstName = "";
+                            if(lstEmp != null && lstEmp.size() > 0){
+                                for(int i = 0; i < lstEmp.size(); i++){
+                                    if(i > 0){
+                                        lstName += ",";
+                                    }
+                                    lstName += lstEmp.get(i).getEmployeeName();
+                                }
+                            }
+                            tvReceiverList.setText(lstName);
+                        }else {
+                            tvReceiverList.setText("");
+                        }
                     }
                     if(oReportTech.getNotes() != null)
                     {

@@ -1,5 +1,6 @@
 package com.mimi.mimigroup.ui.utility;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,10 +23,12 @@ import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class ReportSaleRepActivityItemFragment extends BaseFragment {
 
@@ -35,7 +39,7 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
     @BindView(R.id.tvNotes)
     CustomBoldEditText tvNotes;
     @BindView(R.id.tvWorkday)
-    CustomBoldEditText tvWorkday;
+    CustomTextView tvWorkday;
     @BindView(R.id.tvPlace)
     CustomBoldEditText tvPlace;
 
@@ -46,6 +50,7 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
     private String mReportSaleId = "";
     private String mParSymbol = "";
     private String mAction = "";
+    private DatePickerDialog dtPicker;
 
     List<SM_ReportSaleRepActivitie> lstReportSaleRepActivity;
     String currentActivityId;
@@ -216,15 +221,7 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
-        if (tvWorkday.getText() == null || tvWorkday.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ngày làm việc...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            tvWorkday.requestFocus();
-            return false;
-        } else {
-            oDetail.setWorkDay(tvWorkday.getText().toString());
-        }
+
         if (tvPlace.getText() == null || tvPlace.getText().toString().isEmpty()) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập địa điểm...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
@@ -233,6 +230,16 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
             return false;
         } else {
             oDetail.setPlace(tvPlace.getText().toString());
+        }
+
+        if (tvWorkday.getText() == null || tvWorkday.getText().toString().isEmpty()) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ngày làm việc...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            tvWorkday.requestFocus();
+            return false;
+        } else {
+            oDetail.setWorkDay(tvWorkday.getText().toString());
         }
 
         boolean isExist = false;
@@ -334,6 +341,32 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
             }
         });
         oDlg.show();
+    }
+
+
+    @OnClick(R.id.tvWorkday)
+    public void onWorkday()
+    {
+        final Calendar cldr = java.util.Calendar.getInstance();
+        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
+        int month = cldr.get(java.util.Calendar.MONTH);
+        int year = cldr.get(java.util.Calendar.YEAR);
+
+        // date picker dialog
+        dtPicker = new DatePickerDialog(getActivity(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        cldr.set(year,monthOfYear, dayOfMonth);
+                        String dateString = sdf.format(cldr.getTime());
+                        tvWorkday.setText(dateString);
+                    }
+                }, year, month, day);
+
+        dtPicker.getDatePicker().setCalendarViewShown(false);
+        dtPicker.getDatePicker().setSpinnersShown(true);
+        dtPicker.show();
     }
 }
 

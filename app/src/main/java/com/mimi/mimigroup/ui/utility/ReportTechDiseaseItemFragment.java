@@ -395,7 +395,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             currentDiseaseId = "";
         }
 
-        if (spTree.getText().toString().isEmpty()) {
+        if (oTreeSel == null || oTreeSel.getTreeCode() == null) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn cây trồng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();

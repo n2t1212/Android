@@ -364,11 +364,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
         }
 
         if (tvNotes.getText() == null || tvNotes.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập ghi chú...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            tvNotes.requestFocus();
-            return false;
+            oDetail.setNotes("");
         } else {
             oDetail.setNotes(tvNotes.getText().toString());
         }
