@@ -226,10 +226,10 @@ public class ReportTechFormItemFragment extends BaseFragment {
     @OnClick(R.id.tvReportDay)
     public void onRequestDate()
     {
-        final Calendar cldr = java.util.Calendar.getInstance();
-        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
-        int month = cldr.get(java.util.Calendar.MONTH);
-        int year = cldr.get(java.util.Calendar.YEAR);
+        final Calendar cldr = Calendar.getInstance();
+        int day = cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
 
         // date picker dialog
         dtPicker = new DatePickerDialog(getActivity(),

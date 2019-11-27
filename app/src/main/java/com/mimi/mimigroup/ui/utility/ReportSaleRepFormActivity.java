@@ -16,7 +16,6 @@ import com.mimi.mimigroup.api.SyncPost;
 import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
-import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.SM_ReportSaleRep;
 import com.mimi.mimigroup.model.SM_ReportSaleRepActivitie;
@@ -51,28 +50,6 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     @BindView(R.id.btnReportSaleRepDetailDel)
     FloatingActionButton btnReportSaleRepDetailDel;
 
-    public String getmReportSaleRepID() {
-        return mReportSaleRepID;
-    }
-
-    public String mReportSaleRepID="";
-
-    public String getmPar_Symbol() {
-        return mPar_Symbol;
-    }
-
-    private String mPar_Symbol;
-    private String mAction="";
-    private DBGimsHelper mDB;
-    private boolean isSaved=false;
-
-    SM_ReportSaleRep oReportSaleRep;
-    List<SM_ReportSaleRepMarket> oReportSaleRepMarket;
-    List<SM_ReportSaleRepDisease> oReportSaleRepDisease;
-    List<SM_ReportSaleRepSeason> oReportSaleRepSeason;
-    List<SM_ReportSaleRepActivitie> oReportSaleRepActivity;
-    List<SM_ReportSaleRepActivitie> oReportSaleRepTask;
-
     ReportSaleRepFormItemFragment ReportSaleRepFragment;
     ReportSaleRepMarketItemFragment ReportSaleRepMarketFragment;
     ReportSaleRepDiseaseItemFragment ReportSaleRepDiseaseFragment;
@@ -80,31 +57,18 @@ public class ReportSaleRepFormActivity extends BaseActivity {
     ReportSaleRepActivityItemFragment ReportSaleRepActivityFragment;
     ReportSaleRepTaskItemFragment ReportSaleRepTaskFragment;
 
-    public String getAction(){return this.mAction;}
+    List<SM_ReportSaleRepMarket> oReportSaleRepMarket;
+    List<SM_ReportSaleRepDisease> oReportSaleRepDisease;
+    List<SM_ReportSaleRepSeason> oReportSaleRepSeason;
+    List<SM_ReportSaleRepActivitie> oReportSaleRepActivity;
+    List<SM_ReportSaleRepActivitie> oReportSaleRepTask;
 
-    public SM_ReportSaleRep getoReportSaleRep() {
-        return oReportSaleRep;
-    }
-
-    public List<SM_ReportSaleRepMarket> getoReportSaleRepMarket() {
-        return oReportSaleRepMarket;
-    }
-
-    public List<SM_ReportSaleRepDisease> getoReportSaleRepDisease() {
-        return oReportSaleRepDisease;
-    }
-
-    public List<SM_ReportSaleRepActivitie> getoReportSaleRepActivity() {
-        return oReportSaleRepActivity;
-    }
-
-    public List<SM_ReportSaleRepSeason> getoReportSaleRepSeason() {
-        return oReportSaleRepSeason;
-    }
-
-    public List<SM_ReportSaleRepActivitie> getoReportSaleRepTask() {
-        return oReportSaleRepTask;
-    }
+    public String mReportSaleRepID="";
+    private String mPar_Symbol;
+    private String mAction="";
+    private DBGimsHelper mDB;
+    private boolean isSaved=false;
+    SM_ReportSaleRep oReportSaleRep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +89,9 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             oReportSaleRepSeason = mDB.getAllReportSaleRepSeason(mReportSaleRepID);
             oReportSaleRepTask = mDB.getAllReportSaleRepActivity(mReportSaleRepID, 0); // Cong viec
             oReportSaleRepActivity = mDB.getAllReportSaleRepActivity(mReportSaleRepID, 1); // Hoat dong tuan toi
+            oReportSaleRep.setIsStatus(1);
+            oReportSaleRep.setPost(false);
+
         }else{
             oReportSaleRep = new SM_ReportSaleRep();
             oReportSaleRepMarket = new ArrayList<>();
@@ -146,7 +113,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             oReportSaleRep.setReportSaleId(mReportSaleRepID);
             oReportSaleRep.setReportCode(mReportCode);
             oReportSaleRep.setReportDay(mReportDate);
-            oReportSaleRep.setIsStatus("0");
+            oReportSaleRep.setIsStatus(0);
             oReportSaleRep.setPost(false);
         }
 
@@ -168,44 +135,21 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                         adapter.addFragment(ReportSaleRepSeasonFragment, "Mùa Vụ");
 
                         ReportSaleRepTaskFragment = new ReportSaleRepTaskItemFragment();
-                        adapter.addFragment(ReportSaleRepTaskFragment, "Công việc");
+                        adapter.addFragment(ReportSaleRepTaskFragment, "Hoạt Động Trong Tuần");
 
                         ReportSaleRepActivityFragment = new ReportSaleRepActivityItemFragment();
-                        adapter.addFragment(ReportSaleRepActivityFragment, "HĐ Tuần Tới");
+                        adapter.addFragment(ReportSaleRepActivityFragment, "Hoạt Động Tuần Tới");
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
                             public void onTabSelected(TabLayout.Tab tab) {
-                                switch (tab.getPosition()){
-                                    case 0:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        break;
-                                    case 1:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailAdd.setTag("ADD");
-                                        break;
-                                    case 2:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailAdd.setTag("ADD");
-                                        break;
-                                    case 3:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailAdd.setTag("ADD");
-                                        break;
-                                    case 4:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailAdd.setTag("ADD");
-                                        break;
-                                    case 5:
-                                        btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportSaleRepDetailAdd.setTag("ADD");
-                                        break;
+                                if(tab.getPosition()==0){
+                                    btnReportSaleRepDetailAdd.setVisibility(View.INVISIBLE);
+                                    btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
+                                }else {
+                                    btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
+                                    btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
+                                    btnReportSaleRepDetailAdd.setTag("ADD");
                                 }
                             }
                             @Override
@@ -214,7 +158,6 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                             @Override
                             public void onTabReselected(TabLayout.Tab tab) {}
                         });
-
                     }
                 },300);
     }
@@ -246,12 +189,46 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
         }
     }
+
+    public String getmReportSaleRepID() {
+        return mReportSaleRepID;
+    }
+
+    public String getmPar_Symbol() {
+        return mPar_Symbol;
+    }
+
+    public String getAction(){return this.mAction;}
+
+    public SM_ReportSaleRep getoReportSaleRep() {
+        return oReportSaleRep;
+    }
+
+    public List<SM_ReportSaleRepMarket> getoReportSaleRepMarket() {
+        return oReportSaleRepMarket;
+    }
+
+    public List<SM_ReportSaleRepDisease> getoReportSaleRepDisease() {
+        return oReportSaleRepDisease;
+    }
+
+    public List<SM_ReportSaleRepActivitie> getoReportSaleRepActivity() {
+        return oReportSaleRepActivity;
+    }
+    public List<SM_ReportSaleRepSeason> getoReportSaleRepSeason() {
+        return oReportSaleRepSeason;
+    }
+
+    public List<SM_ReportSaleRepActivitie> getoReportSaleRepTask() {
+        return oReportSaleRepTask;
+    }
+
+
     private void ReceiveDataFragment(){
         //SAVE DETAIL
         try{
             if(btnReportSaleRepDetailAdd.getTag()!=null && btnReportSaleRepDetailAdd.getTag().toString().equalsIgnoreCase("SAVE")) {
                 onReportSaleRepDetailAdd();
-
             }
         }catch (Exception ex){}
 
@@ -324,7 +301,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
             dlgTitle.setText("THÔNG BÁO");
             CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
-            dlgContent.setText("Dữ liệu báo cáo sale chưa cập nhật. Bạn có muốn bỏ qua ?");
+            dlgContent.setText("Dữ liệu chưa cập nhật. Bạn có muốn bỏ qua ?");
             CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
             CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
 
@@ -343,12 +320,10 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 }
             });
             oDlg.show();
-
             return;
         } else {
             super.onBackPressed();
         }
-
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
@@ -473,38 +448,38 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo sale..", Toast.LENGTH_SHORT).show();
             return;
         }
-
         mDB.addReportSaleRep(oReportSaleRep);
 
         if(mDB.getSizeReportSaleRep(oReportSaleRep.getReportSaleId())>0) {
             mDB.delReportSaleDetail(oReportSaleRep.getReportSaleId());
-            // Save market report
+
+            //market report
             if(oReportSaleRepMarket != null && oReportSaleRepMarket.size() >0){
                 for (SM_ReportSaleRepMarket oDetail : oReportSaleRepMarket) {
                     mDB.addReportSaleRepMarket(oDetail);
                 }
             }
-            // Save disease report
+            //disease report
             if(oReportSaleRepDisease != null && oReportSaleRepDisease.size() >0){
                 for (SM_ReportSaleRepDisease oDetail : oReportSaleRepDisease) {
                     mDB.addReportSaleRepDisease(oDetail);
                 }
             }
-            // Save season report
+            //season report
             if(oReportSaleRepSeason != null && oReportSaleRepSeason.size() > 0){
                 for (SM_ReportSaleRepSeason oDetail : oReportSaleRepSeason) {
                     mDB.addReportSaleRepSeason(oDetail);
                 }
             }
 
-            // Save task
+            //task
             if(oReportSaleRepTask != null && oReportSaleRepTask.size() > 0){
                 for (SM_ReportSaleRepActivitie oDetail : oReportSaleRepTask) {
                     mDB.addReportSaleRepActivity(oDetail);
                 }
             }
 
-            // Save activity next week
+            //activity next week
             if(oReportSaleRepActivity != null && oReportSaleRepActivity.size() >0){
                 for (SM_ReportSaleRepActivitie oDetail : oReportSaleRepActivity) {
                     mDB.addReportSaleRepActivity(oDetail);
@@ -512,7 +487,8 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             }
         }
 
-        Toast.makeText(this, "Ghi báo cáo sale thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ghi báo cáo thành công", Toast.LENGTH_SHORT).show();
+        setResult(2001);
         finish();
         isSaved=true;
     }
@@ -748,7 +724,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
         return  mSaleDetail;
     }
 
-    private void onPostReportSaleRep(final SM_ReportSaleRep sale,List<SM_ReportSaleRepMarket> markets, List<SM_ReportSaleRepDisease> diseases,
+    private void onPostReportSaleRep(final SM_ReportSaleRep sale, List<SM_ReportSaleRepMarket> markets, List<SM_ReportSaleRepDisease> diseases,
                                      List<SM_ReportSaleRepSeason> seasons, List<SM_ReportSaleRepActivitie> tasks, List<SM_ReportSaleRepActivitie> activities){
         try{
             if (APINet.isNetworkAvailable(ReportSaleRepFormActivity.this)==false){
@@ -807,8 +783,8 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                 if(sale.getNotes()==null && sale.getNotes().isEmpty()){
                     sale.setNotes("");
                 }
-                if(sale.getIsStatus()==null && sale.getIsStatus().isEmpty()){
-                    sale.setIsStatus("1");
+                if(sale.getIsStatus()==null){
+                    sale.setIsStatus(1);
                 }
             }catch(Exception ex){
                 Toast.makeText(ReportSaleRepFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -827,7 +803,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                     .add("locationaddress", sale.getLocationAddress())
                     .add("receiverlist", sale.getReceiverList())
                     .add("notes",sale.getNotes())
-                    .add("isstatus", sale.getIsStatus())
+                    .add("isstatus", Integer.toString(sale.getIsStatus()))
                     .add("reportsalerepmarket", mDataReportSaleMarket)
                     .add("reportsalerepdisease",mDataReportSaleDisease)
                     .add("reportsalerepseason",mDataReportSaleSeason)
@@ -848,8 +824,9 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 sale.setPostDay(sdf.format(new Date()));
                                 sale.setPost(true);
-                                sale.setIsStatus("2");
+                                sale.setIsStatus(2);
                                 mDB.editReportSale(sale);
+                                setResult(2001);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){

@@ -21,6 +21,7 @@ public class ReportTechMarketAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     public void setSmoReportTechMarket(List<SM_ReportTechMarket> smoReportTechMarket) {
         this.smoReportTechMarket = smoReportTechMarket;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportTechMarket> smoReportTechMarket;

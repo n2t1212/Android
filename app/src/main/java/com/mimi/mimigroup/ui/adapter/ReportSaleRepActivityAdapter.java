@@ -21,6 +21,7 @@ public class ReportSaleRepActivityAdapter extends RecyclerView.Adapter<RecyclerV
 
     public void setsmoReportSaleRepActivity(List<SM_ReportSaleRepActivitie> smoReportSaleRepActivity) {
         this.smoReportSaleRepActivity = smoReportSaleRepActivity;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportSaleRepActivitie> smoReportSaleRepActivity;

@@ -10,12 +10,27 @@ public class SM_ReportSaleRep {
     String locationAddress;
     String receiverList;
     String notes;
-    String isStatus;
+    Integer isStatus;
+    String IsStatusDesc;
     Boolean isPost;
     String postDay;
 
-    public SM_ReportSaleRep() {
+    public SM_ReportSaleRep() {}
+    public SM_ReportSaleRep(String reportSaleId, String reportCode, String reportName, String reportDay, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, Integer isStatus, Boolean isPost, String postDay) {
+        this.reportSaleId = reportSaleId;
+        this.reportCode = reportCode;
+        this.reportName = reportName;
+        this.reportDay = reportDay;
+        this.longtitude = longtitude;
+        this.latitude = latitude;
+        this.locationAddress = locationAddress;
+        this.receiverList = receiverList;
+        this.notes = notes;
+        this.isStatus = isStatus;
+        this.isPost = isPost;
+        this.postDay = postDay;
     }
+
 
     public String getReportSaleId() {
         return reportSaleId;
@@ -89,12 +104,20 @@ public class SM_ReportSaleRep {
         this.notes = notes;
     }
 
-    public String getIsStatus() {
+    public Integer getIsStatus() {
         return isStatus;
     }
 
-    public void setIsStatus(String isStatus) {
+    public void setIsStatus(Integer isStatus) {
         this.isStatus = isStatus;
+    }
+
+    public String getIsStatusDesc() {
+        return IsStatusDesc;
+    }
+
+    public void setIsStatusDesc(String isStatusDesc) {
+        IsStatusDesc = isStatusDesc;
     }
 
     public Boolean getPost() {
@@ -113,18 +136,5 @@ public class SM_ReportSaleRep {
         this.postDay = postDay;
     }
 
-    public SM_ReportSaleRep(String reportSaleId, String reportCode, String reportName, String reportDay, Float longtitude, Float latitude, String locationAddress, String receiverList, String notes, String isStatus, Boolean isPost, String postDay) {
-        this.reportSaleId = reportSaleId;
-        this.reportCode = reportCode;
-        this.reportName = reportName;
-        this.reportDay = reportDay;
-        this.longtitude = longtitude;
-        this.latitude = latitude;
-        this.locationAddress = locationAddress;
-        this.receiverList = receiverList;
-        this.notes = notes;
-        this.isStatus = isStatus;
-        this.isPost = isPost;
-        this.postDay = postDay;
-    }
+
 }

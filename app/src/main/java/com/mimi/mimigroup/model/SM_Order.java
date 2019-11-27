@@ -34,7 +34,7 @@ public class SM_Order {
     public SM_Order(String orderId, String orderCode, String customerId, String customerCode,String customerName,String orderDate,
                     String requestDate,Integer maxDebt,Double originMoney,Double vat,Double vatmoney,Double totalMoney, Integer orderStatus,
                     String approveDate,String handleStaff,String deliveryDesc,Double longitude,Double latitude,String locationAddress,
-                    boolean isPost,String postDay, Boolean IsSample) {
+                    boolean isPost,String postDay,Boolean IsSample) {
         this.OrderID=orderId;
         this.OrderCode=orderCode;
         this.CustomerID=customerId;

@@ -21,6 +21,7 @@ public class ReportTechActivityNextWeekAdapter extends RecyclerView.Adapter<Recy
 
     public void setsmoReportTechActivity(List<SM_ReportTechActivity> smoReportTechActivity) {
         this.smoReportTechActivity = smoReportTechActivity;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportTechActivity> smoReportTechActivity;

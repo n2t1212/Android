@@ -25,6 +25,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:weightSum="2" >
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:padding="10dp"
+                    android:text="Thời gian" />
+                <com.mimi.mimigroup.ui.custom.CustomTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:padding="10dp"
+                    android:layout_weight="0"
+                    android:id="@+id/tvWorkday"
+                    android:background="@drawable/edittext"
+                    android:layout_marginEnd="30dp"
+                    android:inputType="text"
+                    android:gravity="left"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:weightSum="2" >
                 <com.mimi.mimigroup.ui.custom.CustomTextView
                     android:layout_width="100dp"
@@ -71,30 +98,6 @@
                     android:gravity="left"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2" >
-                <com.mimi.mimigroup.ui.custom.CustomTextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:gravity="right"
-                    android:padding="10dp"
-                    android:text="Thời gian" />
-                <com.mimi.mimigroup.ui.custom.CustomTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:padding="10dp"
-                    android:layout_weight="0"
-                    android:id="@+id/tvWorkday"
-                    android:background="@drawable/edittext"
-                    android:layout_marginEnd="30dp"
-                    android:inputType="text"
-                    android:gravity="left"/>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,7 +156,7 @@
                     android:textColor="@color/TextHeaderGrid"
                     android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
-                    android:text="Ngày làm"
+                    android:text="Thời gian"
                     android:gravity="center"/>
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="350dp"

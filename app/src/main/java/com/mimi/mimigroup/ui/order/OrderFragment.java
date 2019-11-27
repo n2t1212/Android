@@ -72,6 +72,22 @@ public class OrderFragment extends BaseFragment  implements PopupMenu.OnMenuItem
         return R.layout.activity_order;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        isEditAdd=false;
+        if (requestCode == REQUEST_CODE_ADD) {
+            if (resultCode == 2001) {
+                onLoadDataSource("","");
+            }
+        }
+        if(requestCode==REQUEST_CODE_EDIT){
+            if (resultCode == 2001) {
+                onLoadDataSource("","");
+            }
+        }
+    }
+
     private void onLoadDataSource(String fDay,String tDay){
         try{
            ((BaseActivity)getActivity()).showProgressDialog("Đang nạp danh sách đơn đặt hàng...");

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Tree;
-import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportSaleRepDisease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 
@@ -25,6 +24,7 @@ public class ReportSaleRepDiseaseAdapter extends RecyclerView.Adapter<RecyclerVi
     private DBGimsHelper mDB = null;
     public void setsmoReportSaleRepDisease(List<SM_ReportSaleRepDisease> smoReportSaleRepDisease) {
         this.smoReportSaleRepDisease = smoReportSaleRepDisease;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportSaleRepDisease> smoReportSaleRepDisease;

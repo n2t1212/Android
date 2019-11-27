@@ -71,7 +71,7 @@ public class SeasonFragment extends BaseFragment {
             return;
         }
 
-        final String mUrlGet=AppSetting.getInstance().URL_SyncDM(AppUtils.getImeil(getContext()),AppUtils.getImeilsim(getContext()),"DM_Season",isAll);
+        final String mUrlGet=AppSetting.getInstance().URL_SyncDM(AppUtils.getImeil(getContext()),AppUtils.getImeilsim(getContext()),"DM_SEASON",isAll);
         new SyncGet(new APINetCallBack() {
             @Override
             public void onHttpStart() {
@@ -106,7 +106,6 @@ public class SeasonFragment extends BaseFragment {
                         Type type = new TypeToken<Collection<DM_Season>>() {}.getType();
                         Collection<DM_Season> enums = gson.fromJson(ResPonseRs, type);
                         DM_Season[] ArrSeason = enums.toArray(new DM_Season[enums.size()]);
-
 
                         if ( ArrSeason!=null && ArrSeason.length>0) {
                             new AsyncUpdate(new SyncCallBack() {
@@ -148,7 +147,7 @@ public class SeasonFragment extends BaseFragment {
                 ((BaseActivity) getActivity()).dismissProgressDialog();
                 Toast.makeText(getContext(),"Không đọc được dữ liệu tải về"+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
-        }, mUrlGet, "DWN_Season").execute();
+        }, mUrlGet, "DWN_SEASON").execute();
 
     }
 
@@ -160,7 +159,6 @@ public class SeasonFragment extends BaseFragment {
             @Override
             public void onHttpStart() {
                 //((BaseActivity) getActivity()).showProgressDialog("Đang tải dữ liệu khách hàng.");
-
             }
             @Override
             public void onHttpSuccess(String ResPonseRs) {
@@ -228,7 +226,7 @@ public class SeasonFragment extends BaseFragment {
             if (mSyncCallBack != null) {
                 if (mException == null) {
                     mSyncCallBack.onSyncSuccess(result);
-                    onSyncConfirm("DM_Season");
+                    onSyncConfirm("DM_SEASON");
                 } else {
                     mSyncCallBack.onSyncFailer(mException);
                 }

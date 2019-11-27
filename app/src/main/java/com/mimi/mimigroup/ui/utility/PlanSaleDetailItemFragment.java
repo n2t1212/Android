@@ -36,7 +36,6 @@ import butterknife.BindView;
 import butterknife.OnTextChanged;
 
 public class PlanSaleDetailItemFragment extends BaseFragment {
-
     @BindView(R.id.rvPlanSaleDetailList)
     RecyclerView rvPlanSaleDetailList;
     @BindView(R.id.spCustomer)
@@ -49,8 +48,7 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
     CustomBoldEditText tvAmount;
     @BindView(R.id.tvNotes)
     CustomBoldEditText tvNotes;
-    @BindView(R.id.tvNotes2)
-    CustomBoldEditText tvNotes2;
+
     @BindView(R.id.Layout_PlanSaleDetailItem)
     LinearLayout Layout_PlanSaleDetailItem;
 
@@ -58,9 +56,9 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
     private String mPlanSaleId = "";
     private String mParSymbol = "";
     private String mAction = "";
+    private String mRowSelectedID="";
 
     List<SM_PlanSaleDetail> lstPlanSaleDetail;
-    String currentPlanSaleDetailId;
 
     List<DM_Customer_Search> lstCustomer;
     List<DM_Product> lstProduct;
@@ -96,6 +94,7 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
                         Toast.makeText(getContext(), "Bạn chọn quá nhiều để có thể sửa..", Toast.LENGTH_SHORT).show();
                     } else {
                         ((PlanSaleFormActivity) getActivity()).setButtonEditStatus(true);
+                        mRowSelectedID=SelectList.get(0).getPlanDetailId();
                     }
                     ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(true);
                 } else {
@@ -254,7 +253,6 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
                             mConvertBox = Float.valueOf(0);
                         }
                     }
-
                 }
 
                 if (osmDT.getAmountBox() != null) {
@@ -267,11 +265,6 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
                 if (osmDT.getNotes() != null) {
                     tvNotes.setText(osmDT.getNotes());
                 }
-                if (osmDT.getNotes2() != null) {
-                    tvNotes2.setText(osmDT.getNotes2());
-                }
-
-                currentPlanSaleDetailId = osmDT.getPlanDetailId();
             } else {
                 Toast.makeText(getContext(), "Không tồn tại kế hoạch bán hàng chi tiết..", Toast.LENGTH_SHORT).show();
             }
@@ -286,17 +279,15 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
         ((PlanSaleFormActivity) getActivity()).setVisibleDetailDelete(false);
         if (Layout_PlanSaleDetailItem.getVisibility() == View.GONE) {
             Layout_PlanSaleDetailItem.setVisibility(View.VISIBLE);
-            //Clear Input
             try {
                 if (isAddnew) {
                     spCustomer.setText("");
                     spCustomer.requestFocus();
                     spProduct.setText("");
-                    spProduct.requestFocus();
                     tvAmountBox.setText("");
                     tvAmount.setText("");
                     tvNotes.setText("");
-                    tvNotes2.setText("");
+                    mRowSelectedID="";
                 }
             } catch (Exception ex) {
             }
@@ -321,115 +312,127 @@ public class PlanSaleDetailItemFragment extends BaseFragment {
     }
 
     private boolean onSaveAddPlanSaleDetail() {
-        SM_PlanSaleDetail oDetail = new SM_PlanSaleDetail();
-
-        // EDIT
-        if (currentPlanSaleDetailId != null && currentPlanSaleDetailId.length() > 0) {
-            oDetail.setPlanDetailId(currentPlanSaleDetailId);
-            currentPlanSaleDetailId = "";
-        }
-
-        if (spCustomer.getText() == null || spCustomer.getText().toString().isEmpty()) {
+        if (spCustomer.getText() == null || spCustomer.getText().toString().isEmpty() || oCustomerSel==null) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập khách hàng...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             spCustomer.requestFocus();
             return false;
-        } else {
-            oDetail.setCustomerId(oCustomerSel.getCustomerid());
         }
-
-        if (spProduct.getText() == null || spProduct.getText().toString().isEmpty()) {
+        if (spProduct.getText() == null || spProduct.getText().toString().isEmpty() || oProductSel==null) {
             Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập sản phẩm...", Toast.LENGTH_LONG);
             oT.setGravity(Gravity.CENTER, 0, 0);
             oT.show();
             spProduct.requestFocus();
             return false;
-        } else {
+        }
+
+        if(oProductSel!=null && oProductSel.getProductCode()!=null && !oProductSel.getProductCode().isEmpty()){
+            SM_PlanSaleDetail oDetail = new SM_PlanSaleDetail();
+
+            oDetail.setCustomerId(oCustomerSel.getCustomerid());
+            oDetail.setCustomerCode(oCustomerSel.getCustomerCode());
+            oDetail.setCustomerName(oCustomerSel.getCustomerName());
+
             oDetail.setProductCode(oProductSel.getProductCode());
-        }
-        if (tvAmountBox.getText() == null || tvAmountBox.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng thùng...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            tvAmountBox.requestFocus();
-            return false;
-        } else {
-            oDetail.setAmountBox(Double.valueOf(tvAmountBox.getText().toString()));
-        }
-        if (tvAmount.getText() == null || tvAmount.getText().toString().isEmpty()) {
-            Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng...", Toast.LENGTH_LONG);
-            oT.setGravity(Gravity.CENTER, 0, 0);
-            oT.show();
-            tvAmount.requestFocus();
-            return false;
-        } else {
-            oDetail.setAmount(Double.valueOf(tvAmount.getText().toString()));
-        }
-
-        oDetail.setNotes(tvNotes.getText().toString());
-        oDetail.setNotes2(tvNotes2.getText().toString());
-
-        boolean isExist = false;
-        for (int i = 0; i < lstPlanSaleDetail.size(); i++) {
-            if (lstPlanSaleDetail.get(i).getPlanDetailId().equalsIgnoreCase(oDetail.getPlanDetailId())) {
-                isExist = true;
-                if (oDetail.getCustomerId() != null) {
-                    lstPlanSaleDetail.get(i).setCustomerId(oDetail.getCustomerId());
-                } else {
-                    lstPlanSaleDetail.get(i).setCustomerId("");
-                }
-                if (oDetail.getProductCode() != null) {
-                    lstPlanSaleDetail.get(i).setProductCode(oDetail.getProductCode());
-                } else {
-                    lstPlanSaleDetail.get(i).setProductCode("");
-                }
-                if (oDetail.getAmountBox() != null) {
-                    lstPlanSaleDetail.get(i).setAmountBox(oDetail.getAmountBox());
-                } else {
-                    lstPlanSaleDetail.get(i).setAmountBox(0d);
-                }
-                if (oDetail.getAmount() != null) {
-                    lstPlanSaleDetail.get(i).setAmount(oDetail.getAmount());
-                } else {
-                    lstPlanSaleDetail.get(i).setAmount(0d);
-                }
-                if (oDetail.getNotes() != null) {
-                    lstPlanSaleDetail.get(i).setNotes(oDetail.getNotes());
-                } else {
-                    lstPlanSaleDetail.get(i).setNotes("");
-                }
-                if (oDetail.getNotes2() != null) {
-                    lstPlanSaleDetail.get(i).setNotes2(oDetail.getNotes2());
-                } else {
-                    lstPlanSaleDetail.get(i).setNotes2("");
-                }
-
-                Toast.makeText(getContext(), "kế hoạch bán hàng chi tiết đã được thêm..", Toast.LENGTH_SHORT).show();
-                break;
+            oDetail.setProductName(oProductSel.getProductName());
+            oDetail.setUnit(oProductSel.getUnit());
+            oDetail.setSpec(oProductSel.getSpecification());
+            if (tvAmountBox.getText() == null || tvAmountBox.getText().toString().isEmpty()) {
+                Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng thùng...", Toast.LENGTH_LONG);
+                oT.setGravity(Gravity.CENTER, 0, 0);
+                oT.show();
+                tvAmountBox.requestFocus();
+                return false;
+            } else {
+                oDetail.setAmountBox(Double.valueOf(tvAmountBox.getText().toString()));
             }
+            if (tvAmount.getText() == null || tvAmount.getText().toString().isEmpty()) {
+                Toast oT = Toast.makeText(getContext(), "Bạn chưa nhập số lượng...", Toast.LENGTH_LONG);
+                oT.setGravity(Gravity.CENTER, 0, 0);
+                oT.show();
+                tvAmount.requestFocus();
+                return false;
+            } else {
+                oDetail.setAmount(Double.valueOf(tvAmount.getText().toString()));
+            }
+            oDetail.setNotes(tvNotes.getText().toString());
+
+            boolean isExist = false;
+            for (int i = 0; i < lstPlanSaleDetail.size(); i++) {
+                if (lstPlanSaleDetail.get(i).getPlanDetailId().equalsIgnoreCase(mRowSelectedID)) {
+                    isExist = true;
+                    if (oDetail.getCustomerId() != null) {
+                        lstPlanSaleDetail.get(i).setCustomerId(oDetail.getCustomerId());
+                    } else {
+                        lstPlanSaleDetail.get(i).setCustomerId("");
+                    }
+                    if (oDetail.getProductCode() != null) {
+                        lstPlanSaleDetail.get(i).setProductCode(oDetail.getProductCode());
+                    } else {
+                        lstPlanSaleDetail.get(i).setProductCode("");
+                    }
+                    if (oDetail.getProductName() != null) {
+                        lstPlanSaleDetail.get(i).setProductName(oDetail.getProductName());
+                    } else {
+                        lstPlanSaleDetail.get(i).setProductName("");
+                    }
+                    if (oDetail.getUnit() != null) {
+                        lstPlanSaleDetail.get(i).setUnit(oDetail.getUnit());
+                    } else {
+                        lstPlanSaleDetail.get(i).setUnit("");
+                    }
+                    if (oDetail.getSpec() != null) {
+                        lstPlanSaleDetail.get(i).setSpec(oDetail.getSpec());
+                    } else {
+                        lstPlanSaleDetail.get(i).setSpec("");
+                    }
+
+                    if (oDetail.getAmountBox() != null) {
+                        lstPlanSaleDetail.get(i).setAmountBox(oDetail.getAmountBox());
+                    } else {
+                        lstPlanSaleDetail.get(i).setAmountBox(0d);
+                    }
+                    if (oDetail.getAmount() != null) {
+                        lstPlanSaleDetail.get(i).setAmount(oDetail.getAmount());
+                    } else {
+                        lstPlanSaleDetail.get(i).setAmount(0d);
+                    }
+                    if (oDetail.getNotes() != null) {
+                        lstPlanSaleDetail.get(i).setNotes(oDetail.getNotes());
+                    } else {
+                        lstPlanSaleDetail.get(i).setNotes("");
+                    }
+                    Toast.makeText(getContext(), "Chi tiết kế hoạch đã được thêm..", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+
+            if (!isExist) {
+                SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+                String mMarketId = "CT" + mParSymbol + Od.format(new Date());
+                oDetail.setPlanDetailId(mMarketId);
+                oDetail.setPlanId(mPlanSaleId);
+                lstPlanSaleDetail.add(oDetail);
+            }
+
+            adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
+            Toast.makeText(getContext(), String.valueOf(lstPlanSaleDetail.size()) + ": kế hoạch bán hàng chi tiết được chọn..", Toast.LENGTH_SHORT).show();
+
+            spCustomer.setText("");
+            spCustomer.requestFocus();
+            spProduct.setText("");
+            spProduct.requestFocus();
+            tvAmountBox.setText("");
+            tvAmount.setText("");
+            tvNotes.setText("");
+            mRowSelectedID="";
+
+            return true;
+        }else{
+            Toast.makeText(getContext(),"Không có sản phẩm nào được chọn..",Toast.LENGTH_SHORT).show();
+            return false;
         }
-
-        if (!isExist) {
-            SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            String mMarketId = "KHBHCT" + mParSymbol + Od.format(new Date());
-            oDetail.setPlanDetailId(mMarketId);
-            oDetail.setPlanId(mPlanSaleId);
-            lstPlanSaleDetail.add(oDetail);
-        }
-
-        adapter.setsmoPlanSaleDetail(lstPlanSaleDetail);
-        Toast.makeText(getContext(), String.valueOf(lstPlanSaleDetail.size()) + ": kế hoạch bán hàng chi tiết được chọn..", Toast.LENGTH_SHORT).show();
-
-       spCustomer.setText("");
-       spCustomer.requestFocus();
-       spProduct.setText("");
-       spProduct.requestFocus();
-       tvAmountBox.setText("");
-       tvAmount.setText("");
-       tvNotes.setText("");
-       tvNotes2.setText("");
-        return true;
     }
 
     public void onDeletedPlanSaleDetail() {

@@ -35,7 +35,6 @@ public class SeasonActivity extends BaseActivity {
         adapter.addFragment(new SeasonFragment(), "Mùa vụ");
     }
 
-
     @OnClick(R.id.ivBack)
     public void onBack(){
         finish();

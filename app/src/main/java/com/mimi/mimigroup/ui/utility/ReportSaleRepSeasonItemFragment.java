@@ -381,7 +381,6 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
                     tvTitle.setText("");
                     tvAcreage.setText("");
                     tvNotes.setText("");
-
                 }
             } catch (Exception ex) {
             }
@@ -485,8 +484,6 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
                 } else {
                     lstReportSaleRepSeason.get(i).setAcreage(0f);
                 }
-
-
                 Toast.makeText(getContext(), "Báo cáo dịch hại đã được thêm..", Toast.LENGTH_SHORT).show();
                 break;
             }
@@ -494,7 +491,7 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
 
         if (!isExist) {
             SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            String mSeasonId = "BCMV" + mParSymbol + Od.format(new Date());
+            String mSeasonId = "SEA" + mParSymbol + Od.format(new Date());
             oDetail.setSeasonId(mSeasonId);
             oDetail.setReportSaleId(mReportSaleRepId);
             lstReportSaleRepSeason.add(oDetail);

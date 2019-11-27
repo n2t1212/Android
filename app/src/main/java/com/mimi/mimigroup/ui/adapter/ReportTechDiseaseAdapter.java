@@ -13,7 +13,6 @@ import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
-import com.mimi.mimigroup.ui.utility.ReportTechFormActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
     private DBGimsHelper mDB = null;
     public void setsmoReportTechDisease(List<SM_ReportTechDisease> smoReportTechDisease) {
         this.smoReportTechDisease = smoReportTechDisease;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportTechDisease> smoReportTechDisease;

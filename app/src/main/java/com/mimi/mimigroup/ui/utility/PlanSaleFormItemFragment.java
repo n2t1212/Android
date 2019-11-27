@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
 
@@ -14,6 +15,7 @@ import com.mimi.mimigroup.model.SM_PlanSale;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
+import com.mimi.mimigroup.utils.AppUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -84,20 +86,18 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
             {
                 tvNotes.setText(oPlanSale.getNotes());
             }
-            if(oPlanSale.getIsStatus() != null)
-            {
-                tvIsStatus.setText(oPlanSale.getIsStatus());
-            }
+
         }
     }
 
     @OnClick(R.id.tvPlanDay)
     public void onPlanDay()
     {
-        final Calendar cldr = java.util.Calendar.getInstance();
-        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
-        int month = cldr.get(java.util.Calendar.MONTH);
-        int year = cldr.get(java.util.Calendar.YEAR);
+        /*
+        final Calendar cldr = Calendar.getInstance();
+        int day= cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
 
         // date picker dialog
         dtPicker = new DatePickerDialog(getActivity(),
@@ -114,16 +114,15 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
         dtPicker.getDatePicker().setCalendarViewShown(false);
         dtPicker.getDatePicker().setSpinnersShown(true);
         dtPicker.show();
+        */
     }
 
     @OnClick(R.id.tvStartDay)
-    public void onStartDay()
-    {
-        final Calendar cldr = java.util.Calendar.getInstance();
-        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
-        int month = cldr.get(java.util.Calendar.MONTH);
-        int year = cldr.get(java.util.Calendar.YEAR);
-
+    public void onStartDay(){
+        final Calendar cldr = Calendar.getInstance();
+        int day= cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
         // date picker dialog
         dtPicker = new DatePickerDialog(getActivity(),
                 new DatePickerDialog.OnDateSetListener() {
@@ -142,13 +141,11 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
     }
 
     @OnClick(R.id.tvEndDay)
-    public void onEndDay()
-    {
-        final Calendar cldr = java.util.Calendar.getInstance();
-        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
-        int month = cldr.get(java.util.Calendar.MONTH);
-        int year = cldr.get(java.util.Calendar.YEAR);
-
+    public void onEndDay(){
+        final Calendar cldr = Calendar.getInstance();
+        int day= cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
         // date picker dialog
         dtPicker = new DatePickerDialog(getActivity(),
                 new DatePickerDialog.OnDateSetListener() {
@@ -166,8 +163,7 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
         dtPicker.show();
     }
 
-    public SM_PlanSale getSMPlanSale()
-    {
+    public SM_PlanSale getSMPlanSale(){
         try {
             oPlanSale.setPlanCode(tvPlanCode.getText().toString());
             if(tvPlanDay.getText().toString().isEmpty()){
@@ -190,10 +186,10 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
             }else{
                 oPlanSale.setPlanName(tvPlanName.getText().toString());
             }
-            if(tvIsStatus.getText().toString().isEmpty()){
-                oPlanSale.setIsStatus("");
+            if(tvNotes.getText().toString().isEmpty()){
+                oPlanSale.setNotes("");
             }else{
-                oPlanSale.setIsStatus(tvIsStatus.getText().toString());
+                oPlanSale.setNotes(tvNotes.getText().toString());
             }
 
         }catch (Exception ex){}

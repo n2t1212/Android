@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -89,7 +88,6 @@ public class ReportSaleRepFormItemFragment extends BaseFragment {
                             {
                                 tvLocationAddress.setText(oReportSaleRep.getLocationAddress());
                             }
-
                             if(oReportSaleRep.getReceiverList() != null)
                             {
                                 tvReceiverList.setText(getListEmpName(oReportSaleRep.getReceiverList()));
@@ -102,10 +100,7 @@ public class ReportSaleRepFormItemFragment extends BaseFragment {
                             {
                                 tvNotes.setText(oReportSaleRep.getNotes());
                             }
-                            if(oReportSaleRep.getIsStatus() != null)
-                            {
-                                tvIsStatus.setText(oReportSaleRep.getIsStatus());
-                            }
+
                         }
                     }} ,300);
     }
@@ -226,10 +221,10 @@ public class ReportSaleRepFormItemFragment extends BaseFragment {
     @OnClick(R.id.tvReportDay)
     public void onRequestDate()
     {
-        final Calendar cldr = java.util.Calendar.getInstance();
-        int day = cldr.get(java.util.Calendar.DAY_OF_MONTH);
-        int month = cldr.get(java.util.Calendar.MONTH);
-        int year = cldr.get(java.util.Calendar.YEAR);
+        final Calendar cldr = Calendar.getInstance();
+        int day = cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
 
         // date picker dialog
         dtPicker = new DatePickerDialog(getActivity(),
@@ -272,11 +267,6 @@ public class ReportSaleRepFormItemFragment extends BaseFragment {
                 oReportSaleRep.setNotes("");
             }else{
                 oReportSaleRep.setNotes(tvNotes.getText().toString());
-            }
-            if(tvIsStatus.getText().toString().isEmpty()){
-                oReportSaleRep.setIsStatus("");
-            }else{
-                oReportSaleRep.setIsStatus(tvIsStatus.getText().toString());
             }
 
         }catch (Exception ex){}

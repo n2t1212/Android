@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mimi.mimigroup.R;
-import com.mimi.mimigroup.model.DM_Tree;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 

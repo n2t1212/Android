@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="LẬP KẾ HOẠCH BÁN HÀNG"
+                    android:text="LẬP KẾ HOẠCH"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />

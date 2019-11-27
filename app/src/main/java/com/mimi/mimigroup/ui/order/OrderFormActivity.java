@@ -15,7 +15,6 @@ import com.mimi.mimigroup.api.APINetCallBack;
 import com.mimi.mimigroup.api.SyncPost;
 import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
-
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Product;
@@ -360,6 +359,7 @@ public class OrderFormActivity extends BaseActivity {
             }
         }
         Toast.makeText(this, "Ghi đơn hàng thành công", Toast.LENGTH_SHORT).show();
+        setResult(2001);
         finish();
         isSaved=true;
     }
@@ -455,7 +455,7 @@ public class OrderFormActivity extends BaseActivity {
         return  mOrderDetail;
     }
 
-    private void onPostOrder(final SM_Order oOd,final List<SM_OrderDetail> lstOrderDetail){
+    private void onPostOrder(final SM_Order oOd, final List<SM_OrderDetail> lstOrderDetail){
         try{
             if (APINet.isNetworkAvailable(OrderFormActivity.this)==false){
                 Toast.makeText(OrderFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -518,7 +518,6 @@ public class OrderFormActivity extends BaseActivity {
             }
 
             String isSample = "";
-
             if(oOd.getSample() != null){
                 if(oOd.getSample().equals(true) || oOd.getSample().equals("1") || oOd.getSample()){
                     isSample = "MAU";
@@ -559,6 +558,7 @@ public class OrderFormActivity extends BaseActivity {
                                 oOd.setPost(true);
                                 oOd.setOrderStatus(2);
                                 mDB.editSMOrder(oOd);
+                                setResult(2001);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){

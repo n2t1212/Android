@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="KẾ HOẠCH BÁN HÀNG THÁNG"
+                    android:text="KẾ HOẠCH BÁN HÀNG"
                     android:textColor="#ffffff"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -72,7 +72,7 @@
                     android:background="@color/BackgroundHeaderGrid"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="Mã kế hoạch"
+                    android:text="Số kế hoạch"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -84,10 +84,20 @@
                     android:background="@color/BackgroundHeaderGrid"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Ngày kế hoạch"
+                    android:text="Ngày lập"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="0.5dp"
+                    android:background="@color/BackgroundHeaderGrid"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Tên kế hoạch"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
@@ -112,21 +122,19 @@
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
-
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="250dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="0.5dp"
                     android:background="@color/BackgroundHeaderGrid"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Tên kế hoạch"
+                    android:text="Đã gửi"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
-
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="150dp"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="0.5dp"
@@ -145,20 +153,9 @@
                     android:background="@color/BackgroundHeaderGrid"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Đã gửi"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
-                    android:layout_width="150dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="0.5dp"
-                    android:background="@color/BackgroundHeaderGrid"
-                    android:gravity="center"
-                    android:padding="5dp"
                     android:text="Trạng thái"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     android:textSize="16sp" />
 
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView

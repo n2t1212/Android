@@ -54,7 +54,6 @@ public class PlanSaleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 //notifyDataSetChanged();
             }
         });
-
     }
 
     public void setPlanSaleList(List<SM_PlanSale> mPlanSaleList)
@@ -138,7 +137,7 @@ public class PlanSaleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                     if(oPlanSale.getIsStatus() != null)
                     {
-                        tvIsStatus.setText(oPlanSale.getIsStatus());
+                        tvIsStatus.setText(Integer.toString(oPlanSale.getIsStatus()));
                     }
                     if(oPlanSale.getPost() != null)
                     {
@@ -156,14 +155,13 @@ public class PlanSaleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvPostDay.setText(oPlanSale.getPostDay());
                     }
                 }
-
             }catch (Exception e){
                 Log.d("ERR_BIND_PLAN_SALE",e.getMessage());
             }
         }
     }
 
-    public void setRowSelected(boolean isSelected, String IsStatus, RecyclerView.ViewHolder viewHolder){
+    public void setRowSelected(boolean isSelected, Integer IsStatus, RecyclerView.ViewHolder viewHolder){
         if(isSelected){
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#F8D8E7"));
             viewHolder.itemView.setSelected(true);

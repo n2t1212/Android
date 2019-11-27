@@ -162,10 +162,6 @@ public class ReportSaleRepAdapter extends RecyclerView.Adapter<RecyclerView.View
                     {
                         tvNotes.setText(oReportTech.getNotes());
                     }
-                    if(oReportTech.getIsStatus() != null)
-                    {
-                        tvIsStatus.setText(oReportTech.getIsStatus());
-                    }
                     if(oReportTech.getPost() != null)
                     {
                         if(oReportTech.getPost()==true || oReportTech.getPost().equals(true) || oReportTech.getPost().equals("1"))
@@ -189,7 +185,7 @@ public class ReportSaleRepAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void setRowSelected(boolean isSelected, String IsStatus, RecyclerView.ViewHolder viewHolder){
+    public void setRowSelected(boolean isSelected, Integer IsStatus, RecyclerView.ViewHolder viewHolder){
         if(isSelected){
             viewHolder.itemView.setBackgroundColor(Color.parseColor("#F8D8E7"));
             viewHolder.itemView.setSelected(true);

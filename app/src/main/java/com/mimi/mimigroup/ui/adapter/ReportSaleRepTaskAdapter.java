@@ -21,6 +21,7 @@ public class ReportSaleRepTaskAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public void setsmoReportSaleRepTask(List<SM_ReportSaleRepActivitie> smoReportSaleRepTask) {
         this.smoReportSaleRepTask = smoReportSaleRepTask;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportSaleRepActivitie> smoReportSaleRepTask;

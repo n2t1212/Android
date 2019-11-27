@@ -69,7 +69,7 @@ public class SearchCustomerAdapter extends ArrayAdapter<DM_Customer_Search> impl
         try {
             return nameFilter;
         }catch (Exception ex){
-            Toast.makeText(ctx, "Không thể tìm khách hàng:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "Không thể tìm sản phẩm:" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             return null;
         }
     }

@@ -35,7 +35,6 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 public class PlanSaleFormActivity extends BaseActivity {
-
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.viewPager)
@@ -47,36 +46,16 @@ public class PlanSaleFormActivity extends BaseActivity {
     @BindView(R.id.btnPlanSaleDetailDel)
     FloatingActionButton btnPlanSaleDetailDel;
 
-    public String getmPlanSaleID() {
-        return mPlanSaleID;
-    }
+    PlanSaleFormItemFragment PlanSaleFragment;
+    PlanSaleDetailItemFragment PlanSaleDetailFragment;
 
     public String mPlanSaleID="";
-
-    public String getmPar_Symbol() {
-        return mPar_Symbol;
-    }
-
     private String mPar_Symbol;
     private String mAction="";
     private DBGimsHelper mDB;
     private boolean isSaved=false;
-
     SM_PlanSale oPlanSale;
     List<SM_PlanSaleDetail> oPlanSaleDetail;
-
-    PlanSaleFormItemFragment PlanSaleFragment;
-    PlanSaleDetailItemFragment PlanSaleDetailFragment;
-
-    public String getAction(){return this.mAction;}
-
-    public SM_PlanSale getoPlanSale() {
-        return oPlanSale;
-    }
-
-    public List<SM_PlanSaleDetail> getoPlanSaleDetail() {
-        return oPlanSaleDetail;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +70,12 @@ public class PlanSaleFormActivity extends BaseActivity {
         mPar_Symbol  = getIntent().getStringExtra("PAR_SYMBOL");
         mAction=getIntent().getAction().toString();
         if(mAction=="EDIT"){
-            oPlanSale = mDB.getPlanSaleById(mPlanSaleID);
+            oPlanSale = mDB.getPlanSale(mPlanSaleID);
             oPlanSaleDetail = mDB.getAllPlanSaleDetail(mPlanSaleID);
+            if (oPlanSale!=null){
+                oPlanSale.setIsStatus(1);
+                oPlanSale.setPost(false);
+            }
         }else{
             oPlanSale = new SM_PlanSale();
             oPlanSaleDetail = new ArrayList<>();
@@ -110,7 +93,7 @@ public class PlanSaleFormActivity extends BaseActivity {
             oPlanSale.setPlanId(mPlanSaleID);
             oPlanSale.setPlanCode(mReportCode);
             oPlanSale.setPlanDay(mReportDate);
-            oPlanSale.setIsStatus("0");
+            oPlanSale.setIsStatus(0);
             oPlanSale.setPost(false);
         }
 
@@ -120,10 +103,10 @@ public class PlanSaleFormActivity extends BaseActivity {
                 new Runnable() {
                     public void run() {
                         PlanSaleFragment = new PlanSaleFormItemFragment();
-                        adapter.addFragment(PlanSaleFragment, "Kế hoạch bán hàng");
+                        adapter.addFragment(PlanSaleFragment, "Kế hoạch");
 
                         PlanSaleDetailFragment = new PlanSaleDetailItemFragment();
-                        adapter.addFragment(PlanSaleDetailFragment, "Kế hoạch chi tiết");
+                        adapter.addFragment(PlanSaleDetailFragment, "Chi tiết");
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
@@ -178,6 +161,20 @@ public class PlanSaleFormActivity extends BaseActivity {
             btnPlanSaleDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
         }
     }
+
+    public String getAction(){return this.mAction;}
+    public SM_PlanSale getoPlanSale() {
+        return this.oPlanSale;
+    }
+    public List<SM_PlanSaleDetail> getoPlanSaleDetail() {
+        return this.oPlanSaleDetail;
+    }
+    public String getmPlanSaleID() {
+        return this.mPlanSaleID;
+    }
+    public String getmPar_Symbol() {
+        return this.mPar_Symbol;
+    }
     private void ReceiveDataFragment(){
         //SAVE DETAIL
         try{
@@ -193,9 +190,8 @@ public class PlanSaleFormActivity extends BaseActivity {
             }
 
         }catch (Exception ex){}
-
-
     }
+
 
     @Override
     public void onBackPressed() {
@@ -207,7 +203,7 @@ public class PlanSaleFormActivity extends BaseActivity {
             CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
             dlgTitle.setText("THÔNG BÁO");
             CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
-            dlgContent.setText("Dữ liệu kế hoạch bán hàng chưa cập nhật. Bạn có muốn bỏ qua ?");
+            dlgContent.setText("Dữ liệu chưa cập nhật. Bạn có muốn bỏ qua ?");
             CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
             CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
             btnYes.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +241,7 @@ public class PlanSaleFormActivity extends BaseActivity {
             CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
             dlgTitle.setText("THÔNG BÁO");
             CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
-            dlgContent.setText("Dữ liệu kế hoạch bán hàng chưa cập nhật. Bạn có muốn bỏ qua ?");
+            dlgContent.setText("Dữ liệu chưa cập nhật. Bạn có muốn bỏ qua ?");
             CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
             CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
 
@@ -269,7 +265,6 @@ public class PlanSaleFormActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
-
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
@@ -315,18 +310,16 @@ public class PlanSaleFormActivity extends BaseActivity {
         }
 
         mDB.addPlanSale(oPlanSale);
-
         if(mDB.getSizePlanSale(oPlanSale.getPlanId())>0) {
             mDB.delPlanSaleDetail(oPlanSale.getPlanId());
-            // Save market report
             if(oPlanSaleDetail != null && oPlanSaleDetail.size() >0){
                 for (SM_PlanSaleDetail oDetail : oPlanSaleDetail) {
                     mDB.addSalePlanDetail(oDetail);
                 }
             }
         }
-
         Toast.makeText(this, "Ghi kế hoạch bán hàng thành công", Toast.LENGTH_SHORT).show();
+        setResult(2001);
         finish();
         isSaved=true;
     }
@@ -354,11 +347,9 @@ public class PlanSaleFormActivity extends BaseActivity {
         else{
             mDB.addPlanSale(oPlanSale);
             if(mDB.getSizePlanSale(oPlanSale.getPlanId())>0) {
-
                 for (SM_PlanSaleDetail oDetail : oPlanSaleDetail) {
                     mDB.addSalePlanDetail(oDetail);
                 }
-
                 onPostPlanSale(oPlanSale, oPlanSaleDetail);
             }else{
                 Toast.makeText(this, "Không thể ghi kế hoạch bán hàng..", Toast.LENGTH_SHORT).show();
@@ -393,7 +384,7 @@ public class PlanSaleFormActivity extends BaseActivity {
                             mRow+=""+"#";
                         }
                         if(oOdt.getAmountBox()!=null){
-                            mRow+=oOdt.getAmountBox()+"#";
+                            mRow+=oOdt.getAmountBox().toString()+"#";
                         }else{
                             mRow+="0"+"#";
                         }
@@ -423,7 +414,7 @@ public class PlanSaleFormActivity extends BaseActivity {
     }
 
 
-    private void onPostPlanSale(final SM_PlanSale planSale ,final List<SM_PlanSaleDetail> detail){
+    private void onPostPlanSale(final SM_PlanSale planSale , final List<SM_PlanSaleDetail> detail){
         try{
             if (APINet.isNetworkAvailable(PlanSaleFormActivity.this)==false){
                 Toast.makeText(PlanSaleFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -446,7 +437,10 @@ public class PlanSaleFormActivity extends BaseActivity {
                 Toast.makeText(this,"Không tìm thấy mã báo cáo",Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            if(mDataPlanSaleDetail==null || mDataPlanSaleDetail.isEmpty()){
+                Toast.makeText(this,"Bạn chưa nhập chi tiết hoặc không thể tổng hợp chi tiết.",Toast.LENGTH_SHORT).show();
+                return;
+            }
             final String mUrlPostPlanSale=AppSetting.getInstance().URL_PostPlanSale();
             try {
                 if (planSale.getPlanId() == null || planSale.getPlanId().isEmpty()) {
@@ -471,7 +465,7 @@ public class PlanSaleFormActivity extends BaseActivity {
                     planSale.setNotes("");
                 }
                 if(planSale.getIsStatus() == null){
-                    planSale.setIsStatus("1");
+                    planSale.setIsStatus(1);
                 }
             }catch(Exception ex){
                 Toast.makeText(PlanSaleFormActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -482,11 +476,12 @@ public class PlanSaleFormActivity extends BaseActivity {
                     .add("imei", Imei)
                     .add("imeisim", ImeiSim)
                     .add("plancode",planSale.getPlanCode())
+                    .add("planday",planSale.getPlanDay())
                     .add("startday", planSale.getStartDay())
                     .add("endday", planSale.getEndDay())
                     .add("customerid", "")
                     .add("planname", planSale.getPlanName())
-                    .add("isstatus", planSale.getIsStatus())
+                    .add("isstatus", Integer.toString(planSale.getIsStatus()))
                     .add("notes", planSale.getNotes())
                     .add("plansaledetail", mDataPlanSaleDetail)
                     .build();
@@ -505,8 +500,9 @@ public class PlanSaleFormActivity extends BaseActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 planSale.setPostDay(sdf.format(new Date()));
                                 planSale.setPost(true);
-                                planSale.setIsStatus("2");
+                                planSale.setIsStatus(2);
                                 mDB.editPlanSale(planSale);
+                                setResult(2001);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){

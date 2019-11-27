@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.Toast;
+
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.api.SyncFindCustomer;
 import com.mimi.mimigroup.api.SyncFindCustomerCallback;
@@ -18,7 +19,6 @@ import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseFragment;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Customer_Distance;
-
 import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.SM_Order;
 import com.mimi.mimigroup.ui.adapter.SearchCustomerAdapter;
@@ -61,10 +61,10 @@ public class OrderFormItemFragment extends BaseFragment {
 
     private DBGimsHelper mDB;
     private String mOrderID="";
-    private  SM_Order oOrder;
+    private SM_Order oOrder;
     List<DM_Customer_Search> lstCustomer;
     private DatePickerDialog dtPicker;
-    private  DM_Customer_Search oCustomerSel;
+    private DM_Customer_Search oCustomerSel;
 
     @Override
     protected int getLayoutResourceId() {

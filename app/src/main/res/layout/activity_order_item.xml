@@ -125,7 +125,6 @@
         android:layout_marginRight="0.5dp"
         android:background="@drawable/border_cell_grid"
         android:gravity="center_horizontal"/>
-
     <com.mimi.mimigroup.ui.custom.CustomTextView
         android:layout_width="400dp"
         android:layout_height="match_parent"

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
 import com.mimi.mimigroup.db.DBGimsHelper;
-import com.mimi.mimigroup.model.DM_Customer;
 import com.mimi.mimigroup.model.DM_Customer_Search;
 import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.SM_ReportSaleRepMarket;
@@ -270,7 +269,6 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
                 if (osmDT.getNotes() != null) {
                     tvNotes.setText(osmDT.getNotes());
                 }
-
                 currentMarketId = osmDT.getMarketId();
             } else {
                 Toast.makeText(getContext(), "Không tồn tại báo cáo thị trường..", Toast.LENGTH_SHORT).show();
@@ -406,7 +404,7 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
 
         if (!isExist) {
             SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            String mMarketId = "BCSALETT" + mParSymbol + Od.format(new Date());
+            String mMarketId = "MAR" + mParSymbol + Od.format(new Date());
             oDetail.setMarketId(mMarketId);
             oDetail.setReportSaleId(mReportSaleId);
             lstReportSaleRepMarket.add(oDetail);

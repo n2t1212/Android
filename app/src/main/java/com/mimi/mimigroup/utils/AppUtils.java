@@ -132,4 +132,29 @@ public class AppUtils {
         }catch (Exception ex){return  amount;}
 
     }
+
+    public static int getDay(String date1) {
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d1=sdf.parse(date1);
+            return d1.getDay();
+        }catch (Exception ex){return 0;}
+    }
+    public static int getMonth(String date1) {
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d1=sdf.parse(date1);
+            return d1.getMonth();
+        }catch (Exception ex){return 0;}
+    }
+    public static int getYear(String date1) {
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date d1=sdf.parse(date1);
+            return d1.getYear();
+        }catch (Exception ex){return 0;}
+    }
 }

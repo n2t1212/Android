@@ -85,151 +85,151 @@ public class DBGimsHelper extends SQLiteOpenHelper{
          */
 
         //<<THAM SỐ HỆ THỐNG>>// INTEGER PRIMARY KEY
-        String sqlCMM = "CREATE TABLE HT_PARA(" +
-                "PARA_NAME VARCHAR(50)," +
+        String sqlCMM="CREATE TABLE HT_PARA(" +
+                "PARA_NAME VARCHAR(50),"+
                 "PARA_VAL VARCHAR(50))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_PROVINCE(Provinceid INTEGER PRIMARY KEY," +
-                "ProvinceCode VARCHAR(10)," +
-                "Province VARCHAR(50)," +
+        sqlCMM="CREATE TABLE DM_PROVINCE(Provinceid INTEGER PRIMARY KEY,"+
+                "ProvinceCode VARCHAR(10),"+
+                "Province VARCHAR(50),"+
                 "ZoneCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_DISTRICT(Districtid INTEGER PRIMARY KEY," +
-                "Provinceid INTEGER," +
-                "District VARCHAR(50)," +
+        sqlCMM="CREATE TABLE DM_DISTRICT(Districtid INTEGER PRIMARY KEY,"+
+                "Provinceid INTEGER,"+
+                "District VARCHAR(50),"+
                 "DistrictCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_WARD(Wardid INTEGER PRIMARY KEY," +
-                "Districtid INTEGER," +
-                "Ward VARCHAR(50)," +
+        sqlCMM="CREATE TABLE DM_WARD(Wardid INTEGER PRIMARY KEY,"+
+                "Districtid INTEGER,"+
+                "Ward VARCHAR(50),"+
                 "WardCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_PRODUCT_GROUP(ProductGroupid VARCHAR(15) PRIMARY KEY," +
-                "ProductGroup VARCHAR(50)," +
+        sqlCMM="CREATE TABLE DM_PRODUCT_GROUP(ProductGroupid VARCHAR(15) PRIMARY KEY,"+
+                "ProductGroup VARCHAR(50),"+
                 "ProductGroupCode VARCHAR(10))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_PRODUCT(ProductCode VARCHAR(15) PRIMARY KEY," +
-                "ProductGroupID VARCHAR(15)," +
-                "ProductName VARCHAR(50)," +
-                "Unit VARCHAR(30)," +
-                "Spec VARCHAR(30)," +
-                "ConvertKgl FLOAT," +
-                "ConvertBox FLOAT," +
+        sqlCMM="CREATE TABLE DM_PRODUCT(ProductCode VARCHAR(15) PRIMARY KEY,"+
+                "ProductGroupID VARCHAR(15),"+
+                "ProductName VARCHAR(50),"+
+                "Unit VARCHAR(30),"+
+                "Spec VARCHAR(30),"+
+                "ConvertKgl FLOAT,"+
+                "ConvertBox FLOAT,"+
                 "isMain BIT)";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_CUSTOMER(Customerid VARCHAR(50)PRIMARY KEY," +
-                "Employeeid VARCHAR(50)," +
-                "CustomerCode VARCHAR(15)," +
-                "CustomerName VARCHAR(150)," +
-                "ShortName VARCHAR(50)," +
-                "Represent VARCHAR(70)," +
-                "Provinceid INTEGER," +
-                "Districtid INTEGER," +
-                "Wardid INTEGER," +
-                "Street VARCHAR(250)," +
-                "Address VARCHAR(250)," +
-                "Tax VARCHAR(15)," +
-                "Tel VARCHAR(15)," +
-                "Fax VARCHAR(15)," +
-                "Email VARCHAR(50)," +
-                "IsLevel INTEGER," +
-                "VisitSchedule VARCHAR(10)," +
-                "Ranked VARCHAR(10)," +
-                "ExtCustomer BIT," +
-                "Longitude FLOAT," +
-                "Latitude FLOAT," +
-                "LongitudeTemp FLOAT," +
-                "LatitudeTemp FLOAT," +
-                "Scope FLOAT," +
-                "LocationAddress VARCHAR(255)," +
-                "LocationAddressTemp VARCHAR(255)," +
-                "Notes VARCHAR(200)," +
-                "IsSupport BIT," +
+        sqlCMM="CREATE TABLE DM_CUSTOMER(Customerid VARCHAR(50)PRIMARY KEY,"+
+                "Employeeid VARCHAR(50),"+
+                "CustomerCode VARCHAR(15),"+
+                "CustomerName VARCHAR(150),"+
+                "ShortName VARCHAR(50),"+
+                "Represent VARCHAR(70),"+
+                "Provinceid INTEGER,"+
+                "Districtid INTEGER,"+
+                "Wardid INTEGER,"+
+                "Street VARCHAR(250),"+
+                "Address VARCHAR(250),"+
+                "Tax VARCHAR(15),"+
+                "Tel VARCHAR(15),"+
+                "Fax VARCHAR(15),"+
+                "Email VARCHAR(50),"+
+                "IsLevel INTEGER,"+
+                "VisitSchedule VARCHAR(10),"+
+                "Ranked VARCHAR(10),"+
+                "ExtCustomer BIT,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LongitudeTemp FLOAT,"+
+                "LatitudeTemp FLOAT,"+
+                "Scope FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
+                "LocationAddressTemp VARCHAR(255),"+
+                "Notes VARCHAR(200),"+
+                "IsSupport BIT,"+
                 "EditStatus INTEGER)";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_CUSTOMER_SUPPLIER(Supplierid VARCHAR(50)," +
-                "Customerid VARCHAR(50)," +
+        sqlCMM="CREATE TABLE DM_CUSTOMER_SUPPLIER(Supplierid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
                 "Notes VARCHAR(50))";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM = "CREATE TABLE QR_QRSCAN(Qrscanid VARCHAR(50)," +
-                "Customerid VARCHAR(50)," +
-                "CommandNo VARCHAR(15)," +
-                "Qrid VARCHAR(50)," +
-                "ProductCode VARCHAR(15)," +
-                "ProductName VARCHAR(70)," +
-                "Unit VARCHAR(30)," +
-                "Specification VARCHAR(50)," +
-                "ScanNo INTEGER," +
-                "ScanDay DATETIME," +
-                "Longitude FLOAT," +
-                "Latitude FLOAT," +
-                "LocationAddress VARCHAR(255)," +
-                "ScanSupportID VARCHAR(50)," +
-                "Imei VARCHAR(50)," +
-                "ImeiSim VARCHAR(50)," +
-                "ScanType VARCHAR(5)," +
-                "SyncDay DATETIME," +
+        sqlCMM="CREATE TABLE QR_QRSCAN(Qrscanid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
+                "CommandNo VARCHAR(15),"+
+                "Qrid VARCHAR(50),"+
+                "ProductCode VARCHAR(15),"+
+                "ProductName VARCHAR(70),"+
+                "Unit VARCHAR(30),"+
+                "Specification VARCHAR(50),"+
+                "ScanNo INTEGER,"+
+                "ScanDay DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
+                "ScanSupportID VARCHAR(50),"+
+                "Imei VARCHAR(50),"+
+                "ImeiSim VARCHAR(50),"+
+                "ScanType VARCHAR(5),"+
+                "SyncDay DATETIME,"+
                 "IsSync BIT)";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM = "CREATE TABLE QR_QRSCAN_HIS(Scanhisid VARCHAR(50)," +
-                "Customerid VARCHAR(50)," +
-                "CommandNo VARCHAR(15)," +
-                "Qrid VARCHAR(50)," +
-                "ProductCode VARCHAR(15)," +
-                "ProductName VARCHAR(70)," +
-                "Unit VARCHAR(30)," +
-                "Specification VARCHAR(50)," +
-                "ScanNo INTEGER," +
-                "ScanDay DATETIME," +
-                "Longitude FLOAT," +
-                "Latitude FLOAT," +
-                "LocationAddress VARCHAR(255)," +
+        sqlCMM="CREATE TABLE QR_QRSCAN_HIS(Scanhisid VARCHAR(50),"+
+                "Customerid VARCHAR(50),"+
+                "CommandNo VARCHAR(15),"+
+                "Qrid VARCHAR(50),"+
+                "ProductCode VARCHAR(15),"+
+                "ProductName VARCHAR(70),"+
+                "Unit VARCHAR(30),"+
+                "Specification VARCHAR(50),"+
+                "ScanNo INTEGER,"+
+                "ScanDay DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
+                "LocationAddress VARCHAR(255),"+
                 "Employee VARCHAR(100))";
 
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_CUSTOMER_LOCATION(" +
-                "Customerid VARCHAR(50)," +
-                "CustomerCode VARCHAR(15)," +
-                "CustomerName VARCHAR(150)," +
-                "LongitudeScan FLOAT," +
-                "LatitudeScan FLOAT," +
+        sqlCMM="CREATE TABLE DM_CUSTOMER_LOCATION("+
+                "Customerid VARCHAR(50),"+
+                "CustomerCode VARCHAR(15),"+
+                "CustomerName VARCHAR(150),"+
+                "LongitudeScan FLOAT,"+
+                "LatitudeScan FLOAT,"+
                 "LocationAddressScan VARCHAR(255)," +
                 "Distince FLOAT)";
         db.execSQL(sqlCMM);
 
 
-        sqlCMM = "CREATE TABLE SM_VISITCARD(" +
-                "VisitCardID VARCHAR(50)," +
-                "VisitDay DATETIME," +
-                "CustomerID VARCHAR(50)," +
-                "VisitType VARCHAR(5)," +
-                "VisitTime DATETIME," +
-                "Longitude FLOAT," +
-                "Latitude FLOAT," +
+        sqlCMM="CREATE TABLE SM_VISITCARD("+
+                "VisitCardID VARCHAR(50),"+
+                "VisitDay DATETIME,"+
+                "CustomerID VARCHAR(50),"+
+                "VisitType VARCHAR(5),"+
+                "VisitTime DATETIME,"+
+                "Longitude FLOAT,"+
+                "Latitude FLOAT,"+
                 "LocationAddress VARCHAR(255)," +
-                "VisitNotes VARCHAR(255)," +
-                "IsSync BIT," +
+                "VisitNotes VARCHAR(255),"+
+                "IsSync BIT,"+
                 "SyncDay DATETIME)";
 
         db.execSQL(sqlCMM);
         // addTrace(db);
 
-        sqlCMM = "CREATE TABLE DM_EMPLOYEE(" +
-                "Employeeid VARCHAR(50)," +
-                "EmployeeCode VARCHAR(15)," +
-                "EmployeeName VARCHAR(120)," +
+        sqlCMM="CREATE TABLE DM_EMPLOYEE("+
+                "Employeeid VARCHAR(50),"+
+                "EmployeeCode VARCHAR(15),"+
+                "EmployeeName VARCHAR(120),"+
                 "Notes VARCHAR(255))";
         db.execSQL(sqlCMM);
 
@@ -254,7 +254,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "OrderID VARCHAR(50) PRIMARY KEY," +
                 "OrderCode VARCHAR(50)," +
                 "CustomerID VARCHAR(50), " +
-                "OrderDate DATETIME," +
+                "OrderDate DATETIME,"+
                 "RequestDate DATETIME," +
                 "MaxDebt INTEGER," +
                 "OriginMoney FLOAT," +
@@ -270,8 +270,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
                 "SeqnoCode INTEGER," +
-                "IsSample BIT," +
-                "IsPost BIT," +
+                "IsSample BIT,"+
+                "IsPost BIT,"+
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
 
@@ -283,12 +283,12 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "ProductCode VARCHAR(50)," +
                 "ProductName VARCHAR(100)," +
                 "Unit VARCHAR(30)," +
-                "Spec VARCHAR(50)," +
-                "ConvertBox FLOAT," +
+                "Spec VARCHAR(50),"+
+                "ConvertBox FLOAT,"+
                 "Amount INTEGER," +
-                "AmountBox FLOAT," +
+                "AmountBox FLOAT,"+
                 "Price FLOAT," +
-                "OriginMoney FLOAT," +
+                "OriginMoney FLOAT,"+
                 "Notes VARCHAR(255)," +
                 "Notes2 VARCHAR(255))";
         db.execSQL(sqlCMM);
@@ -305,7 +305,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "DeliveryDate DATETIME," +
                 "HandlingStaff VARCHAR(100)," +
                 "HandlingDate DATETIME," +
-                "TotalMoney FLOAT," +
+                "TotalMoney FLOAT,"+
                 "DeliveryDesc VARCHAR(1500))";
         db.execSQL(sqlCMM);
         //DELIVERYDETAIL
@@ -315,46 +315,47 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 "ProductCode VARCHAR(50)," +
                 "ProductName VARCHAR(100)," +
                 "Unit VARCHAR(30)," +
-                "Spec VARCHAR(50)," +
+                "Spec VARCHAR(50),"+
                 "Amount INTEGER," +
-                "AmountBox FLOAT," +
+                "AmountBox FLOAT,"+
                 "Price FLOAT," +
-                "OriginMoney FLOAT," +
+                "OriginMoney FLOAT,"+
                 "Notes VARCHAR(255))";
         db.execSQL(sqlCMM);
         /////////////////////////////////////////END TIVA ///////////////////////////////////
         ////////////GIAI DOAN 2//////////
-        sqlCMM = "CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY," +
-                "PayCode VARCHAR(20)," +
-                "PayDate DATETIME," +
-                "PayName VARCHAR(100)," +
-                "CustomerID VARCHAR(50)," +
-                "PayMoney FLOAT," +
-                "PayPic VARCHAR(255)," +
+        sqlCMM="CREATE TABLE SM_CUSTOMER_PAY(PayID VARCHAR(50) PRIMARY KEY,"+
+                "PayCode VARCHAR(20),"+
+                "PayDate DATETIME,"+
+                "PayName VARCHAR(100),"+
+                "CustomerID VARCHAR(50),"+
+                "PayMoney FLOAT,"+
+                "PayPic VARCHAR(255),"+
                 "Longitude FLOAT," +
                 "Latitude FLOAT," +
                 "LocationAddress VARCHAR(255)," +
                 "PayStatus INTEGER," +
                 "PayNotes VARCHAR(255)," +
-                "IsPost BIT," +
+                "IsPost BIT,"+
                 "PostDay DATETIME)";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY," +
-                "TreeCode VARCHAR(15)," +
-                "TreeGroupCode VARCHAR(15)," +
+        sqlCMM="CREATE TABLE DM_TREE(TreeID INTEGER PRIMARY KEY,"+
+                "TreeCode VARCHAR(15),"+
+                "TreeGroupCode VARCHAR(15),"+
                 "TreeName VARCHAR(50))";
         db.execSQL(sqlCMM);
-        sqlCMM = "CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY," +
-                "TreeID INTEGER," +
-                "DiseaseCode VARCHAR(15)," +
+        sqlCMM="CREATE TABLE DM_TREE_DISEASE(DiseaseID INTEGER PRIMARY KEY,"+
+                "TreeID INTEGER,"+
+                "DiseaseCode VARCHAR(15),"+
                 "DiseaseName VARCHAR(50))";
         db.execSQL(sqlCMM);
 
-        sqlCMM = "CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY," +
-                "SeasonCode VARCHAR(15)," +
+        sqlCMM="CREATE TABLE DM_SEASON(SeasonID INTEGER PRIMARY KEY,"+
+                "SeasonCode VARCHAR(15),"+
                 "SeasonName VARCHAR(50))";
         db.execSQL(sqlCMM);
+
 
         //[[[[REPORT-TECH:BÁO CÁO KỸ THUẬT]]]]
         sqlCMM = "CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY," +
@@ -520,6 +521,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                         "SeasonName VARCHAR(50))";
                 db.execSQL(sqlCMM);
 
+
                 //[[[[REPORT-TECH:BÁO CÁO KỸ THUẬT]]]]
                 sqlCMM="CREATE TABLE SM_REPORT_TECH(ReportTechID VARCHAR(50) PRIMARY KEY,"+
                         "ReportCode VARCHAR(20),"+
@@ -619,11 +621,6 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                         "Place VARCHAR(100)," +
                         "Notes VARCHAR(200))";
                 db.execSQL(sqlCMM);
-                //db.execSQL("ALTER TABLE QR_QRSCAN ADD COLUMN ScanSupportID VARCHAR(50) DEFAULT ''");
-                //onCreate(db);
-
-                db.execSQL("ALTER TABLE SM_ORDER_DETAIL ADD COLUMN Notes2 VARCHAR(255) DEFAULT ''");
-                db.execSQL("ALTER TABLE SM_ORDER ADD COLUMN IsSample  BIT");
 
                 // KE HOACH BAN HANG
                 sqlCMM = "CREATE TABLE SM_PLAN_SALE(PlanID VARCHAR(50) PRIMARY KEY," +
@@ -648,6 +645,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                         "Notes2 NVARCHAR(255))";
                 db.execSQL(sqlCMM);
 
+                db.execSQL("ALTER TABLE SM_ORDER_DETAIL ADD COLUMN Notes2 VARCHAR(255) DEFAULT ''");
+                db.execSQL("ALTER TABLE SM_ORDER ADD COLUMN IsSample  BIT");
             }
         }catch (Exception ex){
             //Toast.makeText(mCxt, "Không thể nâng cấp DB lên V12."+ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -2509,7 +2508,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             int iSq = 1;
 
             String mOrderDetailID=getSMOrderDetailID(oOrderDetail.getOrderID(),oOrderDetail.getProductID());
-            if(mOrderDetailID.isEmpty()|| mOrderDetailID=="" ){
+           if(mOrderDetailID.isEmpty()|| mOrderDetailID=="" ){
                 ContentValues values = new ContentValues();
                 values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
                 values.put("OrderID", oOrderDetail.getOrderID());
@@ -2524,25 +2523,25 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("Price",oOrderDetail.getPrice());
                 values.put("OriginMoney", oOrderDetail.getOriginMoney());
                 values.put("Notes", oOrderDetail.getNotes());
-                values.put("Notes2", oOrderDetail.getNotes2());
+               values.put("Notes2", oOrderDetail.getNotes2());
 
                 db.insert("SM_ORDER_DETAIL", null, values);
             }else{
-                ContentValues values = new ContentValues();
-                values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
-                values.put("OrderID", oOrderDetail.getOrderID());
-                values.put("ProductID", oOrderDetail.getProductID());
-                values.put("ProductCode", oOrderDetail.getProductCode());
-                values.put("ProductName", oOrderDetail.getProductName());
-                values.put("Unit", oOrderDetail.getUnit());
-                values.put("Spec",oOrderDetail.getSpec());
-                values.put("ConvertBox",oOrderDetail.getConvertBox());
-                values.put("Amount", oOrderDetail.getAmount());
-                values.put("AmountBox", oOrderDetail.getAmountBox());
-                values.put("Price",oOrderDetail.getPrice());
-                values.put("OriginMoney", oOrderDetail.getOriginMoney());
-                values.put("Notes", oOrderDetail.getNotes());
-                values.put("Notes2", oOrderDetail.getNotes2());
+               ContentValues values = new ContentValues();
+               values.put("OrderDetailID", oOrderDetail.getOrderDetailID());
+               values.put("OrderID", oOrderDetail.getOrderID());
+               values.put("ProductID", oOrderDetail.getProductID());
+               values.put("ProductCode", oOrderDetail.getProductCode());
+               values.put("ProductName", oOrderDetail.getProductName());
+               values.put("Unit", oOrderDetail.getUnit());
+               values.put("Spec",oOrderDetail.getSpec());
+               values.put("ConvertBox",oOrderDetail.getConvertBox());
+               values.put("Amount", oOrderDetail.getAmount());
+               values.put("AmountBox", oOrderDetail.getAmountBox());
+               values.put("Price",oOrderDetail.getPrice());
+               values.put("OriginMoney", oOrderDetail.getOriginMoney());
+               values.put("Notes", oOrderDetail.getNotes());
+               values.put("Notes2", oOrderDetail.getNotes2());
 
                 db.update("SM_ORDER_DETAIL",values,"OrderDetailID=?" ,new String[] {String.valueOf(oOrderDetail.getOrderDetailID())});
             }
@@ -2585,54 +2584,54 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     }
 
 
-    /****SM_DELIVERY_ORDER****/
-    private String getDeliveryID(String mOrderID,String mTransportCode){
-        try {
-            SQLiteDatabase db = getReadableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER WHERE (OrderID='%s' AND TransportCode='%s')", new String[]{mOrderID,mTransportCode});
-            String mDeliveryOrderID="";
-            if (cursor.moveToFirst()) {
-                do {
-                    mDeliveryOrderID=cursor.getString(cursor.getColumnIndex("DeliveryOrderID"));
-                    break;
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-            return mDeliveryOrderID;
-        }catch(Exception ex){return  "";}
-    }
+   /****SM_DELIVERY_ORDER****/
+   private String getDeliveryID(String mOrderID,String mTransportCode){
+       try {
+           SQLiteDatabase db = getReadableDatabase();
+           Cursor cursor = db.rawQuery("SELECT * FROM SM_DELIVERY_ORDER WHERE (OrderID='%s' AND TransportCode='%s')", new String[]{mOrderID,mTransportCode});
+           String mDeliveryOrderID="";
+           if (cursor.moveToFirst()) {
+               do {
+                   mDeliveryOrderID=cursor.getString(cursor.getColumnIndex("DeliveryOrderID"));
+                   break;
+               } while (cursor.moveToNext());
+           }
+           cursor.close();
+           return mDeliveryOrderID;
+       }catch(Exception ex){return  "";}
+   }
 
-    public List<SM_OrderDelivery> getAllDelivery(String mOrderID) {
-        try {
-            List<SM_OrderDelivery> lstOrderDetail = new ArrayList<SM_OrderDelivery>();
-            String mSql=String.format("Select A.* from SM_DELIVERY_ORDER A  where A.OrderID='%s' order by DeliveryNum asc",mOrderID);
+   public List<SM_OrderDelivery> getAllDelivery(String mOrderID) {
+       try {
+           List<SM_OrderDelivery> lstOrderDetail = new ArrayList<SM_OrderDelivery>();
+           String mSql=String.format("Select A.* from SM_DELIVERY_ORDER A  where A.OrderID='%s' order by DeliveryNum asc",mOrderID);
 
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cursor = db.rawQuery(mSql, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    SM_OrderDelivery oOrderDelivery = new SM_OrderDelivery();
-                    oOrderDelivery.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
-                    oOrderDelivery.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
-                    oOrderDelivery.setTransportCode(cursor.getString(cursor.getColumnIndex("TransportCode")));
-                    oOrderDelivery.setNumberPlate(cursor.getString(cursor.getColumnIndex("NumberPlate")));
-                    oOrderDelivery.setCarType(cursor.getString(cursor.getColumnIndex("CarType")));
-                    oOrderDelivery.setDeliveryStaff(cursor.getString(cursor.getColumnIndex("DeliveryStaff")));
-                    oOrderDelivery.setDeliveryNum(cursor.getInt(cursor.getColumnIndex("DeliveryNum")));
-                    oOrderDelivery.setDeliveryDate(cursor.getString(cursor.getColumnIndex("DeliveryDate")));
-                    oOrderDelivery.setHandlingStaff(cursor.getString(cursor.getColumnIndex("HandlingStaff")));
-                    oOrderDelivery.setHandlingDate(cursor.getString(cursor.getColumnIndex("HandlingDate")));
-                    oOrderDelivery.setTotalMoney(cursor.getFloat(cursor.getColumnIndex("TotalMoney")));
-                    oOrderDelivery.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
-                    lstOrderDetail.add(oOrderDelivery);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-            db.close();
-            return lstOrderDetail;
-        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
-        return null;
-    }
+           SQLiteDatabase db = this.getReadableDatabase();
+           Cursor cursor = db.rawQuery(mSql, null);
+           if (cursor.moveToFirst()) {
+               do {
+                   SM_OrderDelivery oOrderDelivery = new SM_OrderDelivery();
+                   oOrderDelivery.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+                   oOrderDelivery.setOrderID(cursor.getString(cursor.getColumnIndex("OrderID")));
+                   oOrderDelivery.setTransportCode(cursor.getString(cursor.getColumnIndex("TransportCode")));
+                   oOrderDelivery.setNumberPlate(cursor.getString(cursor.getColumnIndex("NumberPlate")));
+                   oOrderDelivery.setCarType(cursor.getString(cursor.getColumnIndex("CarType")));
+                   oOrderDelivery.setDeliveryStaff(cursor.getString(cursor.getColumnIndex("DeliveryStaff")));
+                   oOrderDelivery.setDeliveryNum(cursor.getInt(cursor.getColumnIndex("DeliveryNum")));
+                   oOrderDelivery.setDeliveryDate(cursor.getString(cursor.getColumnIndex("DeliveryDate")));
+                   oOrderDelivery.setHandlingStaff(cursor.getString(cursor.getColumnIndex("HandlingStaff")));
+                   oOrderDelivery.setHandlingDate(cursor.getString(cursor.getColumnIndex("HandlingDate")));
+                   oOrderDelivery.setTotalMoney(cursor.getFloat(cursor.getColumnIndex("TotalMoney")));
+                   oOrderDelivery.setDeliveryDesc(cursor.getString(cursor.getColumnIndex("DeliveryDesc")));
+                   lstOrderDetail.add(oOrderDelivery);
+               } while (cursor.moveToNext());
+           }
+           cursor.close();
+           db.close();
+           return lstOrderDetail;
+       }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+       return null;
+   }
 
     public String addDelivery(SM_OrderDelivery oOrderDelivery){
         try {
@@ -2685,7 +2684,6 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             String mSql=String.format("delete from SM_DELIVERY_ORDER_DETAIL where DeliveryOrderID ='%s'",mDeliveryID);
             try {
                 db.execSQL(mSql);
-
                 mSql=String.format("delete from SM_DELIVERY_ORDER where DeliveryOrderID ='%s'",mDeliveryID);
                 db.execSQL(mSql);
                 return  true;
@@ -2695,38 +2693,38 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){return false;}
     }
 
-    //DELIVERY DETAIL
-    public List<SM_OrderDeliveryDetail> getAllDeliveryDetail(String mDeliveryOrderID) {
-        try {
-            List<SM_OrderDeliveryDetail> lstOrderDetail = new ArrayList<SM_OrderDeliveryDetail>();
-            String mSql=String.format("Select A.* from SM_DELIVERY_ORDER_DETAIL A  where A.DeliveryOrderID='%s' order by ProductCode asc",mDeliveryOrderID);
+     //DELIVERY DETAIL
+     public List<SM_OrderDeliveryDetail> getAllDeliveryDetail(String mDeliveryOrderID) {
+         try {
+             List<SM_OrderDeliveryDetail> lstOrderDetail = new ArrayList<SM_OrderDeliveryDetail>();
+             String mSql=String.format("Select A.* from SM_DELIVERY_ORDER_DETAIL A  where A.DeliveryOrderID='%s' order by ProductCode asc",mDeliveryOrderID);
 
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cursor = db.rawQuery(mSql, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    SM_OrderDeliveryDetail oDLT = new SM_OrderDeliveryDetail();
-                    oDLT.setDeliveryOrderDetailID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderDetailID")));
-                    oDLT.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
+             SQLiteDatabase db = this.getReadableDatabase();
+             Cursor cursor = db.rawQuery(mSql, null);
+             if (cursor.moveToFirst()) {
+                 do {
+                     SM_OrderDeliveryDetail oDLT = new SM_OrderDeliveryDetail();
+                     oDLT.setDeliveryOrderDetailID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderDetailID")));
+                     oDLT.setDeliveryOrderID(cursor.getString(cursor.getColumnIndex(    "DeliveryOrderID")));
 
-                    oDLT.setProductCode(cursor.getString(cursor.getColumnIndex(    "ProductCode")));
-                    oDLT.setProductName(cursor.getString(cursor.getColumnIndex(    "ProductName")));
-                    oDLT.setUnit(cursor.getString(cursor.getColumnIndex(    "Unit")));
-                    oDLT.setSpec(cursor.getString(cursor.getColumnIndex(    "Spec")));
-                    oDLT.setAmount(cursor.getInt(cursor.getColumnIndex(    "Amount")));
-                    oDLT.setAmountBox(cursor.getFloat(cursor.getColumnIndex(    "AmountBox")));
-                    oDLT.setPrice(cursor.getFloat(cursor.getColumnIndex(    "Price")));
-                    oDLT.setOriginMoney(cursor.getFloat(cursor.getColumnIndex(    "OriginMoney")));
-                    oDLT.setNotes(cursor.getString(cursor.getColumnIndex(    "Notes")));
-                    lstOrderDetail.add(oDLT);
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-            db.close();
-            return lstOrderDetail;
-        }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
-        return null;
-    }
+                     oDLT.setProductCode(cursor.getString(cursor.getColumnIndex(    "ProductCode")));
+                     oDLT.setProductName(cursor.getString(cursor.getColumnIndex(    "ProductName")));
+                     oDLT.setUnit(cursor.getString(cursor.getColumnIndex(    "Unit")));
+                     oDLT.setSpec(cursor.getString(cursor.getColumnIndex(    "Spec")));
+                     oDLT.setAmount(cursor.getInt(cursor.getColumnIndex(    "Amount")));
+                     oDLT.setAmountBox(cursor.getFloat(cursor.getColumnIndex(    "AmountBox")));
+                     oDLT.setPrice(cursor.getFloat(cursor.getColumnIndex(    "Price")));
+                     oDLT.setOriginMoney(cursor.getFloat(cursor.getColumnIndex(    "OriginMoney")));
+                     oDLT.setNotes(cursor.getString(cursor.getColumnIndex(    "Notes")));
+                     lstOrderDetail.add(oDLT);
+                 } while (cursor.moveToNext());
+             }
+             cursor.close();
+             db.close();
+             return lstOrderDetail;
+         }catch (Exception ex){Log.d("ERR_LOAD_ORDER_DETAIL",ex.getMessage().toString());}
+         return null;
+     }
 
     private String getDeliveryDetailID(String mDeliveryOrderID,String mProductCode){
         try {
@@ -3263,7 +3261,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     public boolean delCustomerPay(SM_CustomerPay oPay){
         try {
             SQLiteDatabase db = getWritableDatabase();
-            try {
+             try {
                 String mSql=String.format("delete from SM_CUSTOMER_PAY where PayID='%s'",oPay.getPayID());
                 db.execSQL(mSql);
             }catch (Exception ex){
@@ -3272,6 +3270,8 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             return  true;
         }catch (Exception ex){return false;}
     }
+
+
 
     /* REPORT TECH */
     public boolean getIsStatus(String mToday){
@@ -4105,29 +4105,29 @@ public class DBGimsHelper extends SQLiteOpenHelper{
 
     public List<DM_Tree_Disease> getListTreeDiseaseByTreeCode(String treeCode)
     { try {
-            List<DM_Tree_Disease> lst = new ArrayList<>();
-            String mSql=String.format("Select A.* from DM_TREE_DISEASE A LEFT JOIN DM_TREE B ON A.TreeID = B.TreeID"+
-                    " where B.TreeCode='%s' ", treeCode);
+        List<DM_Tree_Disease> lst = new ArrayList<>();
+        String mSql=String.format("Select A.* from DM_TREE_DISEASE A LEFT JOIN DM_TREE B ON A.TreeID = B.TreeID"+
+                " where B.TreeCode='%s' ", treeCode);
 
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor cursor = db.rawQuery(mSql, null);
-            if (cursor.moveToFirst()) {
-                do {
-                    DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
-                    oTreeDisease.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
-                    oTreeDisease.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
-                    oTreeDisease.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
-                    oTreeDisease.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
-                    lst.add(oTreeDisease);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(mSql, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_Tree_Disease oTreeDisease = new DM_Tree_Disease();
+                oTreeDisease.setDiseaseID(cursor.getInt(cursor.getColumnIndex("DiseaseID")));
+                oTreeDisease.setTreeID(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oTreeDisease.setDiseaseCode(cursor.getString(cursor.getColumnIndex("DiseaseCode")));
+                oTreeDisease.setDiseaseName(cursor.getString(cursor.getColumnIndex("DiseaseName")));
+                lst.add(oTreeDisease);
 
-                } while (cursor.moveToNext());
-            }
-            cursor.close();
-            db.close();
-            return lst;
-        }catch (Exception ex){
-            Log.d("GET_TREE_DISEASES",ex.getMessage());
+            } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
+        return lst;
+    }catch (Exception ex){
+        Log.d("GET_TREE_DISEASES",ex.getMessage());
+    }
         return null;
     }
 
@@ -4255,26 +4255,13 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptSaleRep.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
                     oRptSaleRep.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
                     oRptSaleRep.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
-                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
-                    if(isStatus != null)
-                    {
-                        if(isStatus.equalsIgnoreCase("0"))
-                        {
-                            oRptSaleRep.setIsStatus("Phiếu mới");
-                        }
-                        else if(isStatus.equalsIgnoreCase("1"))
-                        {
-                            oRptSaleRep.setIsStatus("Đã điều chỉnh");
-                        }
-                        else if(isStatus.equalsIgnoreCase("3"))
-                        {
-                            oRptSaleRep.setIsStatus("Đã hủy");
-                        }
-                        else
-                        {
-                            oRptSaleRep.setIsStatus("");
-                        }
-
+                    Integer isStatus = cursor.getInt(cursor.getColumnIndex("IsStatus"));
+                    oRptSaleRep.setIsStatus(isStatus);
+                    if(isStatus != null){
+                        if(isStatus==0)oRptSaleRep.setIsStatusDesc("Phiếu mới");
+                        else if(isStatus==1) oRptSaleRep.setIsStatusDesc("Đã điều chỉnh");
+                        else if(isStatus==3) oRptSaleRep.setIsStatusDesc("Đã hủy");
+                        else oRptSaleRep.setIsStatusDesc("");
                     }
                     String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
                     if(isPost.equalsIgnoreCase("1"))
@@ -4316,26 +4303,13 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptSaleRep.setLocationAddress(cursor.getString(cursor.getColumnIndex("LocationAddress")));
                     oRptSaleRep.setReceiverList(cursor.getString(cursor.getColumnIndex("ReceiverList")));
                     oRptSaleRep.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
-                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
-                    if(isStatus != null)
-                    {
-                        if(isStatus.equalsIgnoreCase("0"))
-                        {
-                            oRptSaleRep.setIsStatus("Phiếu mới");
-                        }
-                        else if(isStatus.equalsIgnoreCase("1"))
-                        {
-                            oRptSaleRep.setIsStatus("Đã điều chỉnh");
-                        }
-                        else if(isStatus.equalsIgnoreCase("3"))
-                        {
-                            oRptSaleRep.setIsStatus("Đã hủy");
-                        }
-                        else
-                        {
-                            oRptSaleRep.setIsStatus("");
-                        }
-
+                    Integer isStatus = cursor.getInt(cursor.getColumnIndex("IsStatus"));
+                    oRptSaleRep.setIsStatus(isStatus);
+                    if(isStatus != null){
+                        if(isStatus==0)oRptSaleRep.setIsStatusDesc("Phiếu mới");
+                        else if(isStatus==1) oRptSaleRep.setIsStatusDesc("Đã điều chỉnh");
+                        else if(isStatus==3) oRptSaleRep.setIsStatusDesc("Đã hủy");
+                        else oRptSaleRep.setIsStatusDesc("");
                     }
                     String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
                     if(isPost.equalsIgnoreCase("1"))
@@ -5041,7 +5015,6 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 db.execSQL(mSqlDisease);
                 db.execSQL(mSqlCompetitor);
                 db.execSQL(mSqlActivity);
-
             }catch (Exception ex){
                 Log.d("DEL_SM_ODT",ex.getMessage());
                 return  false;
@@ -5122,26 +5095,24 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             int iSq = 1;
-
             iSq=getSizeSeason(obj.getSeasonCode());
             if (iSq<=0) {
                 ContentValues values = new ContentValues();
-                values.put("SeasonID","");
+                values.put("SeasonID",obj.getSeasonID());
                 values.put("SeasonCode", obj.getSeasonCode());
                 values.put("SeasonName", obj.getSeasonName());
                 db.insert("DM_SEASON", null, values);
             }else{
                 iSq=iSq+1;
                 ContentValues values = new ContentValues();
-                values.put("SeasonID","");
                 values.put("SeasonCode", obj.getSeasonCode());
                 values.put("SeasonName", obj.getSeasonName());
-                db.update("DM_SEASON",values,"SeasonCode=?" ,new String[] { String.valueOf(obj.getSeasonCode())});
+                db.update("DM_SEASON",values,"SeasonID=?" ,new String[] { String.valueOf(obj.getSeasonID())});
             }
             db.close();
 
             return true;
-        }catch (Exception e){Log.v("INS_DISTRICT_ERR",e.getMessage()); return  false;}
+        }catch (Exception e){Log.v("INS_SEASON_ERR",e.getMessage()); return  false;}
     }
 
     // KE HOACH BAN HANG
@@ -5213,27 +5184,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     planSale.setPlanName(cursor.getString(cursor.getColumnIndex("PlanName")));
                     planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
                     planSale.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
-                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
-                    if(isStatus != null)
-                    {
-                        if(isStatus.equalsIgnoreCase("0"))
-                        {
-                            planSale.setIsStatus("Phiếu mới");
-                        }
-                        else if(isStatus.equalsIgnoreCase("1"))
-                        {
-                            planSale.setIsStatus("Đã điều chỉnh");
-                        }
-                        else if(isStatus.equalsIgnoreCase("3"))
-                        {
-                            planSale.setIsStatus("Đã hủy");
-                        }
-                        else
-                        {
-                            planSale.setIsStatus("");
-                        }
-
-                    }
+                    planSale.setIsStatus(cursor.getInt(cursor.getColumnIndex("IsStatus")));
                     String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
                     if(isPost.equalsIgnoreCase("1"))
                     {
@@ -5254,12 +5205,10 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
-    public SM_PlanSale getPlanSaleById(String PlanID)
+    public SM_PlanSale getPlanSale(String PlanID)
     {
         try {
-            String mSql=String.format("Select A.* from SM_PLAN_SALE A "+
-                    " where A.PlanID='%s' order by PlanDay desc",PlanID);
-
+            String mSql=String.format("Select A.* from SM_PLAN_SALE A where A.PlanID='%s' order by PlanDay desc",PlanID);
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
             SM_PlanSale planSale = new SM_PlanSale();
@@ -5273,27 +5222,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     planSale.setPlanName(cursor.getString(cursor.getColumnIndex("PlanName")));
                     planSale.setPostDay(cursor.getString(cursor.getColumnIndex("PostDay")));
                     planSale.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
-                    String isStatus = cursor.getString(cursor.getColumnIndex("IsStatus"));
-                    if(isStatus != null)
-                    {
-                        if(isStatus.equalsIgnoreCase("0"))
-                        {
-                            planSale.setIsStatus("Phiếu mới");
-                        }
-                        else if(isStatus.equalsIgnoreCase("1"))
-                        {
-                            planSale.setIsStatus("Đã điều chỉnh");
-                        }
-                        else if(isStatus.equalsIgnoreCase("3"))
-                        {
-                            planSale.setIsStatus("Đã hủy");
-                        }
-                        else
-                        {
-                            planSale.setIsStatus("");
-                        }
-
-                    }
+                    planSale.setIsStatus(cursor.getInt(cursor.getColumnIndex("IsStatus")));
                     String isPost = cursor.getString(cursor.getColumnIndex("IsPost"));
                     if(isPost.equalsIgnoreCase("1"))
                     {
@@ -5419,8 +5348,10 @@ public class DBGimsHelper extends SQLiteOpenHelper{
     public List<SM_PlanSaleDetail> getAllPlanSaleDetail(String PlanID) {
         try {
             List<SM_PlanSaleDetail> lst = new ArrayList<SM_PlanSaleDetail>();
-            String mSql=String.format("Select A.* from SM_PLAN_SALE_DETAIL A LEFT JOIN SM_PLAN_SALE B ON A.PlanID = B.PlanID"+
-                    " where A.PlanID='%s' order by B.PlanDay desc", PlanID);
+            String mSql=String.format("Select A.*,C.CustomerCode,C.CustomerName, D.ProductName,D.Unit,D.Spec "+
+                                       " from SM_PLAN_SALE_DETAIL A LEFT JOIN SM_PLAN_SALE B ON A.PlanID = B.PlanID "+
+                                       "  LEFT JOIN DM_CUSTOMER C ON A.CustomerID=C.CustomerID "+
+                                       "  LEFT JOIN DM_PRODUCT D ON A.ProductCode=D.ProductCode where A.PlanID='%s' order by B.PlanDay desc", PlanID);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -5435,6 +5366,11 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     detail.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
                     detail.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
                     detail.setNotes2(cursor.getString(cursor.getColumnIndex("Notes2")));
+                    detail.setCustomerCode(cursor.getString(cursor.getColumnIndex("CustomerCode")));
+                    detail.setCustomerName(cursor.getString(cursor.getColumnIndex("CustomerName")));
+                    detail.setProductName(cursor.getString(cursor.getColumnIndex("ProductName")));
+                    detail.setUnit(cursor.getString(cursor.getColumnIndex("Unit")));
+                    detail.setSpec(cursor.getString(cursor.getColumnIndex("Spec")));
                     lst.add(detail);
 
                 } while (cursor.moveToNext());
@@ -5555,17 +5491,14 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             String mId = "";
             if(id != null && id.length > 0){
                 for(int i = 0;i < id.length; i++){
-                    if(i > 0){
-                        mId += ",";
-                    }
+                    if(i > 0) mId += ",";
                     mId +=  String.format("'%s'", id[i]) ;
                 }
             } else {
                 return new ArrayList<DM_Employee>();
             }
             List<DM_Employee> lst = new ArrayList<DM_Employee>();
-            String mSql=String.format("Select A.* from DM_EMPLOYEE A "+
-                    " where A.Employeeid in (%s)", mId);
+            String mSql=String.format("Select A.* from DM_EMPLOYEE A where A.Employeeid in (%s)", mId);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(mSql, null);
@@ -5585,6 +5518,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         }catch (Exception ex){Log.d("ERR_LOAD_EMP",ex.getMessage().toString());}
         return null;
     }
+
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){

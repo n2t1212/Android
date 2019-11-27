@@ -25,6 +25,7 @@ public class ReportSaleRepMarketAdapter extends RecyclerView.Adapter<RecyclerVie
     public DBGimsHelper mDB = null;
     public void setsmoReportSaleRepMarket(List<SM_ReportSaleRepMarket> smoReportSaleRepMarket) {
         this.smoReportSaleRepMarket = smoReportSaleRepMarket;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportSaleRepMarket> smoReportSaleRepMarket;

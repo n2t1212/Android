@@ -4,7 +4,12 @@ public class SM_PlanSaleDetail {
     String PlanDetailId;
     String PlanId;
     String CustomerId;
+    String CustomerCode;
+    String CustomerName;
     String ProductCode;
+    String ProductName;
+    String Unit;
+    String Spec;
     Double AmountBox;
     Double Amount;
     String Notes;
@@ -24,12 +29,51 @@ public class SM_PlanSaleDetail {
         Notes2 = notes2;
     }
 
+    public void setCustomerCode(String customerCode) {
+        CustomerCode = customerCode;
+    }
+
+    public String getCustomerCode() {
+        return CustomerCode;
+    }
+
+    public void setCustomerName(String customerName) {
+        CustomerName = customerName;
+    }
+
+    public String getCustomerName() {
+        return CustomerName;
+    }
+
     public String getProductCode() {
         return ProductCode;
     }
 
     public void setProductCode(String productCode) {
         ProductCode = productCode;
+    }
+
+    public String getProductName() {
+        return ProductName;
+    }
+
+    public void setProductName(String productName) {
+        ProductName = productName;
+    }
+
+    public String getSpec() {
+        return Spec;
+    }
+
+    public void setSpec(String spec) {
+        Spec = spec;
+    }
+
+    public String getUnit() {
+        return Unit;
+    }
+    public void setUnit(String unit) {
+        Unit = unit;
     }
 
     public String getPlanDetailId() {

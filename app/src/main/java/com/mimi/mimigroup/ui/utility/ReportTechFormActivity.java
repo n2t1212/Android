@@ -520,6 +520,7 @@ public class ReportTechFormActivity extends BaseActivity {
         }
 
         Toast.makeText(this, "Ghi báo cáo kĩ thuật thành công", Toast.LENGTH_SHORT).show();
+        setResult(2001);
         finish();
         isSaved=true;
     }
@@ -777,8 +778,8 @@ public class ReportTechFormActivity extends BaseActivity {
         return  mTechDetail;
     }
 
-    private void onPostReportTech(final SM_ReportTech tech ,final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
-                             final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
+    private void onPostReportTech(final SM_ReportTech tech , final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
+                                  final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
         try{
             if (APINet.isNetworkAvailable(ReportTechFormActivity.this)==false){
                 Toast.makeText(ReportTechFormActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -875,6 +876,7 @@ public class ReportTechFormActivity extends BaseActivity {
                                 tech.setPost(true);
                                 tech.setIsStatus("2");
                                 mDB.editReportTech(tech);
+                                setResult(2001);
                                 finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){

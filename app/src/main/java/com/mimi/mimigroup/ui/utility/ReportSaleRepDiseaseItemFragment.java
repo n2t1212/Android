@@ -1,8 +1,6 @@
 package com.mimi.mimigroup.ui.utility;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,12 +28,10 @@ import com.mimi.mimigroup.ui.custom.CustomTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class ReportSaleRepDiseaseItemFragment extends BaseFragment {
 

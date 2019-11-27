@@ -61,7 +61,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setOrderList(List<SM_Order> mOrderList) {
         this.smOrderList = mOrderList;
          notifyDataSetChanged();
-
     }
 
     @Override
@@ -102,7 +101,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CustomTextView tvPostDate;
         @BindView(R.id.tvIsSample)
         CustomTextView tvIsSample;
-
 
         public OrderHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,7 +147,6 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if(oOrder.getPostDay()!=null ){
                         tvPostDate.setText(oOrder.getPostDay());
                     }
-
                     if(oOrder.getSample() != null){
                         if(oOrder.getSample()==true || oOrder.getSample().equals(true) || oOrder.getSample().equals("1")){
                             tvIsSample.setText("x");

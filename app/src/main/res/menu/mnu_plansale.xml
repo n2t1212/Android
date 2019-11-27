@@ -11,7 +11,7 @@
         android:title="Xóa" />
     <item android:id="@+id/mnuSynPost"
         android:icon="@drawable/icon_popup_upload"
-        android:title="Gửi kế hoạch BH" />
+        android:title="Nộp kế hoạch" />
     <item android:id="@+id/mnuSearch"
         android:icon="@drawable/icon_popup_search"
         android:title="Tìm kiếm" />

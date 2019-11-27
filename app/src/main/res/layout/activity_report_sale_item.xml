@@ -81,16 +81,6 @@
         android:layout_marginRight="0.5dp"
         android:background="@drawable/border_cell_grid"
         android:gravity="left"/>
-    <com.mimi.mimigroup.ui.custom.CustomTextView
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:padding="10dp"
-        android:id="@+id/tvNotes"
-        android:textSize="17sp"
-        android:layout_marginRight="0.5dp"
-        android:background="@drawable/border_cell_grid"
-        android:gravity="center_horizontal"/>
 
     <com.mimi.mimigroup.ui.custom.CustomTextView
         android:layout_width="100dp"
@@ -100,6 +90,7 @@
         android:id="@+id/tvIsStatus"
         android:textSize="17sp"
         android:layout_marginRight="0.5dp"
+        android:visibility="gone"
         android:background="@drawable/border_cell_grid"
         android:gravity="center_horizontal"/>
 
@@ -116,7 +107,7 @@
         android:gravity="left"/>
 
     <com.mimi.mimigroup.ui.custom.CustomTextView
-        android:layout_width="150dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="10dp"
@@ -125,6 +116,16 @@
         android:layout_marginRight="0.5dp"
         android:background="@drawable/border_cell_grid"
         android:gravity="left"/>
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:id="@+id/tvNotes"
+        android:textSize="17sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="center_horizontal"/>
 
 </LinearLayout>
 

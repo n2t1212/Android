@@ -23,10 +23,6 @@ import butterknife.ButterKnife;
 public class PlanSaleDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     public DBGimsHelper mDB = null;
-    public void setsmoPlanSaleDetail(List<SM_PlanSaleDetail> smoPlanSaleDetail) {
-        this.smoPlanSaleDetail = smoPlanSaleDetail;
-    }
-
     List<SM_PlanSaleDetail> smoPlanSaleDetail;
     public List<SM_PlanSaleDetail> SelectedList = new ArrayList<>();
 
@@ -39,6 +35,11 @@ public class PlanSaleDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public PlanSaleDetailAdapter(PlanSaleDetailAdapter.ListItemClickListener mOnClickListener) {
         smoPlanSaleDetail = new ArrayList<>();
         this.mOnItemClicked=mOnClickListener;
+    }
+
+    public void setsmoPlanSaleDetail(List<SM_PlanSaleDetail> smoPlanSaleDetail) {
+        this.smoPlanSaleDetail = smoPlanSaleDetail;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -94,38 +95,42 @@ public class PlanSaleDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         CustomTextView tvCustomer;
         @BindView(R.id.tvProductCode)
         CustomTextView tvProductCode;
+        @BindView(R.id.tvProductName)
+        CustomTextView tvProductName;
+        @BindView(R.id.tvUnit)
+        CustomTextView tvUnit;
+        @BindView(R.id.tvSpec)
+        CustomTextView tvSpec;
         @BindView(R.id.tvAmountBox)
         CustomTextView tvAmountBox;
         @BindView(R.id.tvAmount)
         CustomTextView tvAmount;
         @BindView(R.id.tvNotes)
         CustomTextView tvNotes;
-        @BindView(R.id.tvNotes2)
-        CustomTextView tvNotes2;
 
         public PlanSaleDetailHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
         public void bind(SM_PlanSaleDetail oDetail){
             if(oDetail != null){
                 if(oDetail.getCustomerId() != null){
-                    DM_Customer customer = mDB.getCustomer(oDetail.getCustomerId());
-                    if(customer != null){
-                        tvCustomer.setText(customer.getCustomerName());
-                        tvCustomer.setTag(oDetail.getCustomerId());
-                    }else{
-                        tvCustomer.setText("");
-                        tvCustomer.setTag("");
-                    }
+                    tvCustomer.setText(oDetail.getCustomerName());
+                    tvCustomer.setTag(oDetail.getCustomerId());
                 }
-                if(oDetail.getProductCode() != null)
-                {
-                    DM_Product product = mDB.getProduct(oDetail.getProductCode());
-                    tvProductCode.setText(product.getProductName());
+                if(oDetail.getProductCode() != null){
+                   tvProductCode.setText(oDetail.getProductCode());
                 }else{
                     tvProductCode.setText("");
+                }
+                if(oDetail.getProductName()!=null) {
+                    tvProductName.setText(oDetail.getProductName());
+                }
+                if(oDetail.getUnit()!=null){
+                    tvUnit.setText(oDetail.getUnit());
+                }
+                if(oDetail.getSpec()!=null){
+                    tvSpec.setText(oDetail.getSpec());
                 }
                 if(oDetail.getAmountBox() != null)
                 {
@@ -140,7 +145,7 @@ public class PlanSaleDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     tvAmount.setText("");
                 }
                 tvNotes.setText(oDetail.getNotes());
-                tvNotes2.setText(oDetail.getNotes2());
+
             }
         }
     }

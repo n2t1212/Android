@@ -94,13 +94,12 @@ public class PlanSaleActivity extends BaseActivity {
         isEditAdd=false;
         if (requestCode == REQUEST_CODE_ADD) {
             if (resultCode == 2001) {
-                onLoadDataSource(mfDay,mtDay);
+                onLoadDataSource("","");
             }
         }
         if(requestCode==REQUEST_CODE_EDIT){
             if (resultCode == 2001) {
-                //UPDATE EDIT STATUS GRID
-                SM_PlanSale oSMPay=mDB.getPlanSaleById(adapter.SelectedList.get(0).getPlanId());
+                onLoadDataSource("","");
             }
         }
     }
@@ -186,7 +185,7 @@ public class PlanSaleActivity extends BaseActivity {
         String mParSymbol=mDB.getParam("PAR_SYMBOL");
         if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
         SimpleDateFormat Od = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-        String mPlanSaleID = "KHBH"+mParSymbol+Od.format(new Date());
+        String mPlanSaleID = "KH"+mParSymbol+Od.format(new Date());
         if(!mPlanSaleID.isEmpty()) {
             Intent intent = new Intent(PlanSaleActivity.this, PlanSaleFormActivity.class);
             intent.setAction("ADD");
@@ -401,11 +400,6 @@ public class PlanSaleActivity extends BaseActivity {
                         }else{
                             mRow+=""+"#";
                         }
-                        if(oOdt.getNotes2()!=null){
-                            mRow+=oOdt.getNotes2().toString()+"#";
-                        }else{
-                            mRow+="0"+"#";
-                        }
                         mRow+="|";
                         mDetail+=mRow;
                     }
@@ -416,7 +410,7 @@ public class PlanSaleActivity extends BaseActivity {
         return  mDetail;
     }
 
-    private void onPostPlanSale(final SM_PlanSale planSale ,final List<SM_PlanSaleDetail> detail){
+    private void onPostPlanSale(final SM_PlanSale planSale , final List<SM_PlanSaleDetail> detail){
         try{
             if (APINet.isNetworkAvailable(PlanSaleActivity.this)==false){
                 Toast.makeText(PlanSaleActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
@@ -464,7 +458,7 @@ public class PlanSaleActivity extends BaseActivity {
                     planSale.setNotes("");
                 }
                 if(planSale.getIsStatus() == null){
-                    planSale.setIsStatus("1");
+                    planSale.setIsStatus(1);
                 }
             }catch(Exception ex){
                 Toast.makeText(PlanSaleActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -475,11 +469,12 @@ public class PlanSaleActivity extends BaseActivity {
                     .add("imei", Imei)
                     .add("imeisim", ImeiSim)
                     .add("plancode",planSale.getPlanCode())
+                    .add("planday",planSale.getPlanDay())
                     .add("startday", planSale.getStartDay())
                     .add("endday", planSale.getEndDay())
                     .add("customerid", "")
                     .add("planname", planSale.getPlanName())
-                    .add("isstatus", planSale.getIsStatus())
+                    .add("isstatus", Integer.toString(planSale.getIsStatus()))
                     .add("notes", planSale.getNotes())
                     .add("plansaledetail", mDataPlanSaleDetail)
                     .build();
@@ -498,9 +493,9 @@ public class PlanSaleActivity extends BaseActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 planSale.setPostDay(sdf.format(new Date()));
                                 planSale.setPost(true);
-                                planSale.setIsStatus("2");
+                                planSale.setIsStatus(2);
                                 mDB.editPlanSale(planSale);
-                                finish();
+                                //finish();
                             }
                             else if(ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")){
                                 Toast.makeText(PlanSaleActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();

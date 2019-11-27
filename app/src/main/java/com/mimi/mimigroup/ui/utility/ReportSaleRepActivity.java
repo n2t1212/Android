@@ -98,13 +98,12 @@ public class ReportSaleRepActivity extends BaseActivity {
         isEditAdd=false;
         if (requestCode == REQUEST_CODE_ADD) {
             if (resultCode == 2001) {
-                onLoadDataSource(mfDay,mtDay);
+                onLoadDataSource("","");
             }
         }
         if(requestCode==REQUEST_CODE_EDIT){
             if (resultCode == 2001) {
-                //UPDATE EDIT STATUS GRID
-                SM_ReportSaleRep oSMPay=mDB.getReportSaleRepById(adapter.SelectedList.get(0).getReportSaleId());
+                onLoadDataSource("","");
             }
         }
     }
@@ -185,7 +184,6 @@ public class ReportSaleRepActivity extends BaseActivity {
     final int REQUEST_CODE_ADD=1;
     final int REQUEST_CODE_EDIT=2;
     boolean isEditAdd=false;
-
     public void onAddReportSaleRepClicked(){
         String mParSymbol=mDB.getParam("PAR_SYMBOL");
         if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
@@ -213,13 +211,11 @@ public class ReportSaleRepActivity extends BaseActivity {
                 Toast.makeText(ReportSaleRepActivity.this, "Bạn chưa chọn báo cáo", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             if(oReportSaleRepSel.size() > 1){
                 Toast.makeText(ReportSaleRepActivity.this, "Bạn chọn quá nhiều báo cáo để sửa. Vui lòng chọn lại...", Toast.LENGTH_SHORT).show();
                 adapter.clearSelected();
                 return;
             }
-
             if (oReportSaleRepSel.get(0).getReportSaleId() != "") {
                 String mParSymbol=mDB.getParam("PAR_SYMBOL");
                 if (mParSymbol==null || mParSymbol.isEmpty()){mParSymbol="MT";}
@@ -348,9 +344,7 @@ public class ReportSaleRepActivity extends BaseActivity {
             adapter.clearSelected();
             return;
         }
-
         SM_ReportSaleRep SaleRep = oSel.get(0);
-
         if (APINet.isNetworkAvailable(ReportSaleRepActivity.this)==false){
             Toast.makeText(ReportSaleRepActivity.this,"Máy chưa kết nối mạng..",Toast.LENGTH_LONG).show();
             return;
@@ -359,7 +353,6 @@ public class ReportSaleRepActivity extends BaseActivity {
             Toast.makeText(this, "Không khởi tạo được hoặc chưa nhập báo cáo sale..", Toast.LENGTH_SHORT).show();
             return;
         }
-
         List<SM_ReportSaleRepMarket> oReportSaleRepMarket = mDB.getAllReportSaleRepMarket(SaleRep.getReportSaleId());
         List<SM_ReportSaleRepDisease> oReportSaleRepDisease = mDB.getAllReportSaleRepDisease(SaleRep.getReportSaleId());
         List<SM_ReportSaleRepSeason> oReportSaleRepSeason = mDB.getAllReportSaleRepSeason(SaleRep.getReportSaleId());
@@ -367,7 +360,6 @@ public class ReportSaleRepActivity extends BaseActivity {
         List<SM_ReportSaleRepActivitie> oReportSaleRepActivityActivity = mDB.getAllReportSaleRepActivity(SaleRep.getReportSaleId(), 1);
 
         onPostReportSaleRep(SaleRep, oReportSaleRepMarket, oReportSaleRepDisease, oReportSaleRepSeason, oReportSaleRepActivityTask, oReportSaleRepActivityActivity);
-
     }
     
     private String getSaleMarketData(List<SM_ReportSaleRepMarket> markets){
@@ -456,7 +448,6 @@ public class ReportSaleRepActivity extends BaseActivity {
                     }
                 }
             }
-
         }catch (Exception ex){}
         return  mSaleDetail;
     }
@@ -565,21 +556,19 @@ public class ReportSaleRepActivity extends BaseActivity {
         return  mSaleDetail;
     }
 
-    private void onPostReportSaleRep(final SM_ReportSaleRep sale,List<SM_ReportSaleRepMarket> markets, List<SM_ReportSaleRepDisease> diseases,
+    private void onPostReportSaleRep(final SM_ReportSaleRep sale, List<SM_ReportSaleRepMarket> markets, List<SM_ReportSaleRepDisease> diseases,
                                      List<SM_ReportSaleRepSeason> seasons, List<SM_ReportSaleRepActivitie> tasks, List<SM_ReportSaleRepActivitie> activities) {
         try {
             if (APINet.isNetworkAvailable(ReportSaleRepActivity.this) == false) {
                 Toast.makeText(ReportSaleRepActivity.this, "Máy chưa kết nối mạng..", Toast.LENGTH_LONG).show();
                 return;
             }
-
             final String Imei = AppUtils.getImeil(this);
             final String ImeiSim = AppUtils.getImeilsim(this);
             final String mDataReportSaleMarket = getSaleMarketData(markets);
             final String mDataReportSaleDisease = getSaleDiseaseData(diseases);
             final String mDataReportSaleSeason = getSaleSeasonData(seasons);
             final String mDataReportSaleActivity = getSaleActivityData(tasks, activities);
-
 
             if (ImeiSim.isEmpty()) {
                 Toast.makeText(this, "Không đọc được số IMEI từ thiết bị cho việc đồng bộ. Kiểm tra Sim của bạn", Toast.LENGTH_LONG).show();
@@ -593,7 +582,6 @@ public class ReportSaleRepActivity extends BaseActivity {
                 Toast.makeText(this, "Không tìm thấy mã báo cáo", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             final String mUrlPostSale = AppSetting.getInstance().URL_PostReportSale();
             try {
                 if (sale.getReportSaleId() == null || sale.getReportSaleId().isEmpty()) {
@@ -624,9 +612,7 @@ public class ReportSaleRepActivity extends BaseActivity {
                 if (sale.getNotes() == null && sale.getNotes().isEmpty()) {
                     sale.setNotes("");
                 }
-                if (sale.getIsStatus() == null && sale.getIsStatus().isEmpty()) {
-                    sale.setIsStatus("1");
-                }
+                sale.setIsStatus(1);
             } catch (Exception ex) {
                 Toast.makeText(ReportSaleRepActivity.this, "Không tìm thấy dữ liệu đã quét.." + ex.getMessage(), Toast.LENGTH_LONG).show();
                 return;
@@ -644,7 +630,7 @@ public class ReportSaleRepActivity extends BaseActivity {
                     .add("locationaddress", sale.getLocationAddress())
                     .add("receiverlist", sale.getReceiverList())
                     .add("notes", sale.getNotes())
-                    .add("isstatus", sale.getIsStatus())
+                    .add("isstatus", Integer.toString(sale.getIsStatus()))
                     .add("reportsalerepmarket", mDataReportSaleMarket)
                     .add("reportsalerepdisease", mDataReportSaleDisease)
                     .add("reportsalerepseason", mDataReportSaleSeason)
@@ -666,8 +652,9 @@ public class ReportSaleRepActivity extends BaseActivity {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                 sale.setPostDay(sdf.format(new Date()));
                                 sale.setPost(true);
-                                sale.setIsStatus("2");
+                                sale.setIsStatus(2);
                                 mDB.editReportSale(sale);
+                                setResult(2001);
                                 finish();
                             } else if (ResPonseRs.contains("SYNC_REG") || ResPonseRs.contains("SYNC_NOT_REG")) {
                                 Toast.makeText(ReportSaleRepActivity.this, "Thiết bị chưa được đăng ký hoặc chưa xác thực từ Server.", Toast.LENGTH_LONG).show();

@@ -16,7 +16,6 @@ import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
 import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
 import com.mimi.mimigroup.ui.adapter.ReportTechCompetitorAdapter;
-import com.mimi.mimigroup.ui.adapter.ReportTechCompetitorAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;

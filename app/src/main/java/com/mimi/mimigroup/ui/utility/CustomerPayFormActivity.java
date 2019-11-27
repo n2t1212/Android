@@ -265,14 +265,13 @@ public class CustomerPayFormActivity extends BaseActivity {
 
     private Bitmap getScaleBitmap(Bitmap bm){
         try{
-            int maxHeight = 800;
-            int maxWidth = 1024;
+            int maxHeight =1024;
+            int maxWidth =1280;
             float scale = Math.min(((float)maxHeight / bm.getWidth()), ((float)maxWidth / bm.getHeight()));
 
             Matrix matrix = new Matrix();
             matrix.postScale(scale, scale);
-
-            Bitmap oRtBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+            Bitmap oRtBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, false);
             return oRtBm;
         }catch (Exception ex){return  bm;}
     }

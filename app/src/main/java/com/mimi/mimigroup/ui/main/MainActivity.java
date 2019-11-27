@@ -178,7 +178,7 @@ public class MainActivity extends BaseActivity implements TabLayout.OnTabSelecte
     }
 
     //private String tabTitles[] = new String[] { "Quét", "Lịch sử","Vào Ra", "Cài đặt" };
-    private String tabTitles[] = new String[] { "Đơn Hàng", "Chấm Công","Tiện Ích","Thiết Lập" };
+    private String tabTitles[] = new String[] { "Đơn Hàng", "Chấm Công","Tiện ích","Thiết Lập" };
     private int[] imageResId = { R.drawable.tiva_order_w,R.drawable.tiva_timekeeping_w,R.drawable.tiva_utiliti_w,  R.drawable.tiva_setting_w};
 
     public View getTabView(int position) {

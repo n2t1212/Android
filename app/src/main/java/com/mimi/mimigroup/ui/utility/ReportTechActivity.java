@@ -23,7 +23,6 @@ import com.mimi.mimigroup.api.SyncPost;
 import com.mimi.mimigroup.app.AppSetting;
 import com.mimi.mimigroup.base.BaseActivity;
 import com.mimi.mimigroup.db.DBGimsHelper;
-import com.mimi.mimigroup.model.SM_CustomerPay;
 import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.model.SM_ReportTechActivity;
 import com.mimi.mimigroup.model.SM_ReportTechCompetitor;
@@ -98,7 +97,7 @@ public class ReportTechActivity extends BaseActivity {
         isEditAdd=false;
         if (requestCode == REQUEST_CODE_ADD) {
             if (resultCode == 2001) {
-                onLoadDataSource(mfDay,mtDay);
+                onLoadDataSource("","");
             }
         }
         if(requestCode==REQUEST_CODE_EDIT){
@@ -559,7 +558,7 @@ public class ReportTechActivity extends BaseActivity {
         return  mTechDetail;
     }
 
-    private void onPostReportTech(final SM_ReportTech tech ,final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
+    private void onPostReportTech(final SM_ReportTech tech , final List<SM_ReportTechMarket> markets, final List<SM_ReportTechDisease> diseases,
                                   final List<SM_ReportTechCompetitor> competitor, final List<SM_ReportTechActivity> thisWeeks, final List<SM_ReportTechActivity> nextWeeks){
         try{
             if (APINet.isNetworkAvailable(ReportTechActivity.this)==false){

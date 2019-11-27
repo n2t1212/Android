@@ -21,6 +21,7 @@ public class ReportTechCompetitorAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void setsmoReportTechCompetitor(List<SM_ReportTechCompetitor> smoReportTechCompetitor) {
         this.smoReportTechCompetitor = smoReportTechCompetitor;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportTechCompetitor> smoReportTechCompetitor;

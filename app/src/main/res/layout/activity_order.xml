@@ -336,22 +336,6 @@
                 android:textStyle="bold" />
 
             <com.mimi.mimigroup.ui.custom.CustomEditText
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="start"
-                android:id="@+id/filterIsSample"
-                android:padding="5dp"
-                android:hint=""
-                android:textColorHint="@color/BorderHeaderGrid"
-                android:layout_marginLeft="0.5dp"
-                android:background="@color/BackgroundFilterGrid"
-                android:textColor="@color/BackgroundHeaderGrid"
-                android:textSize="16sp"
-                android:enabled="false"
-                android:textStyle="bold" />
-
-            <com.mimi.mimigroup.ui.custom.CustomEditText
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

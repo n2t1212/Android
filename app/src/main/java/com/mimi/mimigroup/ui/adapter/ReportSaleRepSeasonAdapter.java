@@ -25,6 +25,7 @@ public class ReportSaleRepSeasonAdapter extends RecyclerView.Adapter<RecyclerVie
     private DBGimsHelper mDB = null;
     public void setsmoReportSaleRepSeason(List<SM_ReportSaleRepSeason> smoReportSaleRepSeason) {
         this.smoReportSaleRepSeason = smoReportSaleRepSeason;
+        notifyDataSetChanged();
     }
 
     List<SM_ReportSaleRepSeason> smoReportSaleRepSeason;

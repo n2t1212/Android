@@ -32,13 +32,6 @@ import com.mimi.mimigroup.model.DM_Ward;
 import com.mimi.mimigroup.model.HT_PARA;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
-import com.mimi.mimigroup.ui.help.HelpActivity;
-import com.mimi.mimigroup.ui.login.LoginActivity;
-import com.mimi.mimigroup.ui.setting.CustomerActivity;
-import com.mimi.mimigroup.ui.setting.EmployeeActivity;
-import com.mimi.mimigroup.ui.setting.ItemActivity;
-import com.mimi.mimigroup.ui.setting.ParamActivity;
-import com.mimi.mimigroup.ui.setting.ProductActivity;
 import com.mimi.mimigroup.utils.AppUtils;
 
 import java.lang.reflect.Type;
