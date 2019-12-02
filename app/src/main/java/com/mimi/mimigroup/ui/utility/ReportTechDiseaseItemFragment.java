@@ -21,10 +21,12 @@ import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_TreeStages;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.ui.adapter.ReportTechDiseaseAdapter;
 import com.mimi.mimigroup.ui.adapter.SearchTreeAdapter;
+import com.mimi.mimigroup.ui.adapter.SearchTreeStagesAdapter;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -44,6 +46,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     RecyclerView rvReportTechDiseaseList;
     @BindView(R.id.spTree)
     AutoCompleteTextView spTree;
+    @BindView(R.id.spTreeStages)
+    AutoCompleteTextView spTreeStages;
     @BindView(R.id.tvTitle)
     CustomBoldEditText tvTitle;
     @BindView(R.id.tvAcreage)
@@ -67,6 +71,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
     List<DM_Tree> lstTree;
     List<DM_Tree_Disease> lstTreeDisease;
     DM_Tree oTreeSel;
+    List<DM_TreeStages> lstTreeStages;
+    DM_TreeStages oStageSel;
 
     DBGimsHelper mDB = null;
 
@@ -154,12 +160,36 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                         if(oTreeSel != null && oTreeSel.getTreeCode() != null){
                             lstTreeDisease = mDB.getListTreeDiseaseByTreeCode(oTreeSel.getTreeCode());
                             initDropDownTreeDisease();
+                            lstTreeStages = mDB.getListTreeStagesByTreeId(oTreeSel.getTreeID());
+                            initDropdownTreeStages();
                         }
 
                     }catch (Exception ex){}
                 }
             });
 
+        }catch (Exception ex){}
+    }
+
+    private void initDropdownTreeStages(){
+        try {
+            ArrayList<DM_TreeStages> oListTreeStages=new ArrayList<DM_TreeStages>();
+            for(int i=0;i<lstTreeStages.size();++i){
+                oListTreeStages.add(lstTreeStages.get(i));
+            }
+            SearchTreeStagesAdapter adapter = new SearchTreeStagesAdapter(getContext(), R.layout.search_tree_stages,oListTreeStages);
+            spTreeStages.setDropDownBackgroundResource(R.drawable.liner_dropdownlist);
+            spTreeStages.setThreshold(1);
+            spTreeStages.setAdapter(adapter);
+            spTreeStages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int iPosition, long l) {
+                    try {
+                        oStageSel = (DM_TreeStages) adapterView.getItemAtPosition(iPosition);
+
+                    }catch (Exception ex){}
+                }
+            });
         }catch (Exception ex){}
     }
 
@@ -308,16 +338,18 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         try {
             if (osmDT != null) {
 
-                if(lstTree != null && lstTree.size() > 0 && osmDT.getTreeCode() != null){
-                    for(DM_Tree tree: lstTree){
-                        if(tree.getTreeCode().equals(osmDT.getTreeCode())){
-                            oTreeSel = tree;
-                            break;
-                        }
-                    }
-
+                if(osmDT.getTreeCode() != null){
+                    oTreeSel = mDB.getTreeByCode(osmDT.getTreeCode());
                     if(oTreeSel != null){
                         spTree.setText(oTreeSel.getTreeName());
+                    }
+                }
+
+                if(osmDT.getStagesCode() != null){
+                    oStageSel = mDB.getTreeStagesByCode(osmDT.getStagesCode());
+
+                    if(oStageSel != null && oStageSel.getStagesName() != null){
+                        spTreeStages.setText(oStageSel.getStagesName());
                     }
                 }
 
@@ -358,6 +390,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                 if (isAddnew) {
                     spTree.setText("");
                     spTree.setTag("");
+                    spTreeStages.setText("");
+                    spTreeStages.setTag("");
                     tvTitle.setText("");
                     tvAcreage.setText("");
                     tvDisease.setText("");
@@ -386,7 +420,7 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         return  false;
     }
 
-    private boolean onSaveAddReportTechDisease() {
+    public boolean onSaveAddReportTechDisease() {
         SM_ReportTechDisease oDetail = new SM_ReportTechDisease();
 
         // EDIT
@@ -403,6 +437,16 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             return false;
         } else {
             oDetail.setTreeCode(oTreeSel.getTreeCode());
+        }
+
+        if (oStageSel == null || oStageSel.getStagesCode() == null) {
+            Toast oT = Toast.makeText(getContext(), "Bạn chưa chọn giai đoạn...", Toast.LENGTH_LONG);
+            oT.setGravity(Gravity.CENTER, 0, 0);
+            oT.show();
+            spTreeStages.requestFocus();
+            return false;
+        } else {
+            oDetail.setStagesCode(oStageSel.getStagesCode());
         }
 
         if (tvDisease.getTag().toString().isEmpty()) {
@@ -467,6 +511,11 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
                 } else {
                     lstReportTechDisease.get(i).setTreeCode("");
                 }
+                if (oDetail.getStagesCode() != null) {
+                    lstReportTechDisease.get(i).setStagesCode(oDetail.getStagesCode());
+                } else {
+                    lstReportTechDisease.get(i).setTreeCode("");
+                }
                 if (oDetail.getDisease() != null) {
                     lstReportTechDisease.get(i).setDisease(oDetail.getDisease());
                 } else {
@@ -503,6 +552,8 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
         tvNotes.setText("");
         spTree.setText("");
         spTree.setTag("");
+        spTreeStages.setText("");
+        spTreeStages.setTag("");
         tvAcreage.setText("");
         tvDisease.setText("");
         tvDisease.setTag("");
@@ -560,5 +611,12 @@ public class ReportTechDiseaseItemFragment extends BaseFragment {
             }
         });
         oDlg.show();
+    }
+
+    public void cancelSaveData(){
+        if(Layout_ReportTechDiseaseItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportTechDiseaseItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
     }
 }

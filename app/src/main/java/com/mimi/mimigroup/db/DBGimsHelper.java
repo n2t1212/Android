@@ -15,6 +15,7 @@ import com.mimi.mimigroup.model.DM_Employee;
 import com.mimi.mimigroup.model.DM_Product;
 import com.mimi.mimigroup.model.DM_Season;
 import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_TreeStages;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.HT_PARA;
 import com.mimi.mimigroup.model.DM_Province;
@@ -383,15 +384,25 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         sqlCMM = "CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY," +
                 "ReportTechID VARCHAR(50)," +
                 "TreeCode VARCHAR(15)," +
+                "StagesCode VARCHAR(15)," +
                 "Title VARCHAR(50)," +
                 "Acreage FLOAT," +
                 "Disease VARCHAR(200)," +
                 "Price FLOAT," +
                 "Notes VARCHAR(200))";
         db.execSQL(sqlCMM);
+
+        // GIAI DOAN - CAY TRONG
+        sqlCMM="CREATE TABLE DM_TREE_STAGES(StagesID INTEGER PRIMARY KEY,"+
+                "TreeID INTEGER,"+
+                "StagesCode VARCHAR(15),"+
+                "StagesName VARCHAR(50))";
+        db.execSQL(sqlCMM);
+
         //ĐỐI THỦ
         sqlCMM = "CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY," +
                 "ReportTechID VARCHAR(50)," +
+                "CompetitorPic VARCHAR(255)," +
                 "Title VARCHAR(50)," +
                 "Notes VARCHAR(200)," +
                 "Useful VARCHAR(200)," +
@@ -548,15 +559,25 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 sqlCMM="CREATE TABLE SM_REPORT_TECH_DISEASE(DiseaseID VARCHAR(50) PRIMARY KEY,"+
                         "ReportTechID VARCHAR(50),"+
                         "TreeCode VARCHAR(15),"+
+                        "StagesCode VARCHAR(15)," +
                         "Title VARCHAR(50),"+
                         "Acreage FLOAT," +
                         "Disease VARCHAR(200),"+
                         "Price FLOAT,"+
                         "Notes VARCHAR(200))";
                 db.execSQL(sqlCMM);
+
+                // GIAI DOAN - CAY TRONG
+                sqlCMM="CREATE TABLE DM_TREE_STAGES(StagesID INTEGER PRIMARY KEY,"+
+                        "TreeID INTEGER,"+
+                        "StagesCode VARCHAR(15),"+
+                        "StagesName VARCHAR(50))";
+                db.execSQL(sqlCMM);
+
                 //ĐỐI THỦ
                 sqlCMM="CREATE TABLE SM_REPORT_TECH_COMPETITOR(CompetitorID VARCHAR(50) PRIMARY KEY,"+
                         "ReportTechID VARCHAR(50),"+
+                        "CompetitorPic VARCHAR(255),"+
                         "Title VARCHAR(50),"+
                         "Notes VARCHAR(200),"+
                         "Useful VARCHAR(200),"+
@@ -3703,6 +3724,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptTechDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
                     oRptTechDisease.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
                     oRptTechDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptTechDisease.setStagesCode(cursor.getString(cursor.getColumnIndex("StagesCode")));
                     oRptTechDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
                     oRptTechDisease.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
                     oRptTechDisease.setDisease(cursor.getString(cursor.getColumnIndex("Disease")));
@@ -3733,6 +3755,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     oRptTechDisease.setDiseaseId(cursor.getString(cursor.getColumnIndex("DiseaseID")));
                     oRptTechDisease.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
                     oRptTechDisease.setTreeCode(cursor.getString(cursor.getColumnIndex("TreeCode")));
+                    oRptTechDisease.setStagesCode(cursor.getString(cursor.getColumnIndex("StagesCode")));
                     oRptTechDisease.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
                     oRptTechDisease.setAcreage(cursor.getFloat(cursor.getColumnIndex("Acreage")));
                     oRptTechDisease.setDisease(cursor.getString(cursor.getColumnIndex("Disease")));
@@ -3767,6 +3790,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 values.put("DiseaseID", oRptTechDisease.getDiseaseId());
                 values.put("ReportTechID", oRptTechDisease.getReportTechId());
                 values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("StagesCode", oRptTechDisease.getStagesCode());
                 values.put("Title", oRptTechDisease.getTitle());
                 values.put("Acreage", oRptTechDisease.getAcreage());
                 values.put("Disease", oRptTechDisease.getDisease());
@@ -3777,6 +3801,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 ContentValues values = new ContentValues();
                 values.put("ReportTechID", oRptTechDisease.getReportTechId());
                 values.put("TreeCode", oRptTechDisease.getTreeCode());
+                values.put("StagesCode", oRptTechDisease.getStagesCode());
                 values.put("Title", oRptTechDisease.getTitle());
                 values.put("Acreage", oRptTechDisease.getAcreage());
                 values.put("Disease", oRptTechDisease.getDisease());
@@ -3842,6 +3867,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                     SM_ReportTechCompetitor oRptTechCompetitor = new SM_ReportTechCompetitor();
                     oRptTechCompetitor.setCompetitorId(cursor.getString(cursor.getColumnIndex("CompetitorID")));
                     oRptTechCompetitor.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechCompetitor.setCompetitorPic(cursor.getString(cursor.getColumnIndex("CompetitorPic")));
                     oRptTechCompetitor.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
                     oRptTechCompetitor.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
                     oRptTechCompetitor.setUseful(cursor.getString(cursor.getColumnIndex("Useful")));
@@ -3870,6 +3896,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 do {
                     oRptTechCompetitor.setCompetitorId(cursor.getString(cursor.getColumnIndex("CompetitorID")));
                     oRptTechCompetitor.setReportTechId(cursor.getString(cursor.getColumnIndex("ReportTechID")));
+                    oRptTechCompetitor.setCompetitorPic(cursor.getString(cursor.getColumnIndex("CompetitorPic")));
                     oRptTechCompetitor.setTitle(cursor.getString(cursor.getColumnIndex("Title")));
                     oRptTechCompetitor.setNotes(cursor.getString(cursor.getColumnIndex("Notes")));
                     oRptTechCompetitor.setUseful(cursor.getString(cursor.getColumnIndex("Useful")));
@@ -3902,6 +3929,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
                 ContentValues values = new ContentValues();
                 values.put("CompetitorID", oRptTechCompetotitor.getCompetitorId());
                 values.put("ReportTechID", oRptTechCompetotitor.getReportTechId());
+                values.put("CompetitorPic", oRptTechCompetotitor.getCompetitorPic());
                 values.put("Title", oRptTechCompetotitor.getTitle());
                 values.put("Notes", oRptTechCompetotitor.getNotes());
                 values.put("Useful", oRptTechCompetotitor.getUseful());
@@ -3910,6 +3938,7 @@ public class DBGimsHelper extends SQLiteOpenHelper{
             }else{
                 ContentValues values = new ContentValues();
                 values.put("ReportTechID", oRptTechCompetotitor.getReportTechId());
+                values.put("CompetitorPic", oRptTechCompetotitor.getCompetitorPic());
                 values.put("Title", oRptTechCompetotitor.getTitle());
                 values.put("Notes", oRptTechCompetotitor.getNotes());
                 values.put("Useful", oRptTechCompetotitor.getUseful());
@@ -4127,6 +4156,35 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return lst;
     }catch (Exception ex){
         Log.d("GET_TREE_DISEASES",ex.getMessage());
+    }
+        return null;
+    }
+
+    public List<DM_TreeStages> getListTreeStagesByTreeId(int TreeID)
+    {
+        try {
+        List<DM_TreeStages> lst = new ArrayList<>();
+        String mSql=String.format("Select A.* from DM_TREE_STAGES A"+
+                " where A.TreeID='%d' ", TreeID );
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(mSql, null);
+        if (cursor.moveToFirst()) {
+            do {
+                DM_TreeStages oTreeStages = new DM_TreeStages();
+                oTreeStages.setStagesId(cursor.getInt(cursor.getColumnIndex("StagesID")));
+                oTreeStages.setTreeId(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                oTreeStages.setStagesCode(cursor.getString(cursor.getColumnIndex("StagesCode")));
+                oTreeStages.setStagesName(cursor.getString(cursor.getColumnIndex("StagesName")));
+                lst.add(oTreeStages);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lst;
+    }catch (Exception ex){
+        Log.d("GET_TREE_STAGE",ex.getMessage());
     }
         return null;
     }
@@ -5519,6 +5577,101 @@ public class DBGimsHelper extends SQLiteOpenHelper{
         return null;
     }
 
+    public List<DM_TreeStages> getAllTreeStages(){
+        try {
+            List<DM_TreeStages> lst = new ArrayList<DM_TreeStages>();
+            String mSql=String.format("select * from DM_TREE_STAGES");
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    DM_TreeStages treeStages = new DM_TreeStages();
+                    treeStages.setStagesId(cursor.getInt(cursor.getColumnIndex("StagesID")));
+                    treeStages.setTreeId(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                    treeStages.setStagesCode(cursor.getString(cursor.getColumnIndex("StagesCode")));
+                    treeStages.setStagesName(cursor.getString(cursor.getColumnIndex("StagesName")));
+
+                    lst.add(treeStages);
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return lst;
+        }catch (Exception ex){Log.d("ERR_LOAD_TREESTAGES",ex.getMessage().toString());}
+        return null;
+    }
+
+    public DM_TreeStages getTreeStagesByCode(String code){
+        try {
+            String mSql=String.format("select * from DM_TREE_STAGES where StagesCode='%s'", code);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(mSql, null);
+            DM_TreeStages treeStages = new DM_TreeStages();
+            if (cursor.moveToFirst()) {
+                do {
+                    treeStages.setStagesId(cursor.getInt(cursor.getColumnIndex("StagesID")));
+                    treeStages.setTreeId(cursor.getInt(cursor.getColumnIndex("TreeID")));
+                    treeStages.setStagesCode(cursor.getString(cursor.getColumnIndex("StagesCode")));
+                    treeStages.setStagesName(cursor.getString(cursor.getColumnIndex("StagesName")));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.close();
+            return treeStages;
+        }catch (Exception ex){Log.d("ERR_GET_TREESTAGES",ex.getMessage().toString());}
+        return null;
+    }
+
+    public boolean delTreeStages(){
+        String mSql=String.format("delete from DM_TREE_STAGES ");
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            db.execSQL(mSql);
+        }catch (Exception ex){
+            Log.d("DEL_DM_TREE_STAGES",ex.getMessage());
+            return  false;
+        }
+        return  true;
+    }
+
+    public int getSizeTreeStages(String code){
+        try {
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM DM_TREE_STAGES WHERE StagesCode=?", new String[]{code});
+            int iSq= cursor.getCount();
+            cursor.close();
+            return  iSq;
+        }catch(Exception ex){return -1;}
+    }
+
+    public boolean addTreeStages(DM_TreeStages obj){
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int iSq = 1;
+            iSq=getSizeTreeStages(obj.getStagesName());
+            if (iSq<=0) {
+                ContentValues values = new ContentValues();
+                values.put("StagesID",obj.getStagesId());
+                values.put("TreeID", obj.getTreeId());
+                values.put("StagesCode", obj.getStagesCode());
+                values.put("StagesName", obj.getStagesName());
+                db.insert("DM_TREE_STAGES", null, values);
+            }else{
+                iSq=iSq+1;
+                ContentValues values = new ContentValues();
+                values.put("TreeID", obj.getTreeId());
+                values.put("StagesCode", obj.getStagesCode());
+                values.put("StagesName", obj.getStagesName());
+                db.update("DM_TREE_STAGES",values,"StagesID=?" ,new String[] { String.valueOf(obj.getStagesId())});
+            }
+            db.close();
+
+            return true;
+        }catch (Exception e){Log.v("INS_TREESTAGES_ERR",e.getMessage()); return  false;}
+    }
 
     //<<SYSTEM-FUNCTION>>
     public String fFormatNgay(String ngay, String sFormatFrom, String sFormatTo){

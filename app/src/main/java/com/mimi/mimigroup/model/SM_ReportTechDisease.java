@@ -4,6 +4,7 @@ public class SM_ReportTechDisease {
     String diseaseId;
     String reportTechId;
     String treeCode;
+    String stagesCode;
     String title;
     Float acreage;
     String disease;
@@ -13,15 +14,24 @@ public class SM_ReportTechDisease {
     public SM_ReportTechDisease() {
     }
 
-    public SM_ReportTechDisease(String diseaseId, String reportTechId, String treeCode, String title, Float acreage, String disease, Float price, String notes) {
+    public SM_ReportTechDisease(String diseaseId, String reportTechId, String treeCode, String stagesCode, String title, Float acreage, String disease, Float price, String notes) {
         this.diseaseId = diseaseId;
         this.reportTechId = reportTechId;
         this.treeCode = treeCode;
+        this.stagesCode = stagesCode;
         this.title = title;
         this.acreage = acreage;
         this.disease = disease;
         this.price = price;
         this.notes = notes;
+    }
+
+    public String getStagesCode() {
+        return stagesCode;
+    }
+
+    public void setStagesCode(String stagesCode) {
+        this.stagesCode = stagesCode;
     }
 
     public String getDiseaseId() {

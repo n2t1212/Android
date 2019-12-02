@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Tree;
+import com.mimi.mimigroup.model.DM_TreeStages;
 import com.mimi.mimigroup.model.DM_Tree_Disease;
 import com.mimi.mimigroup.model.SM_ReportTechDisease;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
@@ -93,6 +94,8 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
     class ReportTechDiseaseHolder  extends RecyclerView.ViewHolder {
         @BindView(R.id.tvTreeCode)
         CustomTextView tvTreeCode;
+        @BindView(R.id.tvStages)
+        CustomTextView tvStages;
         @BindView(R.id.tvTitle)
         CustomTextView tvTitle;
         @BindView(R.id.tvAcreage)
@@ -118,6 +121,15 @@ public class ReportTechDiseaseAdapter extends RecyclerView.Adapter<RecyclerView.
                         tvTreeCode.setText(tree.getTreeName());
                     }else{
                         tvTreeCode.setText("");
+                    }
+                }
+                if(oDetail.getStagesCode() != null){
+                    DM_TreeStages stages = mDB.getTreeStagesByCode(oDetail.getStagesCode());
+
+                    if(stages != null){
+                        tvStages.setText(stages.getStagesName());
+                    }else{
+                        tvStages.setText("");
                     }
                 }
                 if(oDetail.getTitle() != null){

@@ -475,4 +475,11 @@ public class ReportSaleRepMarketItemFragment extends BaseFragment {
         });
         oDlg.show();
     }
+
+    public void cancelSaveData(){
+        if(Layout_ReportSaleRepMarketItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportSaleRepMarketItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
+    }
 }

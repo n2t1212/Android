@@ -187,6 +187,11 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.setting.TreeStagesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
         <service
             android:name="com.mimi.mimigroup.ui.services.mimiService"
             android:enabled="true"

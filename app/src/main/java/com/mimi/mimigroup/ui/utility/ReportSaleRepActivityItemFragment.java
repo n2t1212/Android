@@ -368,6 +368,13 @@ public class ReportSaleRepActivityItemFragment extends BaseFragment {
         dtPicker.getDatePicker().setSpinnersShown(true);
         dtPicker.show();
     }
+
+    public void cancelSaveData(){
+        if(Layout_ReportSaleRepActivityItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportSaleRepActivityItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
+    }
 }
 
 

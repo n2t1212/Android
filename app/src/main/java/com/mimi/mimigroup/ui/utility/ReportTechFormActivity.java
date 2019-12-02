@@ -166,44 +166,22 @@ public class ReportTechFormActivity extends BaseActivity {
                         adapter.addFragment(ReportTechCompetitorFragment, "Đối Thủ");
 
                         ReportTechActivityThisWeekFragment = new ReportTechActivityThisWeekItemFragment();
-                        adapter.addFragment(ReportTechActivityThisWeekFragment, "Trong Tuần");
+                        adapter.addFragment(ReportTechActivityThisWeekFragment, "Hoạt Động Trong Tuần");
 
                         ReportTechActivityNextWeekFragment = new ReportTechActivityNextWeekItemFragment();
-                        adapter.addFragment(ReportTechActivityNextWeekFragment, "Tuần Tới");
+                        adapter.addFragment(ReportTechActivityNextWeekFragment, "Hoạt Động Tuần Tới");
 
                         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                             @Override
                             public void onTabSelected(TabLayout.Tab tab) {
-                                switch (tab.getPosition()){
-                                    case 0:
-                                        btnReportTechDetailAdd.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        break;
-                                    case 1:
-                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailAdd.setTag("ADD");
-                                        break;
-                                    case 2:
-                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailAdd.setTag("ADD");
-                                        break;
-                                    case 3:
-                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailAdd.setTag("ADD");
-                                        break;
-                                    case 4:
-                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailAdd.setTag("ADD");
-                                        break;
-                                    case 5:
-                                        btnReportTechDetailAdd.setVisibility(View.VISIBLE);
-                                        btnReportTechDetailDel.setVisibility(View.INVISIBLE);
-                                        btnReportTechDetailAdd.setTag("ADD");
-                                        break;
+                                if(tab.getPosition()==0){
+                                    btnReportTechDetailAdd.setVisibility(View.INVISIBLE);
+                                    btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                }else {
+                                    checkSaveWhenAddOrEdit();
+                                    btnReportTechDetailAdd.setVisibility(View.VISIBLE);
+                                    btnReportTechDetailDel.setVisibility(View.INVISIBLE);
+                                    btnReportTechDetailAdd.setTag("ADD");
                                 }
                             }
                             @Override
@@ -223,6 +201,83 @@ public class ReportTechFormActivity extends BaseActivity {
             lstTree=mDB.getAllTree();
         }catch (Exception ex){}
         return  lstTree;
+    }
+
+    private void checkSaveWhenAddOrEdit(){
+        if(btnReportTechDetailAdd.getTag() != null && btnReportTechDetailAdd.getTag().equals("SAVE")){
+            final Dialog oDlg=new Dialog(this);
+            oDlg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            oDlg.setContentView(R.layout.dialog_yesno);
+            oDlg.setTitle("");
+            CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
+            dlgTitle.setText("THÔNG BÁO");
+            CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
+            dlgContent.setText("Dữ liệu chưa cập nhật. Bạn có muốn lưu ?");
+            CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
+            CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
+            final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
+            btnYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean isSaved = false;
+                    if(currentFragment instanceof ReportTechMarketItemFragment){
+                        isSaved = ((ReportTechMarketItemFragment) currentFragment).onSaveReportTechMarket();
+                    }else if(currentFragment instanceof ReportTechDiseaseItemFragment){
+                        isSaved = ((ReportTechDiseaseItemFragment) currentFragment).onSaveReportTechDisease();
+                    }else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+                        isSaved = ((ReportTechCompetitorItemFragment) currentFragment).onSaveReportTechCompetitor();
+                    } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
+                        isSaved = ((ReportTechActivityThisWeekItemFragment) currentFragment).onSaveReportTechActivity();
+                    } else if(currentFragment instanceof ReportTechActivityNextWeekItemFragment){
+                        isSaved = ((ReportTechActivityNextWeekItemFragment) currentFragment).onSaveReportTechActivity();
+                    }
+
+                    if(isSaved){
+                        btnReportTechDetailAdd.setTag("ADD");
+                        btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    }else{
+                        Toast.makeText(ReportTechFormActivity.this,"Dữ liệu không hợp lệ nên thông tin không lưu được..", Toast.LENGTH_SHORT).show();
+
+                        if(currentFragment instanceof ReportTechMarketItemFragment){
+                            ((ReportTechMarketItemFragment) currentFragment).cancelSaveData();
+                        }else if(currentFragment instanceof ReportTechDiseaseItemFragment){
+                            ((ReportTechDiseaseItemFragment) currentFragment).cancelSaveData();
+                        }else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+                            ((ReportTechCompetitorItemFragment) currentFragment).cancelSaveData();
+                        } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
+                            ((ReportTechActivityThisWeekItemFragment) currentFragment).cancelSaveData();
+                        } else if(currentFragment instanceof ReportTechActivityNextWeekItemFragment){
+                            ((ReportTechActivityNextWeekItemFragment) currentFragment).cancelSaveData();
+                        }
+                        btnReportTechDetailAdd.setTag("ADD");
+                        btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    }
+
+                    oDlg.dismiss();
+                }
+            });
+            btnNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentFragment instanceof ReportTechMarketItemFragment){
+                        ((ReportTechMarketItemFragment) currentFragment).cancelSaveData();
+                    }else if(currentFragment instanceof ReportTechDiseaseItemFragment){
+                        ((ReportTechDiseaseItemFragment) currentFragment).cancelSaveData();
+                    }else if(currentFragment instanceof ReportTechCompetitorItemFragment){
+                        ((ReportTechCompetitorItemFragment) currentFragment).cancelSaveData();
+                    } else if(currentFragment instanceof ReportTechActivityThisWeekItemFragment){
+                        ((ReportTechActivityThisWeekItemFragment) currentFragment).cancelSaveData();
+                    } else if(currentFragment instanceof ReportTechActivityNextWeekItemFragment){
+                        ((ReportTechActivityNextWeekItemFragment) currentFragment).cancelSaveData();
+                    }
+                    btnReportTechDetailAdd.setTag("ADD");
+                    btnReportTechDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    oDlg.dismiss();
+                    return;
+                }
+            });
+            oDlg.show();
+        }
     }
 
     /*[TRANSFER DATA FOR FRAMGMENT]*/
@@ -645,6 +700,11 @@ public class ReportTechFormActivity extends BaseActivity {
                         }
                         if(oOdt.getTreeCode()!=null && !oOdt.getTreeCode().isEmpty()){
                             mRow+=oOdt.getTreeCode()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
+                        if(oOdt.getStagesCode()!=null && !oOdt.getStagesCode().isEmpty()){
+                            mRow+=oOdt.getStagesCode()+"#";
                         }else{
                             mRow+=""+"#";
                         }

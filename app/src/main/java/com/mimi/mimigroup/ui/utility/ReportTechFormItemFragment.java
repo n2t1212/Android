@@ -3,6 +3,9 @@ package com.mimi.mimigroup.ui.utility;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +14,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.mimi.mimigroup.R;
+import com.mimi.mimigroup.api.APIGPSTrack;
+import com.mimi.mimigroup.api.APIGoogleTrack;
+import com.mimi.mimigroup.api.APILocationCallBack;
+import com.mimi.mimigroup.api.APINet;
 import com.mimi.mimigroup.base.BaseFragment;
 import com.mimi.mimigroup.db.DBGimsHelper;
 import com.mimi.mimigroup.model.DM_Employee;
@@ -18,12 +25,14 @@ import com.mimi.mimigroup.model.SM_ReportTech;
 import com.mimi.mimigroup.ui.custom.CustomBoldEditText;
 import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
+import com.mimi.mimigroup.ui.setting.CustomerFormActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -53,6 +62,12 @@ public class ReportTechFormItemFragment extends BaseFragment {
 
     List<DM_Employee> lstEmp;
 
+    Location mLocation;
+    APIGPSTrack locationTrack;
+    float longitude = 0;
+    float latitude = 0;
+    String locationAddress = "";
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.fragment_report_tech_form;
@@ -62,7 +77,7 @@ public class ReportTechFormItemFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mDB=DBGimsHelper.getInstance(getContext());
-
+        getLocation();
         ReportTechFormActivity oActivity = (ReportTechFormActivity) getActivity();
         oReportTech = oActivity.getoReportTech();
 
@@ -88,6 +103,8 @@ public class ReportTechFormItemFragment extends BaseFragment {
                             if(oReportTech.getLocationAddress() != null)
                             {
                                 tvLocationAddress.setText(oReportTech.getLocationAddress());
+                            } else {
+                                tvLocationAddress.setText(locationAddress);
                             }
                             if(oReportTech.getReceiverList() != null)
                             {
@@ -279,7 +296,63 @@ public class ReportTechFormItemFragment extends BaseFragment {
                 oReportTech.setIsStatus(tvIsStatus.getText().toString());
             }
 
+            oReportTech.setLongtitude(longitude);
+            oReportTech.setLatitude(latitude);
+
         }catch (Exception ex){}
         return oReportTech;
+    }
+
+    public void getLocation(){
+        mLocation=null;
+        if(locationTrack==null) {
+            locationTrack = new APIGPSTrack(getContext());
+        }
+
+        if (locationTrack.canGetLocation()) {
+            mLocation = locationTrack.getLocation();
+        }else{
+            locationTrack.showSettingsAlert();
+        }
+
+        //NẾU API KHÔNG XÁC ĐỊNH ĐƯỢC -> LÁY THEO GPSPROVIDER
+        if(mLocation==null) {
+            locationTrack.stopListener();
+            mLocation = locationTrack.getLocation();
+        }
+
+        if(mLocation!=null){
+            longitude = (float)mLocation.getLongitude();
+            latitude = (float)(mLocation.getLatitude());
+            locationAddress = getAddressLocation(mLocation.getLongitude(),mLocation.getLatitude());
+        }else{
+
+            new APIGoogleTrack(new APILocationCallBack() {
+                @Override
+                public void onCurrentLocation(Location MTLocation) {
+                    mLocation = MTLocation;
+                    if (mLocation!= null) {
+                        longitude = (float)mLocation.getLongitude();
+                        latitude = (float)(mLocation.getLatitude());
+                        locationAddress = getAddressLocation(mLocation.getLongitude(),mLocation.getLatitude());
+                    }
+                }
+            },getContext());
+        }
+    }
+
+    public String getAddressLocation(Double Longitude,Double Latitude){
+        try{
+            if(APINet.isNetworkAvailable(getContext())) {
+                List<Address> lstAddress;
+                Geocoder gCoder = new Geocoder(getContext(), Locale.getDefault());
+                lstAddress = gCoder.getFromLocation(Latitude, Longitude, 1);
+                String mAddress = lstAddress.get(0).getAddressLine(0);
+                return mAddress;
+            }else{
+                return "N/A";
+            }
+        }catch (Exception ex){}
+        return "N/A";
     }
 }

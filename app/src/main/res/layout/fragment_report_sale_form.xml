@@ -147,6 +147,7 @@
                         android:id="@+id/tvReceiverList"
                         android:background="@drawable/edittext"
                         android:layout_marginEnd="30dp"
+                        android:visibility="gone"
                         android:gravity="left"/>
                 </LinearLayout>
 

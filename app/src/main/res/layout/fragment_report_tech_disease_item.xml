@@ -21,6 +21,16 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:padding="10dp"
+        android:id="@+id/tvStages"
+        android:textSize="16sp"
+        android:layout_marginRight="0.5dp"
+        android:background="@drawable/border_cell_grid"
+        android:gravity="left"/>
+    <com.mimi.mimigroup.ui.custom.CustomTextView
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp"
         android:id="@+id/tvTitle"
         android:textSize="16sp"
         android:layout_marginRight="0.5dp"
@@ -35,7 +45,7 @@
         android:textSize="16sp"
         android:layout_marginRight="0.5dp"
         android:background="@drawable/border_cell_grid"
-        android:gravity="left"/>
+        android:gravity="right"/>
     <com.mimi.mimigroup.ui.custom.CustomTextView
         android:layout_width="200dp"
         android:layout_height="match_parent"
@@ -55,7 +65,7 @@
         android:textSize="16sp"
         android:layout_marginRight="0.5dp"
         android:background="@drawable/border_cell_grid"
-        android:gravity="left"/>
+        android:gravity="right"/>
     <com.mimi.mimigroup.ui.custom.CustomTextView
         android:layout_width="200dp"
         android:layout_height="match_parent"

@@ -393,4 +393,11 @@ public class ReportSaleRepDiseaseItemFragment extends BaseFragment {
         });
         oDlg.show();
     }
+
+    public void cancelSaveData(){
+        if(Layout_ReportSaleRepDiseaseItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportSaleRepDiseaseItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
+    }
 }

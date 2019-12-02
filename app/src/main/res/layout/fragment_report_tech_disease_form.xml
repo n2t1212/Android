@@ -60,6 +60,42 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+            <com.mimi.mimigroup.ui.custom.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:clickable="true"
+                android:gravity="left"
+                android:padding="2dp"
+                android:text="Nhập giai đoạn"
+                android:textColorHighlight="@color/colorBorderBlue"
+                android:layout_marginStart="30dp"
+                android:textStyle="bold" />
+            <AutoCompleteTextView
+                android:id="@+id/spTreeStages"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:hint="....."
+                android:textColorHint="@color/colorPrimary"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:background="@drawable/spindropdown"
+                android:padding="15dp"
+                android:textSize="14dp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:dropDownWidth="match_parent"
+                android:ems="10" />
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2" >
                 <com.mimi.mimigroup.ui.custom.CustomTextView
@@ -214,6 +250,17 @@
                     android:textSize="16sp"
                     android:layout_marginRight="0.5dp"
                     android:text="Cây trồng"
+                    android:gravity="center"/>
+                <com.mimi.mimigroup.ui.custom.CustomBoldTextView
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:background="@color/HeaderGridOrderDetail"
+                    android:textColor="@color/TextHeaderGrid"
+                    android:textSize="16sp"
+                    android:layout_marginRight="0.5dp"
+                    android:text="Giai đoạn"
                     android:gravity="center"/>
                 <com.mimi.mimigroup.ui.custom.CustomBoldTextView
                     android:layout_width="200dp"

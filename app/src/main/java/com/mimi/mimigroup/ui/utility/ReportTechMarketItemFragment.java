@@ -189,7 +189,7 @@ public class ReportTechMarketItemFragment extends BaseFragment {
         return  false;
     }
 
-    private boolean onSaveAddReportTechMarket() {
+    public boolean onSaveAddReportTechMarket() {
         SM_ReportTechMarket oDetail = new SM_ReportTechMarket();
 
         // EDIT
@@ -330,5 +330,12 @@ public class ReportTechMarketItemFragment extends BaseFragment {
             }
         });
         oDlg.show();
+    }
+
+    public void cancelSaveData(){
+        if(Layout_ReportTechMarketItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportTechMarketItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
     }
 }

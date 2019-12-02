@@ -561,4 +561,11 @@ public class ReportSaleRepSeasonItemFragment extends BaseFragment {
         });
         oDlg.show();
     }
+
+    public void cancelSaveData(){
+        if(Layout_ReportSaleRepSeasonItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportSaleRepSeasonItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
+    }
 }

@@ -2,11 +2,22 @@ package com.mimi.mimigroup.ui.utility;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,11 +44,16 @@ import com.mimi.mimigroup.ui.custom.CustomBoldTextView;
 import com.mimi.mimigroup.ui.custom.CustomTextView;
 import com.mimi.mimigroup.utils.AppUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -106,6 +122,7 @@ public class ReportTechActivity extends BaseActivity {
                 SM_ReportTech oSMPay=mDB.getReportTechById(adapter.SelectedList.get(0).getReportTechId());
             }
         }
+
     }
 
     @OnClick(R.id.btnReportTechMenuList)
@@ -479,6 +496,11 @@ public class ReportTechActivity extends BaseActivity {
                         }else{
                             mRow+=""+"#";
                         }
+                        if(oOdt.getCompetitorPicBase()!=null && !oOdt.getCompetitorPicBase().isEmpty()){
+                            mRow+=oOdt.getCompetitorPicBase()+"#";
+                        }else{
+                            mRow+=""+"#";
+                        }
                         if(oOdt.getTitle()!=null && !oOdt.getTitle().isEmpty()){
                             mRow+=oOdt.getTitle()+"#";
                         }else{
@@ -689,5 +711,4 @@ public class ReportTechActivity extends BaseActivity {
             dismissProgressDialog();
         }
     }
-
 }

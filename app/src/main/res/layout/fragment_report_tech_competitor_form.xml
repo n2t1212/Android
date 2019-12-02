@@ -123,6 +123,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="15dp"
+                android:background="@color/colorEditY" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/btnCompetitorPicAttach"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginStart="100dp"
+                    android:clickable="true"
+                    android:src="@drawable/tiva_photo"
+                    app:layout_anchorGravity="bottom|right|end"
+                    app:backgroundTint="@color/ColorButtonGreen"
+                    app:rippleColor="#FFF" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="1" >
+
+                <ImageView
+                    android:id="@+id/imgCompetitorPic"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="right"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="70dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:contentDescription="File đối thủ"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:cropToPadding="true"
+                    android:background="@drawable/img_border" />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
                 android:background="@color/colorFormLineGray" />
         </LinearLayout>
     </RelativeLayout>

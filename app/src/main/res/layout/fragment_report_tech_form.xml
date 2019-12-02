@@ -147,6 +147,7 @@
                         android:background="@drawable/edittext"
                         android:layout_marginEnd="30dp"
                         android:inputType="textMultiLine"
+                        android:visibility="gone"
                         android:gravity="left"/>
                 </LinearLayout>
 

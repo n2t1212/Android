@@ -147,6 +147,7 @@ public class ReportSaleRepFormActivity extends BaseActivity {
                                     btnReportSaleRepDetailAdd.setVisibility(View.INVISIBLE);
                                     btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
                                 }else {
+                                    checkSaveWhenAddOrEdit();
                                     btnReportSaleRepDetailAdd.setVisibility(View.VISIBLE);
                                     btnReportSaleRepDetailDel.setVisibility(View.INVISIBLE);
                                     btnReportSaleRepDetailAdd.setTag("ADD");
@@ -168,6 +169,82 @@ public class ReportSaleRepFormActivity extends BaseActivity {
             lstTree=mDB.getAllTree();
         }catch (Exception ex){}
         return  lstTree;
+    }
+
+    private void checkSaveWhenAddOrEdit(){
+        if(btnReportSaleRepDetailAdd.getTag() != null && btnReportSaleRepDetailAdd.getTag().equals("SAVE")){
+            final Dialog oDlg=new Dialog(this);
+            oDlg.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            oDlg.setContentView(R.layout.dialog_yesno);
+            oDlg.setTitle("");
+            CustomTextView dlgTitle=(CustomTextView) oDlg.findViewById(R.id.dlgTitle);
+            dlgTitle.setText("THÔNG BÁO");
+            CustomTextView dlgContent=(CustomTextView) oDlg.findViewById(R.id.dlgContent);
+            dlgContent.setText("Dữ liệu chưa cập nhật. Bạn có muốn lưu ?");
+            CustomBoldTextView btnYes=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonYes);
+            CustomBoldTextView btnNo=(CustomBoldTextView) oDlg.findViewById(R.id.dlgButtonNo);
+            final Fragment currentFragment = adapter.getItem(viewPager.getCurrentItem());
+            btnYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean isSaved = false;
+                    if(currentFragment instanceof ReportSaleRepMarketItemFragment){
+                        isSaved = ((ReportSaleRepMarketItemFragment) currentFragment).onSaveReportSaleRepMarket();
+                    }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+                        isSaved = ((ReportSaleRepDiseaseItemFragment) currentFragment).onSaveReportSaleRepDisease();
+                    }else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
+                        isSaved = ((ReportSaleRepSeasonItemFragment) currentFragment).onSaveReportSaleRepSeason();
+                    } else if(currentFragment instanceof ReportSaleRepTaskItemFragment){
+                        isSaved = ((ReportSaleRepTaskItemFragment) currentFragment).onSaveReportSaleRepActivity();
+                    } else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
+                        isSaved = ((ReportSaleRepActivityItemFragment) currentFragment).onSaveReportSaleRepActivity();
+                    }
+
+                    if(isSaved){
+                        btnReportSaleRepDetailAdd.setTag("ADD");
+                        btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    } else {
+                        Toast.makeText(ReportSaleRepFormActivity.this, "Dữ liệu không hợp lệ nên thông tin không lưu được..", Toast.LENGTH_SHORT).show();
+                        if(currentFragment instanceof ReportSaleRepMarketItemFragment){
+                            ((ReportSaleRepMarketItemFragment) currentFragment).cancelSaveData();
+                        }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+                            ((ReportSaleRepDiseaseItemFragment) currentFragment).cancelSaveData();
+                        }else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
+                            ((ReportSaleRepSeasonItemFragment) currentFragment).cancelSaveData();
+                        } else if(currentFragment instanceof ReportSaleRepTaskItemFragment){
+                            ((ReportSaleRepTaskItemFragment) currentFragment).cancelSaveData();
+                        } else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
+                            ((ReportSaleRepActivityItemFragment) currentFragment).cancelSaveData();
+                        }
+                        btnReportSaleRepDetailAdd.setTag("ADD");
+                        btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    }
+
+                    oDlg.dismiss();
+                }
+            });
+            btnNo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentFragment instanceof ReportSaleRepMarketItemFragment){
+                        ((ReportSaleRepMarketItemFragment) currentFragment).cancelSaveData();
+                    }else if(currentFragment instanceof ReportSaleRepDiseaseItemFragment){
+                        ((ReportSaleRepDiseaseItemFragment) currentFragment).cancelSaveData();
+                    }else if(currentFragment instanceof ReportSaleRepSeasonItemFragment){
+                        ((ReportSaleRepSeasonItemFragment) currentFragment).cancelSaveData();
+                    } else if(currentFragment instanceof ReportSaleRepTaskItemFragment){
+                        ((ReportSaleRepTaskItemFragment) currentFragment).cancelSaveData();
+                    } else if(currentFragment instanceof ReportSaleRepActivityItemFragment){
+                        ((ReportSaleRepActivityItemFragment) currentFragment).cancelSaveData();
+                    }
+                    btnReportSaleRepDetailAdd.setTag("ADD");
+                    btnReportSaleRepDetailAdd.setImageDrawable(getResources().getDrawable(R.drawable.tiva_add));
+                    oDlg.dismiss();
+                    return;
+                }
+            });
+            oDlg.show();
+        }
     }
 
     /*[TRANSFER DATA FOR FRAMGMENT]*/

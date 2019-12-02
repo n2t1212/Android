@@ -184,7 +184,7 @@ public class ReportTechActivityThisWeekItemFragment extends BaseFragment {
         return  false;
     }
 
-    private boolean onSaveAddReportTechActivity() {
+    public boolean onSaveAddReportTechActivity() {
         SM_ReportTechActivity oDetail = new SM_ReportTechActivity();
 
         // EDIT
@@ -311,6 +311,13 @@ public class ReportTechActivityThisWeekItemFragment extends BaseFragment {
             }
         });
         oDlg.show();
+    }
+
+    public void cancelSaveData(){
+        if(Layout_ReportTechActivityThisWeekItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportTechActivityThisWeekItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
     }
 }
 

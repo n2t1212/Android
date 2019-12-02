@@ -367,5 +367,12 @@ public class ReportSaleRepTaskItemFragment extends BaseFragment {
         dtPicker.getDatePicker().setSpinnersShown(true);
         dtPicker.show();
     }
+
+    public void cancelSaveData(){
+        if(Layout_ReportSaleRepTaskItem.getVisibility()==View.VISIBLE) {
+            Layout_ReportSaleRepTaskItem.setVisibility(View.GONE);
+            adapter.clearSelected();
+        }
+    }
 }
 

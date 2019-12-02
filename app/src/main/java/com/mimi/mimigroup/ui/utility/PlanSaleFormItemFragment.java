@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.mimi.mimigroup.R;
 import com.mimi.mimigroup.base.BaseFragment;
@@ -19,6 +20,7 @@ import com.mimi.mimigroup.utils.AppUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -131,6 +133,18 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         cldr.set(year,monthOfYear, dayOfMonth);
                         String dateString = sdf.format(cldr.getTime());
+
+                        // Check start day >= now
+                        String currentDay = sdf.format(new Date());
+                        float check = AppUtils.datediff2(currentDay, dateString, "yyyy-MM-dd");
+
+                        if(check > 0){
+                            Toast.makeText(getContext(), "Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại..", Toast.LENGTH_SHORT).show();
+                            tvStartDay.setText("");
+                            tvStartDay.requestFocus();
+                            return;
+                        }
+
                         tvStartDay.setText(dateString);
                     }
                 }, year, month, day);
@@ -154,6 +168,28 @@ public class PlanSaleFormItemFragment  extends BaseFragment {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         cldr.set(year,monthOfYear, dayOfMonth);
                         String dateString = sdf.format(cldr.getTime());
+
+                        // Check end day >= start day
+                        if(tvStartDay.getText() != null && !tvStartDay.getText().toString().equals(""))
+                        {
+                            String startDay = tvStartDay.getText().toString();
+                            float check = AppUtils.datediff2(startDay, dateString, "yyyy-MM-dd");
+
+                            if(check > 0){
+                                Toast.makeText(getContext(), "Ngày kết thúc phải lớn hơn hoặc bằng từ ngày..", Toast.LENGTH_SHORT).show();
+                                tvEndDay.setText("");
+                                tvEndDay.requestFocus();
+                                return;
+                            }
+                        }else{
+                            Toast.makeText(getContext(), "Vui lòng chọn ngày bắt đầu..", Toast.LENGTH_SHORT).show();
+                            tvEndDay.setText("");
+                            tvStartDay.requestFocus();
+                            return;
+                        }
+
+
+
                         tvEndDay.setText(dateString);
                     }
                 }, year, month, day);
